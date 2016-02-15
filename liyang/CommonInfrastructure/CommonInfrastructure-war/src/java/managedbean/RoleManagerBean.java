@@ -18,9 +18,9 @@ public class RoleManagerBean {
     private String roleNameLength;
     private String statusMessage;
     private Long newRoleId;
-    private boolean value1 = false;
-    private boolean value2 = false;
-    private boolean value3 = false;
+    private boolean value1;
+    private boolean value2;
+    private boolean value3;
     
     
     public RoleManagerBean() {
@@ -84,8 +84,8 @@ public class RoleManagerBean {
     
     public void saveNewRole(ActionEvent event) {
         newRoleId = roleSessionBean.addNewRole(roleName, value1, value2, value3);
-        statusMessage = "New Event Saved Successfully";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Add New Event Result: "
-        + statusMessage + " (New Event ID is " + newRoleId + ")", ""));
+        statusMessage = "New Role Saved Successfully";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Add New Role Result: "
+        + statusMessage + " (New Role ID is " + newRoleId + ")", ""));
         }
     }

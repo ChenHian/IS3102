@@ -58,13 +58,14 @@ public class RoleSessionBean {
 
     public Long addNewRole(String roleName, boolean value1, boolean value2, boolean value3)  {
             Role role = new Role();
+            listOfPrivileges = "- ";
             role.setRoleName(roleName);
             role.setPrivilege1(value1);
             role.setPrivilege2(value2);
             role.setPrivilege3(value3);
-            if (value1) listOfPrivileges.concat("Supplies Management Module. ");
-            if (value2) listOfPrivileges.concat("Transaction Management Module. ");
-            if (value3) listOfPrivileges.concat("Customer Management Module. ");
+            if (value1) listOfPrivileges=listOfPrivileges.concat("Supplies Management Module. ");
+            if (value2) listOfPrivileges=listOfPrivileges.concat("Transaction Management Module. ");
+            if (value3) listOfPrivileges=listOfPrivileges.concat("Customer Management Module. ");
             role.setListOfPrivileges(listOfPrivileges);
             entityManager.persist(role);
             entityManager.flush();
