@@ -9,7 +9,7 @@
         <h:form>
             <p:growl id="messages" /> 
             <p:menu style="width:95%" >
-                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
                 <p:menuitem value="View All Roles" action="/admin/viewAllRoles" icon="ui-icon-search"/>
                 <p:menuitem value="Add New Role" action="/admin/addNewRole" icon="ui-icon-plus"/>
                 <p:menuitem value="View All Privileges" action="/admin/viewAllPrivileges" icon="ui-icon-search"/>
@@ -22,7 +22,7 @@
 
 
             <p:panel header="Welcome">
-                Welcome to S-mart Superb System. You have logged in as Administrator.
+                Welcome to S-mart Superb System. You have logged in as s.
             </p:panel>
         </h:form>
     </ui:define>

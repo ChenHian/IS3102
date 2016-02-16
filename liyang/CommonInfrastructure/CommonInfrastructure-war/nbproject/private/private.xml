@@ -3,21 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/admin/addNewRole.xhtml</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/admin/AdminHome.xhtml</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/admin/viewAllRoles.xhtml</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/addNewRole.xhtml</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/src/java/managedbean/RoleDataTableBean.java</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/templates/tiles/LeftMenu.xhtml</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/src/java/managedbean/SelectBooleanView.java</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/Login.xhtml</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/src/java/managedbean/RoleManagerBean.java</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/admin/viewAllPrivileges.xhtml</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/index.xhtml</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/templates/layout.xhtml</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/index_old.xhtml</file>
-            <file>file:/C:/Users/Computer/Documents/NetBeansProjects/CommonInfrastructure/CommonInfrastructure-war/web/viewAllRoles.xhtml</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/src/java/managedbean/RoleManagerBean.java</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/web/admin/AdminHome.xhtml</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/web/SystemAdmin/AdminHome.xhtml</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/src/java/managedbean/RoleDataTableBean.java</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/web/admin/addNewRole.xhtml</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/src/java/managedbean/loginController.java</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/src/java/managedbean/SelectBooleanView.java</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/src/java/managedbean/Util.java</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/src/java/loginAuthentication/authentication.java</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/nbproject/build-impl.xml</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/src/java/loginAuthentication/Database.java</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/src/java/managedbean/accessController.java</file>
+            <file>file:/E:/IS3102/liyang/CommonInfrastructure/CommonInfrastructure-war/web/WEB-INF/web.xml</file>
         </group>
     </open-files>
 </project-private>

@@ -21,9 +21,12 @@
                     <f:validateLength minimum="1" />  
                 </p:password>
                 <f:facet name="footer">
-                <p:commandButton value="Submit" update="msgs" actionListener="#{loginController.login}" type="submit" icon="ui-icon-check" style="margin:0"></p:commandButton>
+                <p:commandButton action="#{loginController.login}" value="Submit" update="msgs" icon="ui-icon-check" style="margin:0" ajax="true"></p:commandButton>
                 </f:facet> 
             </p:panelGrid>
         </h:form>
+         
+  
      </ui:define>
+    
 </ui:composition>

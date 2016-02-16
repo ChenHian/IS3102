@@ -22,10 +22,22 @@ public class Role implements Serializable {
     private boolean privilege1;
     private boolean privilege2;     
     private boolean privilege3;
+    private boolean privilege4;
     String listOfPrivileges;
     
     @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Set<Privilege> privileges = new HashSet<Privilege>();
+
+    public Role() {
+    }
+
+    public boolean isPrivilege4() {
+        return privilege4;
+    }
+
+    public void setPrivilege4(boolean privilege4) {
+        this.privilege4 = privilege4;
+    }
 
     public Long getRoleId() {
         return roleId;

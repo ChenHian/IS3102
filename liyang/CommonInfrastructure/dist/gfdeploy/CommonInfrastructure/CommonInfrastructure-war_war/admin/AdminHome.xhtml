@@ -9,12 +9,30 @@
         <h:form>
             <p:growl id="messages" /> 
             <p:menu style="width:95%" >
-                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
-                <p:menuitem value="View All Roles" action="/admin/viewAllRoles" icon="ui-icon-search"/>
-                <p:menuitem value="Add New Role" action="/admin/addNewRole" icon="ui-icon-plus"/>
-                <p:menuitem value="View All Privileges" action="/admin/viewAllPrivileges" icon="ui-icon-search"/>
+                
+             <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
+  
             </p:menu>
         </h:form>
+        <h:form>
+    <p:growl autoUpdate="true"/>
+ 
+    <p:panelMenu style="width:300px">
+        
+        <p:submenu label="Admin Tools" rendered = "#{accessController.adminAccess()}">
+            <p:menuitem value="Create New User Account" action="/admin/createUser" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Roles" action="/admin/viewAllRoles" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Role" action="/admin/addNewRole" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Privileges" action="/admin/viewAllPrivileges" icon="ui-icon-search"/>
+        </p:submenu>
+        <p:submenu label="Procurement Module Dummy" rendered = "#{accessController.procurementAccess()}" >
+            <p:menuitem value="Dummy, do not use" action ="/login.xhtml"  ajax="false" icon="ui-icon-close"/>
+        </p:submenu>
+        <p:separator />
+       
+        
+    </p:panelMenu>
+</h:form>
     </ui:define>
 
     <ui:define name="content">
@@ -26,5 +44,9 @@
             </p:panel>
         </h:form>
     </ui:define>
+    <p:idleMonitor timeout="5000">
+        <p:ajax event="idle" listener="#{loginController.logout}" update ="formMain" />
+        
+    </p:idleMonitor>
 
 </ui:composition>

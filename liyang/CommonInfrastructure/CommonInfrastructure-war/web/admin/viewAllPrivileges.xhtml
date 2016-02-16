@@ -31,7 +31,7 @@
         <h:form>
             <p:growl id="messages" /> 
             <p:menu style="width:95%" >
-                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
                 <p:menuitem value="Home" action="/admin/AdminHome" icon="ui-icon-home"/>
                 <p:menuitem value="View All Roles" action="/admin/viewAllRoles" icon="ui-icon-search"/>
                 <p:menuitem value="Add New Role" action="/admin/addNewRole" icon="ui-icon-plus"/>
