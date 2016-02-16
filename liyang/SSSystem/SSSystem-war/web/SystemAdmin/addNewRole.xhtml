@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="formMain">
+            <p:panel id="panel" header="Add New Role">
+                <p:ajaxStatus style="width:16px;height:16px;">
+                    <f:facet name="start">
+                        <h:graphicImage value="/images/spinner.gif" />
+                    </f:facet>
+                    <f:facet name="complete">
+                        <h:outputText value="" />
+                    </f:facet>
+                </p:ajaxStatus>
+                <p:messages />
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="roleName" style="fontweight:
+                                           bold" value="Role Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText required="true" label="Role Name"
+                                         requiredMessage="Role Name is required." id="roleName"
+                                         value="#{roleManagerBean.roleName}">
+                                <f:validateLength minimum="4" maximum="16" />
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="roleName" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Selecte Privilege(s): " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="1. Supplies Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value1}" />
+                            <h:outputText value="2. Transaction Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value2}" />
+                            <h:outputText value="3. Customer Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value3}" />
+                        </p:column>
+                        <p:column>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:commandButton id="btn" value="Save New Role"
+                                 update="panel" actionListener="#{roleManagerBean.saveNewRole}" ajax="true"
+                                 />
+            </p:panel>
+        </h:form>
+
+
+
+    </ui:define>
+    <ui:define name ="left">
+        <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                 <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
+                <p:menuitem value="Home" action="/admin/AdminHome" icon="ui-icon-home"/>
+                <p:menuitem value="View All Roles" action="/admin/viewAllRoles" icon="ui-icon-search"/>
+                <p:menuitem value="View All Privileges" action="/admin/viewAllPrivileges" icon="ui-icon-search"/>
+            </p:menu>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="left">
+        <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                
+             <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
+  
+            </p:menu>
+        </h:form>
+        <h:form>
+    <p:growl autoUpdate="true"/>
+ 
+    <p:panelMenu style="width:300px">
+        
+        <p:submenu label="Admin Tools" rendered = "#{accessController.adminAccess}">
+            <p:menuitem value="Create New User Account" action="/admin/createUser" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Roles" action="/admin/viewAllRoles" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Role" action="/admin/addNewRole" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Privileges" action="/admin/viewAllPrivileges" icon="ui-icon-search"/>
+        </p:submenu>
+        <p:submenu label="Procurement Module Dummy" rendered = "#{accessController.procurementAccess()}" >
+            <p:menuitem value="Dummy, do not use" action ="/login.xhtml"  ajax="false" icon="ui-icon-close"/>
+        </p:submenu>
+        <p:separator />
+       
+        
+    </p:panelMenu>
+</h:form>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formMain">
+
+
+            <p:panel header="Welcome">
+                Welcome to S-mart Superb System. 
+            </p:panel>
+        </h:form>
+    </ui:define>
+    <p:idleMonitor timeout="5000">
+        <p:ajax event="idle" listener="#{loginController.logout}" update ="formMain" />
+        
+    </p:idleMonitor>
+
+</ui:composition>
