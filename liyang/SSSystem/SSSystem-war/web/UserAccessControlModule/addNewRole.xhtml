@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="accessError" rendered="#{!accessController.userAccessControlModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+        <h:form id="formMain" rendered="#{accessController.userAccessControlModuleAccess()}">
+            <p:panel id="panel" header="Add New Role">
+                <p:ajaxStatus style="width:16px;height:16px;">
+                    <f:facet name="start">
+                        <h:graphicImage value="/images/spinner.gif" />
+                    </f:facet>
+                    <f:facet name="complete">
+                        <h:outputText value="" />
+                    </f:facet>
+                </p:ajaxStatus>
+                <p:messages />
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="roleName" style="fontweight:
+                                           bold" value="Role Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText required="true" label="Role Name"
+                                         requiredMessage="Role Name is required." id="roleName"
+                                         value="#{roleManagerBean.roleName}">
+                                <f:validateLength minimum="4" maximum="16" />
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="roleName" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Selecte Privilege(s): " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="1. User Account Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value1}" />
+                            <h:outputText value="2. User Access Control Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value2}" />
+                            <h:outputText value="3. Account Administration: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value3}" />
+                            <h:outputText value="4. Audit Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value4}" />
+                            <h:outputText value="5. Reporting Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value5}" />
+                            <h:outputText value="6. Supplier Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value6}" />
+                            <h:outputText value="7. Purchase Request Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value7}" />
+                            <h:outputText value="8. Purchasing Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value8}" />
+                            <h:outputText value="9. Purchase Contract Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value9}" />
+                            <h:outputText value="10. Item Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value10}" />
+                            <h:outputText value="11. Purchasing Issue Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value11}" />
+                            <h:outputText value="12. Notification Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value12}" />
+                            <h:outputText value="13. Warehouse Inventory Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value13}" />
+                            <h:outputText value="14. Purchase Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value14}" />
+                            <h:outputText value="15. Delivery Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value15}" />
+                            <h:outputText value="16. Supplies Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value16}" />     
+                            <h:outputText value="17. Transaction Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value17}" />
+                            <h:outputText value="18. Customer Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value18}" />
+                            <h:outputText value="19. Price Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value19}" />
+                            <h:outputText value="20. Promotion Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value20}" />
+                            <h:outputText value="21. Membership Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value21}" />
+                            <h:outputText value="22. Advertising Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value22}" />
+                            <h:outputText value="23. Sales and Marketing Approval Rights: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value23}" />
+                            <h:outputText value="24. Supplier Payment Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value24}" />
+                            <h:outputText value="25. Online Sales Payment Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value25}" />
+                            <h:outputText value="26. Refund Management Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value26}" />
+                            <h:outputText value="27. Web Store Content Management: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value27}" />
+                        </p:column>
+                        <p:column>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:commandButton id="btn" value="Save New Role"
+                                 update="panel" actionListener="#{roleManagerBean.saveNewRole}" ajax="true"
+                                 />
+            </p:panel>
+        </h:form>
+        </ui:define>
+
+
+
+     <!--Left drop down menu, edit for all .xhtml pages if changed-->
+    <ui:define name="left">
+<h:form>
+    <p:growl autoUpdate="true"/>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+            <p:menuitem value="Home" action="/admin/AdminHome" icon="ui-icon-home"/>    
+            <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
+            </p:menu>
+ 
+ 
+    
+   
+    <p:panelMenu style="width:300px">
+        
+        <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
+            
+            <p:menuitem value="View All Roles" action="/UserAccessControlModule/viewAllRoles" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Role" action="/UserAccessControlModule/addNewRole" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Privileges" action="/UserAccessControlModule/viewAllPrivileges" icon="ui-icon-search"/>
+        </p:submenu>
+        <p:submenu label="Purchasing Request Module Dummy" rendered = "#{accessController.purchasingRequestModuleAccess()}" >
+            <p:menuitem value="Dummy, do not use" action ="/login.xhtml"  ajax="false" icon="ui-icon-close"/>
+        </p:submenu>
+        <p:separator />
+       
+        
+    </p:panelMenu>
+            </h:form>
+      </ui:define>
+    <!--Left drop down menu end-->
+    
+</ui:composition>

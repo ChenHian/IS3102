@@ -14,6 +14,7 @@ public class RoleDataTableBean {
 
     @EJB
     private RoleSessionBean roleSessionBean;
+    private Role selectedRole;
 
     public RoleDataTableBean() {
     }
@@ -28,5 +29,18 @@ public class RoleDataTableBean {
     
     public List<Role> getRoles() {
         return roleSessionBean.getAllRoles();
+    }
+
+    public Role getSelectedRole() {
+        return selectedRole;
+    }
+
+    public void setSelectedRole(Role selectedRole) {
+        this.selectedRole = selectedRole;
+    }
+    
+        public void deleteRole() {
+        roleSessionBean.deleteRole(selectedRole);
+        selectedRole = null;
     }
 }

@@ -78,7 +78,7 @@ public class loginController implements Serializable{
             return "login";
         }
     }
-    public String logout() {
+    public static String logout() {
       HttpSession session = Util.getSession();
       Audit au =new Audit();
         @SuppressWarnings("unchecked")                     

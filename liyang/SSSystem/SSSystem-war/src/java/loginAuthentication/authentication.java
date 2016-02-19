@@ -22,7 +22,7 @@ public class authentication {
         //System.out.print(password);
         try {
             con = Database.getConnection();
-            System.out.println("authentication "+ con.getCatalog());
+            //System.out.println("authentication "+ con.getCatalog());
             ps = con.prepareStatement(
                     "SELECT email, password FROM staffaccount WHERE email= ? and password= ? ");
             ps.setString(1, username);

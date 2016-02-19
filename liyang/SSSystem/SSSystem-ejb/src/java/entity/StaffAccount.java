@@ -16,13 +16,10 @@ public class StaffAccount implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long staffAccountId;
-    private String email;
-    private String password;
     private String staffAccountName;
+    private String password;
     @OneToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Role role;
-    private String contactNumber;
-    
 
     public Long getSystemUserId() {
         return staffAccountId;
@@ -55,22 +52,6 @@ public class StaffAccount implements Serializable {
    public void setRole (Role role){
        this.role = role;
    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
-    }
    
     @Override
     public int hashCode() {
