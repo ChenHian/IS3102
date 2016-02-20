@@ -42,7 +42,8 @@ public class authentication {
                 
             //Comment line below for cleartext password
             ps.setString(2, passwordMD5);
-               
+            
+            
             ResultSet rs = ps.executeQuery();
             if (rs.next()) { //found
                 System.out.println(rs.getString("email"));
