@@ -26,7 +26,9 @@ public class authentication {
             ps = con.prepareStatement(
                     "SELECT email, password FROM staffaccount WHERE email= ? and password= ? ");
             ps.setString(1, username);
-            ps.setString(2, password);
+            
+            //Uncomment line below for cleartext password
+            //ps.setString(2, password);
             
             String passwordMD5 = "";
                 try { 
@@ -37,7 +39,9 @@ public class authentication {
                 }
                 catch (NoSuchAlgorithmException ex) {  
                 }
-               // ps.setString(2, passwordMD5);
+                
+            //Comment line below for cleartext password
+            ps.setString(2, passwordMD5);
                
             ResultSet rs = ps.executeQuery();
             if (rs.next()) { //found

@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content" >
+        
+        <!--Timeout function-->    
+        <h:form>
+    <p:growl id="timeout" showDetail="true" sticky="true" />
+ 
+    <p:idleMonitor timeout="900000">
+        <p:ajax event="idle" listener="#{idleMonitorView.onIdle}" update="timeout" />
+        
+    </p:idleMonitor>
+</h:form>
+        
+    <!--Timeout function end-->
+    
+    <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.accountAdministrationModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+    
+    
+    <h:form id="formMain" rendered="#{accessController.accountAdministrationModuleAccess()}">
+            <p:panel id="panel" header="Add New Staff Account">
+                <p:ajaxStatus style="width:16px;height:16px;">
+                    <f:facet name="start">
+                        <h:graphicImage value="/images/spinner.gif" />
+                    </f:facet>
+                    <f:facet name="complete">
+                        <h:outputText value="" />
+                    </f:facet>
+                </p:ajaxStatus>
+                <p:messages />
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="email" style="fontweight:
+                                           bold" value="Email: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText required="true" label="Email"
+                                         requiredMessage="Email is required." id="email"
+                                         value="#{staffAccountManagerBean.email}">
+                                <f:validateLength minimum="4" />
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="email" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="staffAccountName" style="fontweight:
+                                           bold" value="Staff Account Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText required="true" label="Staff Account Name"
+                                         requiredMessage="Staff Account Name is required." id="staffAccountName"
+                                         value="#{staffAccountManagerBean.staffAccountName}">
+                                <f:validateLength minimum="4" />
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="staffAccountName" />
+                        </p:column>
+                    </p:row>                   
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="contactNumber" style="fontweight:
+                                           bold" value="Contact Number: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText required="true" label="Contact Number"
+                                         requiredMessage="Contact Number is required." id="contactNumber"
+                                         value="#{staffAccountManagerBean.contactNumber}">
+                                <f:validateLength minimum="4"/>
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="contactNumber" />
+                        </p:column>
+                    </p:row>
+
+                    <p:outputLabel for="role" value="Role: " />
+                    <p:selectOneMenu id="role" value="#{staffAccountManagerBean.role}">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItems value="#{roleDataTableBean.roleNames}" />
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton id="btn" value="Save New Staff Account"
+                                 update="panel" actionListener="#{staffAccountManagerBean.saveNewStaffAccount}" ajax="true"
+                                 />
+            </p:panel>
+        </h:form>
+
+
+
+    </ui:define>
+    <!--Left drop down menu, edit for all .xhtml pages if changed-->
+    <ui:define name="left">
+<h:form>
+    <p:growl autoUpdate="true"/>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+            <p:menuitem value="Home" action="/admin/AdminHome" icon="ui-icon-home"/>    
+            <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
+            </p:menu>
+ 
+ 
+    
+   
+    <p:panelMenu style="width:300px">
+        
+        <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
+            
+            <p:menuitem value="View All Roles" action="/UserAccessControlModule/viewAllRoles" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Role" action="/UserAccessControlModule/addNewRole" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Privileges" action="/UserAccessControlModule/viewAllPrivileges" icon="ui-icon-search"/>
+        </p:submenu>
+        
+        <p:submenu label="Account Administration Module" rendered = "#{accessController.accountAdministrationModuleAccess()}">
+            
+            <p:menuitem value="View All Staff Accounts" action="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Account" action="/AccountAdministrationModule/addNewStaffAccount" icon="ui-icon-plus"/>
+        </p:submenu>
+        <p:submenu label="Purchasing Request Module Dummy" rendered = "#{accessController.purchasingRequestModuleAccess()}" >
+            <p:menuitem value="Dummy, do not use" action ="/login.xhtml"  ajax="false" icon="ui-icon-close"/>
+        </p:submenu>
+        <p:separator />
+       
+        
+    </p:panelMenu>
+            </h:form>
+      </ui:define>
+    <!--Left drop down menu end-->
+
+
+
+</ui:composition>

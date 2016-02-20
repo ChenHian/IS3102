@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.faces.bean.SessionScoped;
 
-import AuditLog.Audit;
+import auditLog.Audit;
 import org.primefaces.context.RequestContext;
  
 @ManagedBean
@@ -49,7 +49,7 @@ public class loginController implements Serializable{
             HttpSession session = Util.getSession();
             session.setAttribute("username", username);
             
-        Audit au =new Audit();
+        Audit au = new Audit();
         @SuppressWarnings("unchecked")                     
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();

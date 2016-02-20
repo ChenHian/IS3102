@@ -5,7 +5,7 @@
  */
 package managedbean;
 
-import AuditLog.Audit;
+import auditLog.Audit;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;

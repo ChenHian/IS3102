@@ -101,8 +101,46 @@ public class accessController {
                 //System.out.println("Result found");
                 //System.out.println("accessController: Roleid getString" + rs.getString("ROLE_ROLEID"));
                 roleid = Long.parseLong(rs.getString("ROLE_ROLEID"));
-                System.out.println("roleId = "+ roleid);
+                System.out.println("privilege2 = "+ entityManager.find(Role.class, roleid).isPrivilege2());
                 return entityManager.find(Role.class, roleid).isPrivilege2();
+            }
+            else {
+                System.out.println("No RS result");
+            }
+  
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+    
+    
+    public boolean accountAdministrationModuleAccess() {
+        String user = "";
+        HttpSession session = Util.getSession();
+        user= (String)session.getAttribute("username");
+        System.out.println("Session user = " + user);
+        Connection con = null;
+        PreparedStatement ps = null;
+        
+        long roleid = 0;
+        try {
+            
+            con = Database.getConnection();
+            
+            ps = con.prepareStatement(
+                    "SELECT role_roleid FROM staffaccount WHERE email= ?");
+            ps.setString(1, user);
+            //ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()) {
+                //System.out.println("Result found");
+                //System.out.println("accessController: Roleid getString" + rs.getString("ROLE_ROLEID"));
+                roleid = Long.parseLong(rs.getString("ROLE_ROLEID"));
+                //System.out.println("roleId = "+ roleid);
+                return entityManager.find(Role.class, roleid).isPrivilege3();
             }
             else {
                 System.out.println("No RS result");
@@ -131,7 +169,7 @@ public class accessController {
             if(rs.next()) {
                 System.out.println(rs.getString("ROLE_ROLEID"));
                 roleid = Long.parseLong(rs.getString("ROLE_ROLEID"));
-                System.out.println("Privilege 7:" + entityManager.find(Role.class, roleid).isPrivilege7());
+                //System.out.println("Privilege 7:" + entityManager.find(Role.class, roleid).isPrivilege7());
                 return entityManager.find(Role.class, roleid).isPrivilege7();
             }
             //Role userRole = entityManager.find(Role.class,roleid);

@@ -20,37 +20,43 @@
         
     <!--Timeout function end-->
         
-        <h:form id="accessError" rendered="#{!accessController.userAccessControlModuleAccess()}">
+        <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.accountAdministrationModuleAccess()}">
             <p:panel header="Error Accessing Page">
                 You do not have the access required to view this page, please contact your system administrator.
             </p:panel>
         </h:form>
-        
-        <h:form id="formMain"  rendered="#{accessController.userAccessControlModuleAccess()}">
-            <h:form id="formMain">
-            <p:panel header="View All Privileges">
-                <p:dataTable var="privilege" value="#{roleDataTableBean.privileges}"
-                             paginator="true" rows="10" emptyMessage="No privilege">
-                    <p:column headerText="Privilege ID"
-                              sortBy="#{privilege.privilegeId}">
-                        <h:outputText value="#{privilege.privilegeId}" />
+    
+    
+        <h:form id="formMain" rendered="#{accessController.accountAdministrationModuleAccess()}">
+            <p:panel header="View All Staff Accounts">
+                <p:contextMenu for="staffAccounts">
+                    <p:menuitem value="Delete" update="staffAccounts" icon="ui-icon-close" actionListener="#{roleDataTableBean.deleteStaffAccount}"/>
+                </p:contextMenu>
+                <p:dataTable id = "staffAccounts" var="staffAccount" value="#{roleDataTableBean.staffAccounts}"
+                             paginator="true" rows="10" emptyMessage="No role" rowKey="#{staffAccount.staffAccountId}"
+                 selection="#{roleDataTableBean.selectedStaffAccount}" selectionMode="single">
+                    <p:column headerText="Staff Account Name"
+                              sortBy="#{staffAccount.staffAccountName}">
+                        <h:outputText value="#{staffAccount.staffAccountName}" />
                     </p:column>
-                    <p:column headerText="Privilege Name"
-                              sortBy="#{privilege.privilegeName}">
-                        <h:outputText value="#{privilege.privilegeName}" />
+                    <p:column headerText="Email"
+                              sortBy="#{staffAccount.email}">
+                        <h:outputText value="#{staffAccount.email}" />
                     </p:column>
-                    <p:column headerText="Privilege Description"
-                              sortBy="#{privilege.description}">
-                        <h:outputText value="#{privilege.description}" />
+                    <p:column headerText="Contact Number"
+                              sortBy="#{staffAccount.contactNumber}">
+                        <h:outputText value="#{staffAccount.contactNumber}" />
+                    </p:column>
+                    <p:column headerText="Role"
+                              sortBy="#{staffAccount.role.roleName}">
+                        <h:outputText value="#{staffAccount.role.roleName}" />
                     </p:column>
                 </p:dataTable>
             </p:panel>
         </h:form>
-        </h:form>
     </ui:define>
-    
-    
-     <!--Left drop down menu, edit for all .xhtml pages if changed-->
+    <!--Left drop down menu, edit for all .xhtml pages if changed-->
     <ui:define name="left">
 <h:form>
     <p:growl autoUpdate="true"/>
@@ -87,5 +93,7 @@
             </h:form>
       </ui:define>
     <!--Left drop down menu end-->
+
+
 
 </ui:composition>

@@ -8,6 +8,18 @@
 
     <ui:define name="content">
         
+    <!--Timeout function-->    
+        <h:form>
+    <p:growl id="timeout" showDetail="true" sticky="true" />
+ 
+    <p:idleMonitor timeout="900000">
+        <p:ajax event="idle" listener="#{idleMonitorView.onIdle}" update="timeout" />
+        
+    </p:idleMonitor>
+</h:form>
+        
+    <!--Timeout function end-->
+        
         <h:form id="accessError" rendered="#{!accessController.userAccessControlModuleAccess()}">
             <p:panel header="Error Accessing Page">
                 You do not have the access required to view this page, please contact your system administrator.
@@ -60,6 +72,12 @@
             <p:menuitem value="View All Roles" action="/UserAccessControlModule/viewAllRoles" icon="ui-icon-search"/>
             <p:menuitem value="Add New Role" action="/UserAccessControlModule/addNewRole" icon="ui-icon-plus"/>
             <p:menuitem value="View All Privileges" action="/UserAccessControlModule/viewAllPrivileges" icon="ui-icon-search"/>
+        </p:submenu>
+        
+        <p:submenu label="Account Administration Module" rendered = "#{accessController.accountAdministrationModuleAccess()}">
+            
+            <p:menuitem value="View All Staff Accounts" action="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Account" action="/AccountAdministrationModule/addNewStaffAccount" icon="ui-icon-plus"/>
         </p:submenu>
         <p:submenu label="Purchasing Request Module Dummy" rendered = "#{accessController.purchasingRequestModuleAccess()}" >
             <p:menuitem value="Dummy, do not use" action ="/login.xhtml"  ajax="false" icon="ui-icon-close"/>
