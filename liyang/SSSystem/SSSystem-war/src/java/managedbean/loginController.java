@@ -13,6 +13,12 @@ import java.util.Date;
 import javax.faces.bean.SessionScoped;
 
 import auditLog.Audit;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import loginAuthentication.Database;
 import org.primefaces.context.RequestContext;
  
 @ManagedBean
@@ -48,7 +54,29 @@ public class loginController implements Serializable{
             System.out.println("Authenticated");
             HttpSession session = Util.getSession();
             session.setAttribute("username", username);
+            Connection con = null;
+        PreparedStatement ps = null;
+        //System.out.print(password);
+        try {
+            con = Database.getConnection();
+            //System.out.println("authentication "+ con.getCatalog());
+            ps = con.prepareStatement(
+                    "SELECT staffAccountId FROM staffaccount WHERE email= ?");
+            ps.setString(1, username);
             
+
+            
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) { //found
+                //System.out.println(rs.getString("email"));
+                session.setAttribute("userId", rs.getString("staffAccountId"));
+                System.out.println(rs.getString("staffAccountId"));
+            }
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+          
         Audit au = new Audit();
         @SuppressWarnings("unchecked")                     
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

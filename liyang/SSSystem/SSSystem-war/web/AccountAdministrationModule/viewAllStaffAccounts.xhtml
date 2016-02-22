@@ -20,6 +20,8 @@
         
     <!--Timeout function end-->
         
+        
+        
         <!-- URL Access control, change rendered to module -->
         <h:form id="accessError" rendered="#{!accessController.userAccountManagementModuleAccess()}">
             <p:panel header="Error Accessing Page">
@@ -56,7 +58,7 @@
             </p:panel>
         </h:form>
     </ui:define>
-    <!--Left drop down menu, edit for all .xhtml pages if changed-->
+<!--Left drop down menu, edit for all .xhtml pages if changed-->
     <ui:define name="left">
 <h:form>
     <p:growl autoUpdate="true"/>
@@ -69,7 +71,15 @@
  
     
    
+    <!--Module menu--> 
     <p:panelMenu style="width:300px">
+        
+        <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
+            
+            <p:menuitem value="Edit Account Particulars" action="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
+            <p:menuitem value="Change Password" action="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
+
+        </p:submenu>
         
         <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
             
@@ -93,6 +103,7 @@
             </h:form>
       </ui:define>
     <!--Left drop down menu end-->
+    
 
 
 

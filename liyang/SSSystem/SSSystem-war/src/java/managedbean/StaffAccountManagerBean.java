@@ -11,6 +11,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpSession;
 import session.stateless.StaffAccountSessionBean;
 
 @Named(value = "staffAccountManagerBean")
@@ -29,6 +30,25 @@ public class StaffAccountManagerBean {
     private String role;
     private List<String> roleNames;
     private List <Role>roles =  new ArrayList<Role>();
+    
+    private String newPassword1;
+    private String newPassword2;
+
+    public String getNewPassword1() {
+        return newPassword1;
+    }
+
+    public String getNewPassword2() {
+        return newPassword2;
+    }
+
+    public void setNewPassword1(String newPassword1) {
+        this.newPassword1 = newPassword1;
+    }
+
+    public void setNewPassword2(String newPassword2) {
+        this.newPassword2 = newPassword2;
+    }
 
     public StaffAccountManagerBean() {
         emailLength = "Current staff name length is less than 4.";
@@ -136,4 +156,21 @@ public class StaffAccountManagerBean {
 
 
     }   
+    
+    public void changePassword() {
+        if(!newPassword1.equals(newPassword2)) {          
+            statusMessage = "Password does not match";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, statusMessage, ""));
+        }
+        else {
+            
+            HttpSession session = Util.getSession();
+            Long accountId = Long.parseLong(session.getAttribute("userId").toString());
+            System.out.println("changing password:" + newPassword1 + "for id" + accountId);
+            staffAccountSessionBean.changePassword(newPassword1, accountId);
+                statusMessage = "Password has been changed successfully.";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, statusMessage, ""));
+        }
+        
+    }
 }

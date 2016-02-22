@@ -50,7 +50,7 @@
     </ui:define>
     
     
-     <!--Left drop down menu, edit for all .xhtml pages if changed-->
+    <!--Left drop down menu, edit for all .xhtml pages if changed-->
     <ui:define name="left">
 <h:form>
     <p:growl autoUpdate="true"/>
@@ -69,6 +69,7 @@
         <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
             
             <p:menuitem value="Edit Account Particulars" action="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
+            <p:menuitem value="Change Password" action="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
 
         </p:submenu>
         
@@ -94,5 +95,5 @@
             </h:form>
       </ui:define>
     <!--Left drop down menu end-->
-
+    
 </ui:composition>

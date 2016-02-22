@@ -9,7 +9,6 @@
 
     <ui:define name="content">
         
-        
         <!--Timeout function-->    
         <h:form>
     <p:growl id="timeout" showDetail="true" sticky="true" />
@@ -21,6 +20,7 @@
 </h:form>
         
     <!--Timeout function end-->
+       
         
         <!-- URL Access control, change rendered to module -->
         <h:form id="accessError" rendered="#{!accessController.userAccessControlModuleAccess()}">
@@ -134,7 +134,7 @@
 
 
 
-    <!--Left drop down menu, edit for all .xhtml pages if changed-->
+   <!--Left drop down menu, edit for all .xhtml pages if changed-->
     <ui:define name="left">
 <h:form>
     <p:growl autoUpdate="true"/>
@@ -146,12 +146,14 @@
  
  
     
-   <!--Module menu--> 
+   
+    <!--Module menu--> 
     <p:panelMenu style="width:300px">
         
         <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
             
             <p:menuitem value="Edit Account Particulars" action="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
+            <p:menuitem value="Change Password" action="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
 
         </p:submenu>
         
@@ -177,6 +179,7 @@
             </h:form>
       </ui:define>
     <!--Left drop down menu end-->
+ 
 
 
     

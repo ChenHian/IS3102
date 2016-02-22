@@ -8,7 +8,7 @@
 
     <ui:define name="content" >
         
-        <!--Timeout function-->    
+        <!--Timeout function, do not move-->    
         <h:form>
     <p:growl id="timeout" showDetail="true" sticky="true" />
  
@@ -117,7 +117,15 @@
  
     
    
+    <!--Module menu--> 
     <p:panelMenu style="width:300px">
+        
+        <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
+            
+            <p:menuitem value="Edit Account Particulars" action="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
+            <p:menuitem value="Change Password" action="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
+
+        </p:submenu>
         
         <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
             
@@ -141,6 +149,7 @@
             </h:form>
       </ui:define>
     <!--Left drop down menu end-->
+    
 
 
 

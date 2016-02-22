@@ -14,10 +14,12 @@
  
     <p:idleMonitor timeout="900000">
         <p:ajax event="idle" listener="#{idleMonitorView.onIdle}" update="timeout" />
+        
     </p:idleMonitor>
 </h:form>
         
     <!--Timeout function end-->
+
         
         <!-- URL Access control, change rendered to module -->
         <h:form id="accessError" rendered="#{!accessController.userAccountManagementModuleAccess()}">
@@ -89,6 +91,7 @@
         <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
             
             <p:menuitem value="Edit Account Particulars" action="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
+            <p:menuitem value="Change Password" action="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
 
         </p:submenu>
         
@@ -114,7 +117,7 @@
             </h:form>
       </ui:define>
     <!--Left drop down menu end-->
-
+  
 
 
 </ui:composition>
