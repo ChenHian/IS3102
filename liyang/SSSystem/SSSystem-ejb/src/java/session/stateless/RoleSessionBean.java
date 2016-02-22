@@ -51,6 +51,12 @@ public class RoleSessionBean {
         Query query = entityManager.createQuery("SELECT r FROM Role r");
         return query.getResultList();
     }
+    
+    public List<String> getAllRoleNames() {
+        Query query = entityManager.createQuery("SELECT r.roleName FROM Role r");
+        return query.getResultList();
+    }
+
 
     public Role getMyRole(Long staffAccountId) {
         StaffAccount staffAccount = getStaffAccount(staffAccountId);

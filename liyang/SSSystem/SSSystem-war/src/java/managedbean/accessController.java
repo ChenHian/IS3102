@@ -33,13 +33,6 @@ public class accessController {
     @PersistenceContext(unitName = "CommonInfrastructure-ejbPU")
     private EntityManager entityManager;
     
-    
-    public boolean userPrivilege4(int roleid) {
-        Role role = entityManager.find(Role.class, roleid) ; //To change body of generated methods, choose Tools | Templates.
-        System.out.println("Privilege 4: " + role.isPrivilege4());
-        return role.isPrivilege4();
-    }
-    
     public String getSessionUser() {
         String user = "";
         HttpSession session = Util.getSession();
@@ -48,9 +41,9 @@ public class accessController {
         PreparedStatement ps = null;
         
         try {
-            System.out.println("Making connection");
+            //System.out.println("Making connection");
             con = Database.getConnection();
-            System.out.println("Connection made: "+ con.getCatalog());
+            //System.out.println("Connection made: "+ con.getCatalog());
             ps = con.prepareStatement(
                     "SELECT staffaccountname FROM staffaccount WHERE email= ?");
             ps.setString(1, user);
@@ -75,33 +68,70 @@ public class accessController {
         return "Error finding name, please contact your system administrator";
     }
     
+    
+    public boolean userAccountManagementModuleAccess() {
+        String user = "";
+        HttpSession session = Util.getSession();
+        user= (String)session.getAttribute("username");
+        //System.out.println("Session user = " + user);
+        Connection con = null;
+        PreparedStatement ps = null;
+        
+        long roleid = 0;
+        try {
+            //System.out.println("Making connection");
+            con = Database.getConnection();
+            //System.out.println("Connection made: "+ con.getCatalog());
+            ps = con.prepareStatement(
+                    "SELECT role_roleid FROM staffaccount WHERE email= ?");
+            ps.setString(1, user);
+            //ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            //System.out.println("After Query");
+            
+            if(rs.next()) {
+                //System.out.println("Result found");
+                //System.out.println("accessController: Roleid getString" + rs.getString("ROLE_ROLEID"));
+                roleid = Long.parseLong(rs.getString("ROLE_ROLEID"));
+                return entityManager.find(Role.class, roleid).isPrivilege1();
+            }
+            else {
+                System.out.println("No RS result");
+            }
+  
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
 
     
     public boolean userAccessControlModuleAccess() {
         String user = "";
         HttpSession session = Util.getSession();
         user= (String)session.getAttribute("username");
-        System.out.println("Session user = " + user);
+        //System.out.println("Session user = " + user);
         Connection con = null;
         PreparedStatement ps = null;
         
         long roleid = 0;
         try {
-            System.out.println("Making connection");
+            //System.out.println("Making connection");
             con = Database.getConnection();
-            System.out.println("Connection made: "+ con.getCatalog());
+            //System.out.println("Connection made: "+ con.getCatalog());
             ps = con.prepareStatement(
                     "SELECT role_roleid FROM staffaccount WHERE email= ?");
             ps.setString(1, user);
             //ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
-            System.out.println("After Query");
+            //System.out.println("After Query");
             
             if(rs.next()) {
                 //System.out.println("Result found");
                 //System.out.println("accessController: Roleid getString" + rs.getString("ROLE_ROLEID"));
                 roleid = Long.parseLong(rs.getString("ROLE_ROLEID"));
-                System.out.println("privilege2 = "+ entityManager.find(Role.class, roleid).isPrivilege2());
+                //System.out.println("privilege2 = "+ entityManager.find(Role.class, roleid).isPrivilege2());
                 return entityManager.find(Role.class, roleid).isPrivilege2();
             }
             else {
@@ -120,7 +150,7 @@ public class accessController {
         String user = "";
         HttpSession session = Util.getSession();
         user= (String)session.getAttribute("username");
-        System.out.println("Session user = " + user);
+        //System.out.println("Session user = " + user);
         Connection con = null;
         PreparedStatement ps = null;
         
@@ -140,6 +170,7 @@ public class accessController {
                 //System.out.println("accessController: Roleid getString" + rs.getString("ROLE_ROLEID"));
                 roleid = Long.parseLong(rs.getString("ROLE_ROLEID"));
                 //System.out.println("roleId = "+ roleid);
+                //System.out.println("accountAdministrationModuleAccess: " + entityManager.find(Role.class, roleid).isPrivilege3());
                 return entityManager.find(Role.class, roleid).isPrivilege3();
             }
             else {
@@ -167,7 +198,7 @@ public class accessController {
             ResultSet rs = ps.executeQuery();
             
             if(rs.next()) {
-                System.out.println(rs.getString("ROLE_ROLEID"));
+            //    System.out.println(rs.getString("ROLE_ROLEID"));
                 roleid = Long.parseLong(rs.getString("ROLE_ROLEID"));
                 //System.out.println("Privilege 7:" + entityManager.find(Role.class, roleid).isPrivilege7());
                 return entityManager.find(Role.class, roleid).isPrivilege7();

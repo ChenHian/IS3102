@@ -62,7 +62,7 @@ public class loginController implements Serializable{
 
         catch(Exception ex)
         {}
-        return home;
+        return "home";
             
         } else {
  

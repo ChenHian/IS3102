@@ -65,7 +65,14 @@
  
     
    
+    <!--Module menu--> 
     <p:panelMenu style="width:300px">
+        
+        <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
+            
+            <p:menuitem value="Edit Account Particulars" action="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
+
+        </p:submenu>
         
         <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
             

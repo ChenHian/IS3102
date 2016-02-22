@@ -4,7 +4,8 @@
                 template="/templates/layout.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml" >
 
     <ui:define name="content">
         
@@ -50,7 +51,7 @@
                             <p:inputText required="true" label="Role Name"
                                          requiredMessage="Role Name is required." id="roleName"
                                          value="#{roleManagerBean.roleName}">
-                                <f:validateLength minimum="4" maximum="16" />
+                                <f:validateLength minimum="4" maximum="255" />
                             </p:inputText>
                         </p:column>
                         <p:column>
@@ -60,63 +61,65 @@
 
                     <p:row>
                         <p:column>
-                            <p:outputLabel value="Selecte Privilege(s): " />
+                            <p:outputLabel value="Select Privilege(s): " />
                         </p:column>
-                        <p:column>
+                        
+
+                        <p:column >
                             <h:outputText value="1. User Account Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value1}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value1}" style= "margin-bottom: 10px;" />  <br />
                             <h:outputText value="2. User Access Control Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value2}" />
-                            <h:outputText value="3. Account Administration: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value3}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value2}" style="margin-bottom:10px;"/> <br />
+                            <h:outputText value="3. Account Administration Module: " />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value3}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="4. Audit Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value4}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value4}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="5. Reporting Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value5}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value5}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="6. Supplier Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value6}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value6}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="7. Purchase Request Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value7}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value7}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="8. Purchasing Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value8}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value8}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="9. Purchase Contract Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value9}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value9}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="10. Item Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value10}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value10}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="11. Purchasing Issue Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value11}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value11}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="12. Notification Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value12}" />
-                            <h:outputText value="13. Warehouse Inventory Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value13}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value12}" style="margin-bottom:10px;"/> <br />
+                            <h:outputText value="13. Warehouse Inventory Management Module: " /> 
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value13}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="14. Purchase Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value14}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value14}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="15. Delivery Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value15}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value15}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="16. Supplies Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value16}" />     
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value16}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="17. Transaction Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value17}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value17}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="18. Customer Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value18}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value18}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="19. Price Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value19}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value19}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="20. Promotion Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value20}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value20}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="21. Membership Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value21}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value21}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="22. Advertising Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value22}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value22}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="23. Sales and Marketing Approval Rights: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value23}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value23}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="24. Supplier Payment Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value24}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value24}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="25. Online Sales Payment Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value25}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value25}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="26. Refund Management Module: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value26}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value26}" style="margin-bottom:10px;"/> <br />
                             <h:outputText value="27. Web Store Content Management: " />
-                            <p:selectBooleanCheckbox value="#{roleManagerBean.value27}" />
+                            <p:selectBooleanCheckbox value="#{roleManagerBean.value27}" style="margin-bottom:10px;"/> <br />
                         </p:column>
                         <p:column>
                         </p:column>
@@ -143,8 +146,14 @@
  
  
     
-   
+   <!--Module menu--> 
     <p:panelMenu style="width:300px">
+        
+        <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
+            
+            <p:menuitem value="Edit Account Particulars" action="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
+
+        </p:submenu>
         
         <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
             

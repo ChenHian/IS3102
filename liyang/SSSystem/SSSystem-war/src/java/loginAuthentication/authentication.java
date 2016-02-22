@@ -8,12 +8,20 @@ import entity.StaffAccount;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import javax.ejb.EJB;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import session.stateless.StaffAccountSessionBean;
 /**
  *
  * @author Chen Hian
  */
+
+
+
 public class authentication {
+    
+    
     
 
     public static boolean login(String username, String password) {
@@ -73,4 +81,6 @@ public class authentication {
        res = sb.toString();
        return res.toUpperCase(); 
     }
+
+    
 }
