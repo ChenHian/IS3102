@@ -17,6 +17,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import loginAuthentication.Database;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 import session.stateless.StaffAccountSessionBean;
@@ -49,32 +51,58 @@ public class EditViewWarehouseInventory implements Serializable {
         System.out.println(oldValue.toString());
         Object newValue = event.getNewValue();
         System.out.println(newValue.toString());
+        String column = event.getColumn().getHeaderText();
         
+        DataTable table = (DataTable) event.getSource();
         
+        DistributionCenterInventory distributionCenterInventory  = (DistributionCenterInventory) table.getRowData();
         
-            HttpSession session = Util.getSession();
-            String username= (String)session.getAttribute("username");
-            System.out.println(username);
-            Connection con = null;
-        PreparedStatement ps = null;
-        //System.out.print(password);
-        try {
-            con = Database.getConnection();
-            //System.out.println("authentication "+ con.getCatalog());
-            ps = con.prepareStatement(
-                    "SELECT email, staffAccountId FROM staffaccount WHERE email= ?");
-            ps.setString(1, username);
-            
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) { //found
-
-                Long staffAccountId = Long.parseLong(rs.getString("staffAccountId"));
-                System.out.println("newvalue = " + newValue.toString());
-                //System.out.println("Privilege 7:" + entityManager.find(Role.class, roleid).isPrivilege7());
-                //System.out.println(entityManager.find(StaffAccount.class, staffAccountId).getEmail());
-                //staffAccountSessionBean.setContactNumber(staffAccountId, newValue.toString());
+        switch(column) {
+            case "Available Quantity" : {
+                distributionCenterInventory.setAvailableQuantity(Integer.parseInt(newValue.toString()));
+                break;
             }
+            case "Reserved for Customer Orders" : {
+                if (distributionCenterInventory.getAvailableQuantity()-Integer.parseInt(newValue.toString())<0) {
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Note that the warehouse currently do not have enough quantity on hand to supply for customers.", null);
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                }
+                distributionCenterInventory.setReservedForCustomerOrders(Integer.parseInt(newValue.toString()));
+                distributionCenterInventory.setAvailableQuantity(distributionCenterInventory.getAvailableQuantity()-(Integer.parseInt(newValue.toString()))-Integer.parseInt(oldValue.toString()));
+            }
+            case "Alert Threshold" : {
+                distributionCenterInventory.setThresholdAlert(Integer.parseInt(newValue.toString()));
+                break;
+            }
+            case "For Return" : {
+                
+                if (distributionCenterInventory.getAvailableQuantity()-Integer.parseInt(newValue.toString())<0) {
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "You cannot have more returns than you hava stock available, please check your entries .", null);
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    break;
+                }
+                distributionCenterInventory.setAvailableQuantity(distributionCenterInventory.getAvailableQuantity()-(Integer.parseInt(newValue.toString()))-Integer.parseInt(oldValue.toString()));
+                distributionCenterInventory.setBlockedForReturn(Integer.parseInt(newValue.toString()));
+                break;
+            }
+            
+            case "Reserved for Transfer" : {
+                
+                if (distributionCenterInventory.getAvailableQuantity()-Integer.parseInt(newValue.toString())<0) {
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Note that the warehouse currently do not have enough quantity on hand to handle all transfers.", null);
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                }
+                distributionCenterInventory.setAvailableQuantity(distributionCenterInventory.getAvailableQuantity()-(Integer.parseInt(newValue.toString()))-Integer.parseInt(oldValue.toString()));
+                distributionCenterInventory.setReservedForTransfer(Integer.parseInt(newValue.toString()));
+                break;
+            }
+                
         }
-        catch (Exception ex) {ex.printStackTrace();}
+        
+
+        warehouseSessionBean.edit(distributionCenterInventory);
+
     }
+    
+    
 }

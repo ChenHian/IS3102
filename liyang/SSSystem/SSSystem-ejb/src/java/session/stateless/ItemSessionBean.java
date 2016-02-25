@@ -8,6 +8,7 @@ package session.stateless;
 
 import entity.Item;
 import entity.Brand;
+import entity.DistributionCenterInventory;
 import entity.ItemType;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -144,6 +145,15 @@ public class ItemSessionBean implements ItemSessionBeanLocal {
             
            
             em.persist(i);
+            
+            Query r = em.createQuery("SELECT d.distributionCenterId FROM DistributionCenter d");
+            if(!r.getResultList().isEmpty()) {
+                List<Long> distributionCenterId =  r.getResultList();
+                for(Long id:distributionCenterId) {
+                    this.addDistributionCenterItem(i,id);
+                }
+            }
+            
    
     }
 
@@ -360,6 +370,19 @@ public class ItemSessionBean implements ItemSessionBeanLocal {
             
             em.persist(b);
         
+    }
+
+
+    public void addDistributionCenterItem(Item i, Long distributionCenterId) {
+        DistributionCenterInventory distributionCenterInventory = new DistributionCenterInventory();
+        distributionCenterInventory.setDistributionCenterId(distributionCenterId);
+        distributionCenterInventory.setAvailableQuantity(0);
+        distributionCenterInventory.setBlockedForReturn(0);
+        distributionCenterInventory.setReservedForCustomerOrders(0);
+        distributionCenterInventory.setReservedForTransfer(0);
+        distributionCenterInventory.setThresholdAlert(100);
+        distributionCenterInventory.setItem(i);
+        em.persist(distributionCenterInventory);
     }
        
 

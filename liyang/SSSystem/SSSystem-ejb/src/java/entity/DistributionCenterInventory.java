@@ -8,11 +8,14 @@ package entity;
 import entity.Item;
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -28,10 +31,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 public class DistributionCenterInventory implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long distributionCenterInventoryId;
     private Long distributionCenterId;
+    
+    @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Item item;
     private Integer availableQuantity;
     private Integer reservedForCustomerOrders;
@@ -103,6 +109,11 @@ public class DistributionCenterInventory implements Serializable {
 
     public void setThresholdAlert(Integer thresholdAlert) {
         this.thresholdAlert = thresholdAlert;
+    }
+
+    @Override
+    public String toString() {
+        return "DistributionCenterInventory{" + "distributionCenterInventoryId=" + distributionCenterInventoryId + ", distributionCenterId=" + distributionCenterId + ", item=" + item + ", availableQuantity=" + availableQuantity + ", reservedForCustomerOrders=" + reservedForCustomerOrders + ", reservedForTransfer=" + reservedForTransfer + ", blockedForReturn=" + blockedForReturn + ", thresholdAlert=" + thresholdAlert + '}';
     }
     
 }

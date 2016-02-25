@@ -63,7 +63,25 @@ public class WarehouseSessionBean implements WarehouseSessionBeanLocal {
     
     @Override
     public List<DistributionCenterInventory> getDCinventory() {
-        Query q = entityManager.createQuery("SELECT d FROM Distributioncenterinventory d");
+        Query q = entityManager.createQuery("SELECT d FROM DistributionCenterInventory d");
         return q.getResultList();
+    }
+    
+    public void setAvailableQuantity() {
+        
+    }
+
+    public void edit(DistributionCenterInventory updated) {
+        Long id = updated.getDistributionCenterInventoryId();
+        DistributionCenterInventory old = entityManager.find(DistributionCenterInventory.class, id);
+        
+        old.setAvailableQuantity(updated.getAvailableQuantity());
+        old.setBlockedForReturn(updated.getBlockedForReturn());
+        old.setReservedForCustomerOrders(updated.getReservedForCustomerOrders());
+        old.setReservedForTransfer(updated.getReservedForTransfer());
+        old.setThresholdAlert(updated.getThresholdAlert());
+        
+        entityManager.persist(old);
+        
     }
 }
