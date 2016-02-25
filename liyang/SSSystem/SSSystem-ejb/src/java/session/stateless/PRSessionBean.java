@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package session.stateless.warehouse;
+package session.stateless;
 
-import entity.warehouse_entity.PurchaseRequsition;
+import entity.PurchaseRequisition;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 
 
 /**
@@ -28,8 +29,8 @@ public class PRSessionBean implements PRSessionBeanLocal {
     private EntityManager entityManager;
 
      public Long createPR(String status){
-        PurchaseRequsition pr = new PurchaseRequsition(); 
-        pr.setStatus(status);
+        PurchaseRequisition pr = new PurchaseRequisition(); 
+        //pr.setStatus(status);
         entityManager.persist(pr);
         entityManager.flush();
         return pr.getPurchaseRequisitionId();

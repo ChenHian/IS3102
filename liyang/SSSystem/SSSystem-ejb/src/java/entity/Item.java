@@ -17,7 +17,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import entity.warehouse_entity.PurchaseRequisitionItem;
 
 
 /**
@@ -186,12 +185,12 @@ public class Item implements Serializable {
             return false;
         }
         return true;
-    }
+    } */
 
     @Override
     public String toString() {
-        return "entity.Item[ itemId=" + itemId + " ]";
-    }*/
+        return  "" + itemId;
+    }
 
     /**
      * @return the suppliers

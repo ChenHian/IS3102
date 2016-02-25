@@ -3,7 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/entity/StaffAccount.java</file>
+            <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/session/stateless/ItemSessionBean.java</file>
+            <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/entity/Brand.java</file>
             <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/session/stateless/StaffAccountSessionBean.java</file>
         </group>
     </open-files>

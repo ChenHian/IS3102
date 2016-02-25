@@ -35,12 +35,12 @@ public class IdleMonitorView {
         catch(Exception ex)
         {}
        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                    "Your session is closed", "You have been idle for at least 10 minutes"));
+                    "Your session is closed", "You have been idle for at least 15 minutes"));
 
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             request.getSession().invalidate();
             try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("Timeout.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("timeout.xhtml");
             }
             catch(Exception ex) {
                 ex.printStackTrace();

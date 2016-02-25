@@ -1,43 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package entity.warehouse_entity;
+package entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-public class PurchaseRequsition implements Serializable {
+public class PurchaseRequisition implements Serializable {
+
     private static final Long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-        private Long purchaseRequisitionId;
-        private String status; 
-        
-    @OneToMany(cascade ={CascadeType.PERSIST, CascadeType.REMOVE})
+    private Long purchaseRequisitionId;
+    private String centerName;
+    private Date DateCreated;
+    private Date dateRequest;
+
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "purchaseRequisition")
     private List<PurchaseRequisitionItem> itemList = new ArrayList<PurchaseRequisitionItem>();
 
-    
     public Long getPurchaseRequisitionId() {
         return purchaseRequisitionId;
     }
@@ -46,12 +33,28 @@ public class PurchaseRequsition implements Serializable {
         this.purchaseRequisitionId = purchaseRequisitionId;
     }
 
-    public String getStatus() {
-        return status;
+    public Date getDateCreated() {
+        return DateCreated;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setDateCreated(Date DateCreated) {
+        this.DateCreated = DateCreated;
+    }
+
+    public Date getDateRequest() {
+        return dateRequest;
+    }
+
+    public void setDateRequest(Date dateRequest) {
+        this.dateRequest = dateRequest;
+    }
+
+    public String getCenterName() {
+        return centerName;
+    }
+
+    public void setCenterName(String centerName) {
+        this.centerName = centerName;
     }
 
     @Override
@@ -64,10 +67,10 @@ public class PurchaseRequsition implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PurchaseRequsition)) {
+        if (!(object instanceof PurchaseRequisition)) {
             return false;
         }
-        PurchaseRequsition other = (PurchaseRequsition) object;
+        PurchaseRequisition other = (PurchaseRequisition) object;
         if ((this.purchaseRequisitionId == null && other.purchaseRequisitionId != null) || (this.purchaseRequisitionId != null && !this.purchaseRequisitionId.equals(other.purchaseRequisitionId))) {
             return false;
         }
@@ -76,11 +79,25 @@ public class PurchaseRequsition implements Serializable {
 
     @Override
     public String toString() {
-        return "warehouse_entity.Purchaserequsition[ purchaseRequisitionId=" + purchaseRequisitionId + " ]";
+        return "warehouse_entity.Purchaserequisition[ purchaseRequisitionId=" + purchaseRequisitionId + " ]";
     }
 
     private void setID(long nanoTime) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    /**
+     * @return the itemList
+     */
+    public List<PurchaseRequisitionItem> getItemList() {
+        return itemList;
+    }
+
+    /**
+     * @param itemList the itemList to set
+     */
+    public void setItemList(List<PurchaseRequisitionItem> itemList) {
+        this.itemList = itemList;
+    }
+
 }

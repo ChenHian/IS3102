@@ -24,7 +24,7 @@ import session.stateless.StaffAccountSessionBean;
  
 @ManagedBean
 @SessionScoped
-public class EditView implements Serializable {
+public class EditViewStaffAccount implements Serializable {
 
     @EJB
     private StaffAccountSessionBean staffAccountSessionBean;
@@ -96,9 +96,14 @@ public class EditView implements Serializable {
                 System.out.println("newvalue = " + newValue.toString());
                 //System.out.println("Privilege 7:" + entityManager.find(Role.class, roleid).isPrivilege7());
                 //System.out.println(entityManager.find(StaffAccount.class, staffAccountId).getEmail());
-                staffAccountSessionBean.setContactNumber(staffAccountId, newValue.toString());
+                staffAccountSessionBean.setContactNumber(staffAccountId, Integer.parseInt(newValue.toString()));
             }
         }
         catch (Exception ex) {ex.printStackTrace();}
+    }
+    
+    public boolean isValidNumber() {
+        return false;
+        
     }
 }

@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package session.stateless.warehouse;
+package session.stateless;
 
 import java.util.ArrayList;
-import entity.warehouse_entity.DistributionCenter;
-import entity.warehouse_entity.DistributionCenterInventory;
+import entity.DistributionCenter;
+import entity.DistributionCenterInventory;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;

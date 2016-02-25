@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -26,6 +28,8 @@ public class DeliveryRequest implements Serializable {
     private String requestType;
     private String deliverFrom;
     private String deliverTo;
+    
+    @Temporal(TemporalType.DATE)
     private Date date;
     private String status;
     

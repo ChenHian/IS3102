@@ -25,7 +25,7 @@ public class StaffAccount implements Serializable {
     @OneToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Role role;
     private String email;
-    private String contactNumber;
+    private int contactNumber;
     
     
 
@@ -69,11 +69,11 @@ public class StaffAccount implements Serializable {
         this.email = email;
     }
 
-    public String getContactNumber() {
+    public int getContactNumber() {
         return contactNumber;
     }
 
-    public void setContactNumber(String contactNumber) {
+    public void setContactNumber(int contactNumber) {
         this.contactNumber = contactNumber;
     }
    

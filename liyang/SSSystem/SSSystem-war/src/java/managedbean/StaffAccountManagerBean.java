@@ -24,7 +24,7 @@ public class StaffAccountManagerBean {
     private String emailLength;
     private String staffAccountName;
     private String password;
-    private String contactNumber;
+    private int contactNumber;
     private String statusMessage;
     private Long newStaffAccountId;
     private String role;
@@ -99,11 +99,11 @@ public class StaffAccountManagerBean {
         this.password = password;
     }
 
-    public String getContactNumber() {
+    public int getContactNumber() {
         return contactNumber;
     }
 
-    public void setContactNumber(String contactNumber) {
+    public void setContactNumber(int contactNumber) {
         this.contactNumber = contactNumber;
     }
 

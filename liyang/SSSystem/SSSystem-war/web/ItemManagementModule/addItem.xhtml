@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="addItemForm">
+            <p:panel header="Add Item">
+                
+                <h:panelGrid columns="2" style="margin-bottom:40px"> 
+                    <h:outputLabel for="itemName" value="Item Name: " style="font-weight:bold" />
+                    <p:inputText id="itemName" value="#{itemDataTableBean.newItemName}" />
+                    
+                    <h:outputLabel for="itemDescription" value="Item Description: " style="font-weight:bold" />
+                    <p:inputText id="itemDescription" value="#{itemDataTableBean.newItemDescription}" />
+                  
+                    <h:outputLabel for="itemReturnable" value="Item Returnable: " style="font-weight:bold" />
+                    
+                    <p:selectBooleanCheckbox value="#{itemDataTableBean.newItemReturnable}" />
+                    
+                    <h:outputLabel for="returnablePeriod" value="Returnable Period: " style="font-weight:bold" />
+                    <p:inputText id="returnablePeriod" value="#{itemDataTableBean.newReturnablePeriod}" />
+                    
+                    <h:outputLabel for="brandIdItem" value="Brand Name: " style="font-weight:bold" />
+                    <p:selectOneMenu id="brandIdItem" value="#{itemDataTableBean.brandIdItem}" style="width:150px">
+                        <f:selectItem itemLabel="Select Brand Name" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value= "#{itemDataTableBean.brandBasicList.entrySet()}" var="itemm"
+                                    itemValue="#{itemm.key}" itemLabel="#{itemm.value}" />
+                    </p:selectOneMenu>
+                    
+                    <h:outputLabel for="itemTypeIdItem" value="Item Type: " style="font-weight:bold" />
+                    <p:selectOneMenu id="itemTypeIdItem" value="#{itemDataTableBean.itemTypeIdItem}" style="width:150px">
+                        <f:selectItem itemLabel="Select Item Type" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value= "#{itemDataTableBean.itemTypeBasicList.entrySet()}" var="itemmm"
+                                    itemValue="#{itemmm.key}" itemLabel="#{itemmm.value}" />
+                    </p:selectOneMenu>
+   
+                </h:panelGrid>
+                
+                <p:commandButton value="Add" icon="fa fa-plus" id="nonAjax" action ="/ItemManagementModule/viewItems" ajax="false" actionListener="#{itemDataTableBean.addItemAction}" />
+                <p:spacer width="20" height="20" />
+                <p:button outcome="viewItems" value="View Item List" icon="fa fa-fw fa-neuter"></p:button>
+
+            </p:panel>
+
+
+            
+                    
+
+        </h:form>
+    </ui:define>
+    
+    <ui:define name ="left">
+        <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="Home" action="/admin/adminHome" icon="ui-icon-home"/>
+                <p:menuitem value="Manage Item List" action="/procurement/viewItems" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Brand List" action="/procurement/viewBrand" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Item Type List" action="/procurement/viewItemType" icon="ui-icon-search"/>
+
+            </p:menu>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

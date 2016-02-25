@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.warehouse_entity;
+package entity;
 
+import entity.Item;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -31,12 +32,14 @@ public class DistributionCenterInventory implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long distributionCenterInventoryId;
     private Long distributionCenterId;
-    private Long itemId;
+    private Item item;
     private Integer availableQuantity;
     private Integer reservedForCustomerOrders;
     private Integer reservedForTransfer; 
     private Integer blockedForReturn;
     private Integer thresholdAlert;
+    
+
      
     public Long getDistributionCenterInventoryId() {
         return distributionCenterInventoryId;
@@ -54,12 +57,12 @@ public class DistributionCenterInventory implements Serializable {
         this.distributionCenterId = distributionCenterId;
     }
 
-    public Long getItemId() {
-        return itemId;
+    public Item getItem() {
+        return item;
     }
 
-    public void setItemId(Long itemId) {
-        this.itemId = itemId;
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     public Integer getAvailableQuantity() {

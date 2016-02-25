@@ -8,18 +8,30 @@
             <web-module-libraries/>
             <web-module-additional-libraries>
                 <library>
-                    <file>${reference.CommonInfrastructure-war.dist-ear}</file>
+                    <file>${reference.SSSystem-ejb.dist}</file>
                     <path-in-war>/</path-in-war>
                 </library>
                 <library>
-                    <file>${reference.CommonInfrastructure-ejb.dist-ear}</file>
+                    <file>${reference.SSSystem-war.dist-ear}</file>
+                    <path-in-war>/</path-in-war>
+                </library>
+                <library>
+                    <file>${reference.SSSystem-ejb.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
             </web-module-additional-libraries>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
-                <foreign-project>CommonInfrastructure-ejb</foreign-project>
+                <foreign-project>SSSystem-ejb</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>dist</target>
+                <clean-target>clean</clean-target>
+                <id>dist</id>
+            </reference>
+            <reference>
+                <foreign-project>SSSystem-ejb</foreign-project>
                 <artifact-type>j2ee_ear_archive</artifact-type>
                 <script>build.xml</script>
                 <target>dist-ear</target>
@@ -27,7 +39,7 @@
                 <id>dist-ear</id>
             </reference>
             <reference>
-                <foreign-project>CommonInfrastructure-war</foreign-project>
+                <foreign-project>SSSystem-war</foreign-project>
                 <artifact-type>j2ee_ear_archive</artifact-type>
                 <script>build.xml</script>
                 <target>dist-ear</target>

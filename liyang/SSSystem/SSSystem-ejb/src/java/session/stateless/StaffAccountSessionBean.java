@@ -95,7 +95,7 @@ public class StaffAccountSessionBean {
         entityManager.remove(role);
     }
 
-    public Long addNewStaffAccount(String email, String staffAccountName, String contactNumber, String name) {
+    public Long addNewStaffAccount(String email, String staffAccountName, int contactNumber, String name) {
         StaffAccount staffAccount = new StaffAccount();
         
         String password = "password";
@@ -160,7 +160,7 @@ public class StaffAccountSessionBean {
         return password;
     }
 
-    public void setContactNumber(Long staffAccountId, String contactNumber) {
+    public void setContactNumber(Long staffAccountId, int contactNumber) {
         System.out.println(staffAccountId);
         StaffAccount staffAccount = entityManager.find(StaffAccount.class, staffAccountId);
         staffAccount.setContactNumber(contactNumber);

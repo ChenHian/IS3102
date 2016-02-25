@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="addBrandForm">
+            <p:panel header="Add Brand">
+                
+                <h:panelGrid columns="2" style="margin-bottom:40px"> 
+                    <h:outputLabel for="brandName" value="Brand Name: " style="font-weight:bold" />
+                    <p:inputText id = "newBrandName" value="#{itemDataTableBean.newBrandName}" />
+                    
+                    
+                    <h:outputLabel for="brandDescription" value="Brand Description: " style="font-weight:bold" />
+                    <p:inputText id="newBrandDescription" value="#{itemDataTableBean.newBrandDescription}" />
+                  
+                </h:panelGrid>
+                
+                <p:commandButton value="Add" icon="fa fa-plus" id="nonAjax" action ="/ItemManagementModule/viewBrand" ajax="false" actionListener="#{itemDataTableBean.addBrandAction}" />
+                <p:spacer width="20" height="20" />
+                <p:button outcome="viewBrand" value="View Brand List" icon="fa fa-fw fa-neuter"></p:button>
+
+            </p:panel>
+
+
+            
+                    
+
+        </h:form>
+    </ui:define>
+    
+    <ui:define name ="left">
+        <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="Home" action="/admin/adminHome" icon="ui-icon-home"/>
+                <p:menuitem value="Manage Item List" action="/procurement/viewItems" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Brand List" action="/procurement/viewBrand" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Item Type List" action="/procurement/viewItemType" icon="ui-icon-search"/>
+
+            </p:menu>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

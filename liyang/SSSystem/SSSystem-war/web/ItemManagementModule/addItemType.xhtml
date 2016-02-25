@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="addItemTypeForm">
+            <p:panel header="Add Item Type">
+                
+                <h:panelGrid columns="2" style="margin-bottom:40px"> 
+                    <h:outputLabel for="Item Type Description" value="Item Type Description: " style="font-weight:bold" />
+                    <p:inputText id="itemTypeDescription" value="#{itemDataTableBean.newItemTypeDescription}" />
+                    
+                    <h:outputLabel for="itemCategory" value="Item Category: " style="font-weight:bold" />
+                    <p:inputText id="itemCategory" value="#{itemDataTableBean.newItemCategory}" />
+                    
+                    <h:outputLabel for="itemSubcategory" value="Item Subcategory: " style="font-weight:bold" />
+                    <p:inputText id="itemSubcategory" value="#{itemDataTableBean.newItemSubCategory}" />
+                    
+                    <h:outputLabel for="storageType" value="Storage Type: " style="font-weight:bold" />
+                    <p:inputText id="storageType" value="#{itemDataTableBean.newStorageType}" />
+                    
+                    <h:outputLabel for="perishable" value="Perishable: " style="font-weight:bold" />
+                    <p:inputText id="perishable" value="#{itemDataTableBean.newIsPerishable}" />
+                    
+                    <h:outputLabel for="measurementType" value="Measurement Type: " style="font-weight:bold" />
+                    <p:inputText id="measurementType" value="#{itemDataTableBean.newMeasurementType}" />
+                  
+                </h:panelGrid>
+                
+                <p:commandButton value="Add" icon="fa fa-plus" id="nonAjax" action ="/ItemManagementModule/viewItemType" ajax="false" actionListener="#{itemDataTableBean.addItemTypeAction}" />
+                <p:spacer width="20" height="20" />
+                <p:button outcome="viewItemType" value="View Item Type" icon="fa-fw fa-neuter"></p:button>
+
+            </p:panel>
+
+
+            
+                    
+
+        </h:form>
+    </ui:define>
+    
+    <ui:define name ="left">
+        <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="Home" action="/admin/adminHome" icon="ui-icon-home"/>
+                <p:menuitem value="Manage Item List" action="/procurement/viewItems" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Brand List" action="/procurement/viewBrand" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Item Type List" action="/procurement/viewItemType" icon="ui-icon-search"/>
+
+            </p:menu>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
