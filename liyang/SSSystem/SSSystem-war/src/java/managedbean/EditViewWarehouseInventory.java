@@ -51,13 +51,27 @@ public class EditViewWarehouseInventory implements Serializable {
         
         Object newValue = event.getNewValue();
         System.out.println(newValue.toString());
-        Integer n = Integer.parseInt(newValue.toString());
-        String column = event.getColumn().getHeaderText();
+        Integer n = 0;
+        try{
+            n = Integer.parseInt(newValue.toString());
+            String column = event.getColumn().getHeaderText();
+            if(n<0) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Numbers entered must be greater than 0", null);
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return;
+            }
+        }
+        catch (Exception ex) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter a valid integer", null);
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
         
         DataTable table = (DataTable) event.getSource();
         
         DistributionCenterInventory distributionCenterInventory  = (DistributionCenterInventory) table.getRowData();
         Integer oldAvailable= distributionCenterInventory.getAvailableQuantity();
+        String column = event.getColumn().getHeaderText();
         switch(column) {
             case "Available Quantity" : {
                 
@@ -69,13 +83,13 @@ public class EditViewWarehouseInventory implements Serializable {
                 Integer oldRC = distributionCenterInventory.getReservedForCustomerOrders();
                 System.out.println(oldRC);
                 
-                if (oldAvailable - n <0) {
+                if (oldAvailable-(n-oldRC)<0) {
                     
                     FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Note that the warehouse currently do not have enough quantity on hand to supply for customers.", null);
                     FacesContext.getCurrentInstance().addMessage(null, message);
                 }
                 distributionCenterInventory.setReservedForCustomerOrders(n);
-                distributionCenterInventory.setAvailableQuantity(oldAvailable-(n-oldRC));
+                //distributionCenterInventory.setAvailableQuantity(oldAvailable-(n-oldRC));
             }
             case "Alert Threshold" : {
                 Integer oldThreshold = distributionCenterInventory.getThresholdAlert();
@@ -86,12 +100,12 @@ public class EditViewWarehouseInventory implements Serializable {
             case "For Return" : {
                 Integer oldReturn = distributionCenterInventory.getBlockedForReturn();
                 
-                if (oldAvailable - n<0) {
+                if (oldAvailable-(n-oldReturn)<0) {
                     FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "You cannot have more returns than you hava stock available, please check your entries .", null);
                     FacesContext.getCurrentInstance().addMessage(null, message);
                     break;
                 }
-                distributionCenterInventory.setAvailableQuantity(oldAvailable -(n -oldReturn));
+                //distributionCenterInventory.setAvailableQuantity(oldAvailable -(n -oldReturn));
                 distributionCenterInventory.setBlockedForReturn(Integer.parseInt(newValue.toString()));
                 break;
             }
@@ -99,11 +113,11 @@ public class EditViewWarehouseInventory implements Serializable {
             case "Reserved for Transfer" : {
                 Integer oldTransfer = distributionCenterInventory.getReservedForTransfer();
                 System.out.println(oldTransfer.toString());
-                if (distributionCenterInventory.getAvailableQuantity()-Integer.parseInt(newValue.toString())<0) {
+                if (oldAvailable-(n-oldTransfer)<0) {
                     FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Note that the warehouse currently do not have enough quantity on hand to handle all transfers.", null);
                     FacesContext.getCurrentInstance().addMessage(null, message);
                 }
-                distributionCenterInventory.setAvailableQuantity(oldAvailable -(n-oldTransfer));
+                //distributionCenterInventory.setAvailableQuantity(oldAvailable -(n-oldTransfer));
                 distributionCenterInventory.setReservedForTransfer(n);
                 break;
             }
