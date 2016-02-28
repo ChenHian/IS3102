@@ -192,7 +192,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return  "" + itemId;
+        return itemName;
     }
 
     /**

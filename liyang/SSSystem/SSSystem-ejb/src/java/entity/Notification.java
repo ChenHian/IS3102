@@ -22,8 +22,10 @@ public class Notification implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long notificationId;
+    
     private String receivingDivision;
     private String sendingDivision;
+    
     private String notificationType;
     private String notificationMessage;
     private Date date;

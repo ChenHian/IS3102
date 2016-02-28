@@ -23,6 +23,7 @@ public class RoleDataTableBean {
     private RoleSessionBean roleSessionBean;
     @EJB
     private StaffAccountSessionBean staffAccountSessionBean;
+    
     private Role selectedRole;
     private StaffAccount selectedStaffAccount;
 

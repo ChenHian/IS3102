@@ -33,27 +33,34 @@
                 
         
             <p:growl id="DCinventory" showDetail="true"/>
-        <p:dataTable id = "inventory" var="inventory" value="#{editViewWarehouseInventory.getDCinventory()}" editable="true" editMode="cell" widgetVar="cellWarehouseInventory">
+            
+        <p:dataTable id = "inventory" var="inventory" value="#{editViewWarehouseInventory.distributionCenterInventory}" editable="true" editMode="cell" widgetVar="cellWarehouseInventory">
             <p:remoteCommand name="onCellEdit" action="#{editViewWarehouseInventory.onContactCellEdit}" update=":formMain" />
             <f:facet name="header">
                 Warehouse Inventory Management
             </f:facet>
         
              
-       <p:column headerText="Distribution Center ID">
-              <p:column>
+       <p:column headerText="Distribution Center ID" sortBy="#{inventory.distributionCenterId}">
+              <p:column >
                    <h:outputText value="#{inventory.distributionCenterId}" />
               </p:column>
           </p:column>
  
-        <p:column headerText="Item Id">
-           <p:column>
+        <p:column headerText="Item Id" sortBy="#{inventory.item.itemId}">
+            <p:column >
                <h:outputText value="#{inventory.item.itemId}" />
+           </p:column>
+       </p:column>
+            
+        <p:column headerText="Item Name">
+           <p:column>
+               <h:outputText value="#{inventory.item.itemName}" />
            </p:column>
        </p:column>
        
        <p:ajax event="cellEdit" listener="#{editViewWarehouseInventory.onContactCellEdit}" update=":formMain:DCinventory"/>     
-       <p:column headerText="Available Quantity">
+       <p:column headerText="Available Quantity" sortBy="#{inventory.availableQuantity}">
            <p:cellEditor>
                <f:facet name="output"><h:outputText value="#{inventory.availableQuantity}" /></f:facet>
                <f:facet name="input"><p:inputText value ="input"  style="width:100%"/></f:facet>
@@ -62,7 +69,7 @@
        </p:column>
        
        <p:column headerText="Unit" width = "5%">
-           <p:column>
+           <p:column sortBy="#{inventory.item.itemType.measurementType}">
                <h:outputText value="#{inventory.item.itemType.measurementType}" />
            </p:column>
        </p:column>

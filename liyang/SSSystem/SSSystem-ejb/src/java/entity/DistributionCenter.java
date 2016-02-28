@@ -91,7 +91,7 @@ public class DistributionCenter implements Serializable {
 
     @Override
     public String toString() {
-        return "warehouse_entity.Distributioncenter[ id=" + distributionCenterId + " ]";
+        return name;
     }
     
 }

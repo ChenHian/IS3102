@@ -2,26 +2,15 @@ package managedbean;
  
 import entity.DistributionCenterInventory;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-import loginAuthentication.Database;
 import org.primefaces.component.datatable.DataTable;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
-import org.primefaces.event.RowEditEvent;
-import session.stateless.StaffAccountSessionBean;
 import session.stateless.WarehouseSessionBean;
 
  
@@ -32,16 +21,20 @@ public class EditViewWarehouseInventory implements Serializable {
     @EJB
     private WarehouseSessionBean warehouseSessionBean;
     
-    private List<DistributionCenterInventory> DCinventory;
+    private List<DistributionCenterInventory> distributionCenterInventory;
 
-    public List<DistributionCenterInventory> getDCinventory() {
-        DCinventory = warehouseSessionBean.getDCinventory();
-        return DCinventory;
+    public List<DistributionCenterInventory> getDistributionCenterInventory() {
+        return distributionCenterInventory;
     }
+
+    public void setDistributionCenterInventory(List<DistributionCenterInventory> distributionCenterInventory) {
+        this.distributionCenterInventory = distributionCenterInventory;
+    }
+    
     
     @PostConstruct
     public void init() {
-        DCinventory = warehouseSessionBean.getDCinventory();
+        distributionCenterInventory = warehouseSessionBean.getDCinventory();
     }
     
     
