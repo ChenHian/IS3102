@@ -74,6 +74,12 @@ public class EditViewStaffAccount implements Serializable {
         Object newValue = event.getNewValue();
         System.out.println(newValue.toString());
         
+        if(Integer.parseInt(newValue.toString())<10000000) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Please enter a valid phone number.", null);
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                return;
+        }
+        
         
         
             HttpSession session = Util.getSession();

@@ -324,6 +324,6 @@ public class Role implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Role[id=" + roleId + "]";
+        return ""+roleName+"";
     }
 }

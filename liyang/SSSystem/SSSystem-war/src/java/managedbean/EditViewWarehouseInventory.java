@@ -21,20 +21,36 @@ public class EditViewWarehouseInventory implements Serializable {
     @EJB
     private WarehouseSessionBean warehouseSessionBean;
     
-    private List<DistributionCenterInventory> distributionCenterInventory;
+    private List<DistributionCenterInventory> DCinventory;
+    
+    private List<DistributionCenterInventory> filteredDCinventory;
 
-    public List<DistributionCenterInventory> getDistributionCenterInventory() {
-        return distributionCenterInventory;
+    public void setDCinventory(List<DistributionCenterInventory> DCinventory) {
+        this.DCinventory = DCinventory;
     }
 
-    public void setDistributionCenterInventory(List<DistributionCenterInventory> distributionCenterInventory) {
-        this.distributionCenterInventory = distributionCenterInventory;
+    public void setFilteredDCinventory(List<DistributionCenterInventory> filteredDCinventory) {
+        this.filteredDCinventory = filteredDCinventory;
     }
     
+    public List<DistributionCenterInventory> getNewFilteredDCinventory() {
+    this.filteredDCinventory = warehouseSessionBean.getDCinventory();
+    return filteredDCinventory;
+    }
+    
+    public List<DistributionCenterInventory> getFilteredDCinventory() {
+        
+        return filteredDCinventory;
+    }
+
+    public List<DistributionCenterInventory> getDCinventory() {
+        //DCinventory = warehouseSessionBean.getDCinventory();
+        return warehouseSessionBean.getDCinventory();
+    }
     
     @PostConstruct
     public void init() {
-        distributionCenterInventory = warehouseSessionBean.getDCinventory();
+        DCinventory = warehouseSessionBean.getDCinventory();
     }
     
     

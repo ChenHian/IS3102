@@ -30,37 +30,53 @@
         
         <h:form id="formMain">
             <p:panel header="Warehouse Inventory">
-                
-        
+
             <p:growl id="DCinventory" showDetail="true"/>
-            
-        <p:dataTable id = "inventory" var="inventory" value="#{editViewWarehouseInventory.distributionCenterInventory}" editable="true" editMode="cell" widgetVar="cellWarehouseInventory">
+            <p:dataTable id = "inventory" var="inventory" 
+                         resizableColumns="true" 
+                         filteredValue="#{editViewWarehouseInventory.filteredDCinventory}" 
+                         value="#{editViewWarehouseInventory.DCinventory}" 
+                         editable="true" editMode="cell" widgetVar="cellWarehouseInventory"
+                         emptyMessage="No item found" 
+                         >
+                
+                <f:facet name="header">
+                       <p:outputPanel>
+                         <h:outputText value="Search all fields:" />
+                         <p:inputText id="globalFilter" onkeyup="PF('cellWarehouseInventory').filter()" style="width:150px" placeholder="Enter keyword"/>
+                       </p:outputPanel>
+                    </f:facet>
+                
+            <p:menuitem value="Edit Cell" icon="ui-icon-search" onclick="PF('cellWarehouseInventory').showCellEditor();return false;"/> 
             <p:remoteCommand name="onCellEdit" action="#{editViewWarehouseInventory.onContactCellEdit}" update=":formMain" />
             <f:facet name="header">
                 Warehouse Inventory Management
             </f:facet>
         
              
-       <p:column headerText="Distribution Center ID" sortBy="#{inventory.distributionCenterId}">
-              <p:column >
+       <p:column headerText="Distribution Center ID" filterBy="#{inventory.distributionCenterId}" filterStyle="display:none"  filterMatchMode="contains" 
+                            sortBy="#{inventory.distributionCenterId}" >
+              <p:column>
                    <h:outputText value="#{inventory.distributionCenterId}" />
               </p:column>
           </p:column>
  
-        <p:column headerText="Item Id" sortBy="#{inventory.item.itemId}">
-            <p:column >
+        <p:column headerText="Item Id" filterBy="#{inventory.item.itemId}" filterStyle="display:none"  filterMatchMode="contains" 
+                            sortBy="#{inventory.item.itemId}" >
+           <p:column>
                <h:outputText value="#{inventory.item.itemId}" />
            </p:column>
        </p:column>
             
-        <p:column headerText="Item Name">
+        <p:column headerText="Item Name" filterBy="#{inventory.item.itemName}" filterStyle="display:none"  filterMatchMode="contains" 
+                            sortBy="#{inventory.item.itemName}" >
            <p:column>
                <h:outputText value="#{inventory.item.itemName}" />
            </p:column>
        </p:column>
        
        <p:ajax event="cellEdit" listener="#{editViewWarehouseInventory.onContactCellEdit}" update=":formMain:DCinventory"/>     
-       <p:column headerText="Available Quantity" sortBy="#{inventory.availableQuantity}">
+       <p:column headerText="Available Quantity">
            <p:cellEditor>
                <f:facet name="output"><h:outputText value="#{inventory.availableQuantity}" /></f:facet>
                <f:facet name="input"><p:inputText value ="input"  style="width:100%"/></f:facet>
@@ -68,8 +84,9 @@
            
        </p:column>
        
-       <p:column headerText="Unit" width = "5%">
-           <p:column sortBy="#{inventory.item.itemType.measurementType}">
+       <p:column headerText="Unit" width = "5%" filterBy="#{inventory.item.itemType.measurementType}" filterStyle="display:none"  filterMatchMode="contains" 
+                            sortBy="#{inventory.item.itemType.measurementType}" >
+           <p:column>
                <h:outputText value="#{inventory.item.itemType.measurementType}" />
            </p:column>
        </p:column>
@@ -107,13 +124,15 @@
             </p:panel>
         </h:form>
     </ui:define>
+    
+    
     <!--Left drop down menu, edit for all .xhtml pages if changed-->
     <ui:define name="left">
 <h:form>
     <p:growl autoUpdate="true"/>
             <p:growl id="messages" /> 
             <p:menu style="width:95%" >
-            <p:menuitem value="Home" action="/admin/adminHome" icon="ui-icon-home"/>    
+            <p:menuitem value="Home" outcome="/admin/adminHome" icon="ui-icon-home"/>    
             <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
             </p:menu>
  
@@ -125,22 +144,22 @@
         
         <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
             
-            <p:menuitem value="Edit Account Particulars" action="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
-            <p:menuitem value="Change Password" action="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
+            <p:menuitem value="Edit Account Particulars" outcome="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
+            <p:menuitem value="Change Password" outcome="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
 
         </p:submenu>
         
         <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
             
-            <p:menuitem value="View All Roles" action="/UserAccessControlModule/viewAllRoles" icon="ui-icon-search"/>
-            <p:menuitem value="Add New Role" action="/UserAccessControlModule/addNewRole" icon="ui-icon-plus"/>
-            <p:menuitem value="View All Privileges" action="/UserAccessControlModule/viewAllPrivileges" icon="ui-icon-search"/>
+            <p:menuitem value="View All Roles" outcome="/UserAccessControlModule/viewAllRoles" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Role" outcome="/UserAccessControlModule/addNewRole" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Privileges" outcome="/UserAccessControlModule/viewAllPrivileges" icon="ui-icon-search"/>
         </p:submenu>
         
         <p:submenu label="Account Administration Module" rendered = "#{accessController.accountAdministrationModuleAccess()}">
             
-            <p:menuitem value="View All Staff Accounts" action="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
-            <p:menuitem value="Add New Account" action="/AccountAdministrationModule/addNewStaffAccount" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Staff Accounts" outcome="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Account" outcome="/AccountAdministrationModule/addNewStaffAccount" icon="ui-icon-plus"/>
         </p:submenu>
         
         <p:submenu label="Purchasing Request Module Dummy" rendered = "#{accessController.purchasingRequestModuleAccess()}" >
@@ -149,10 +168,13 @@
         
         <p:submenu label="Item Management Module" rendered = "#{accessController.itemManagementModuleAccess()}">
             
-            <p:menuitem value="Add New item" action="/ItemManagementModule/addItem" icon="ui-icon-search"/>
-            <p:menuitem value="Edit Item Profile" action="/ItemManagementModule/editItemProfile" icon="ui-icon-plus"/>
-            <p:menuitem value="View Brand" action="/ItemManagementModule/viewBrand" icon="ui-icon-search"/>
-            <p:menuitem value="View Items" action="/ItemManagementModule/viewItems" icon="ui-icon-search"/>
+            
+            <p:menuitem value="View/Edit Warehouse Inventory" outcome="/ItemManagementModule/viewWarehouseInventory" icon="ui-icon-plus"/>
+            <p:menuitem value="Add Item to Warehouse" outcome="/ItemManagementModule/addWarehouseInventory" icon="ui-icon-plus"/>
+            <p:menuitem value="Redelivery" outcome="/ItemManagementModule/redeliveryDoc" icon="ui-icon-search"/>
+            <p:menuitem value="View Brand" outcome="/ItemManagementModule/viewBrand" icon="ui-icon-search"/>
+            <p:menuitem value="View Items" outcome="/ItemManagementModule/viewItems" icon="ui-icon-search"/>
+            <p:menuitem value="View Item Type" outcome="/ItemManagementModule/viewItemType" icon="ui-icon-search"/>
         </p:submenu>
         <p:separator />
        
@@ -161,7 +183,6 @@
             </h:form>
       </ui:define>
     <!--Left drop down menu end-->
-  
 
 
 </ui:composition>

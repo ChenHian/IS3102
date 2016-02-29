@@ -2,14 +2,13 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class PurchaseRequisition implements Serializable {
@@ -19,11 +18,16 @@ public class PurchaseRequisition implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long purchaseRequisitionId;
     private String centerName;
-    private Date DateCreated;
+    private Date dateCreated;
     private Date dateRequest;
+    private String status;
+    private Integer quantityRequested;
 
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "purchaseRequisition")
-    private List<PurchaseRequisitionItem> itemList = new ArrayList<PurchaseRequisitionItem>();
+    @OneToOne (cascade = {CascadeType.ALL})
+    private PurchaseOrder purchaseOrder;
+
+    @ManyToOne
+    private Item item;
 
     public Long getPurchaseRequisitionId() {
         return purchaseRequisitionId;
@@ -34,11 +38,11 @@ public class PurchaseRequisition implements Serializable {
     }
 
     public Date getDateCreated() {
-        return DateCreated;
+        return dateCreated;
     }
 
-    public void setDateCreated(Date DateCreated) {
-        this.DateCreated = DateCreated;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public Date getDateRequest() {
@@ -55,6 +59,30 @@ public class PurchaseRequisition implements Serializable {
 
     public void setCenterName(String centerName) {
         this.centerName = centerName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public Integer getQuantityRequested() {
+        return quantityRequested;
+    }
+
+    public void setQuantityRequested(Integer quantityRequested) {
+        this.quantityRequested = quantityRequested;
     }
 
     @Override
@@ -82,22 +110,17 @@ public class PurchaseRequisition implements Serializable {
         return "warehouse_entity.Purchaserequisition[ purchaseRequisitionId=" + purchaseRequisitionId + " ]";
     }
 
-    private void setID(long nanoTime) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * @return the purchaseOrder
+     */
+    public PurchaseOrder getPurchaseOrder() {
+        return purchaseOrder;
     }
 
     /**
-     * @return the itemList
+     * @param purchaseOrder the purchaseOrder to set
      */
-    public List<PurchaseRequisitionItem> getItemList() {
-        return itemList;
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
     }
-
-    /**
-     * @param itemList the itemList to set
-     */
-    public void setItemList(List<PurchaseRequisitionItem> itemList) {
-        this.itemList = itemList;
-    }
-
 }

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -26,6 +27,40 @@ public class RoleDataTableBean {
     
     private Role selectedRole;
     private StaffAccount selectedStaffAccount;
+    
+    private List<StaffAccount> staffAccounts;
+    private List<StaffAccount> filteredStaffAccounts;
+    
+    private List<Role> roles;
+    private List<Role> filteredRoles;
+    
+    private String staffAccountName;
+    private String staffAccount;
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setFilteredStaffAccounts(List<StaffAccount> filteredStaffAccounts) {
+        this.filteredStaffAccounts = filteredStaffAccounts;
+    }
+
+    public List<StaffAccount> getFilteredStaffAccounts() {
+        return filteredStaffAccounts;
+    }
+    
+    @PostConstruct
+    public void init() {
+        staffAccounts = staffAccountSessionBean.getAllStaffAccounts();
+        roles = roleSessionBean.getAllRoles();
+        //filteredStaffAccounts = staffAccounts;
+    }
+
+    public void setStaffAccounts(List<StaffAccount> staffAccounts) {
+        this.staffAccounts = staffAccounts;
+    }
+    
+    
 
     public RoleDataTableBean() {
     }
@@ -39,7 +74,7 @@ public class RoleDataTableBean {
     }
     
     public List<Role> getRoles() {
-        return roleSessionBean.getAllRoles();
+        return roles;
     }
     
     public List<String> getRoleNames() {
@@ -47,7 +82,8 @@ public class RoleDataTableBean {
     }
     
     public List<StaffAccount> getStaffAccounts(){
-        return staffAccountSessionBean.getAllStaffAccounts();
+        return staffAccounts;
+        //return staffAccountSessionBean.getAllStaffAccounts();
     }
     
     public StaffAccount getCurrentStaffAccount(){

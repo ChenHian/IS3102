@@ -59,7 +59,7 @@ public class Item implements Serializable {
 
 
 @OneToMany(cascade = {CascadeType.ALL}, mappedBy="item")
-    private Collection<PurchaseRequisitionItem> purchaseRequisitionItem = new ArrayList<PurchaseRequisitionItem>();
+    private Collection<PurchaseRequisition> purchaseRequisitionItem = new ArrayList<PurchaseRequisition>();
 
     public Collection<PurchaseOrderItem> getPurchaseOrderItems(){
         return purchaseOrderItems;
@@ -86,14 +86,14 @@ public class Item implements Serializable {
     /**
      * @return the purchaseRequisitionItem
      */
-    public Collection<PurchaseRequisitionItem> getPurchaseRequisitionItem() {
+    public Collection<PurchaseRequisition> getPurchaseRequisitionItems() {
         return purchaseRequisitionItem;
     }
 
     /**
      * @param purchaseRequisitionItem the purchaseRequisitionItem to set
      */
-    public void setPurchaseRequisitionItem(Collection<PurchaseRequisitionItem> purchaseRequisitionItem) {
+    public void setPurchaseRequisitionItems(Collection<PurchaseRequisition> purchaseRequisitionItems) {
         this.purchaseRequisitionItem = purchaseRequisitionItem;
     }
 

@@ -4,7 +4,8 @@
                 template="/templates/layout.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
 
     <ui:define name="content">
         
@@ -28,43 +29,70 @@
                 You do not have the access required to view this page, please contact your system administrator.
             </p:panel>
         </h:form>
-    
+        
+        
+        <script type="text/javascript">
+    redirect = function() {
+        window.location.href = 'http://localhost:8080/SSSystem-war/AccountAdministrationModule/viewAllStaffAccounts.xhtml';
+    }
+</script>
     
         <h:form id="formMain" rendered="#{accessController.userAccountManagementModuleAccess()}">
             <p:panel header="View All Staff Accounts">
                 <p:contextMenu for="staffAccounts">
-                    <p:menuitem value="Delete" update="staffAccounts" icon="ui-icon-close" actionListener="#{roleDataTableBean.deleteStaffAccount}"/>
+                    <p:menuitem value="Delete" update="staffAccounts" icon="ui-icon-close" actionListener="#{roleDataTableBean.deleteStaffAccount}" onsuccess="redirect()" />
+                    
+                    
                 </p:contextMenu>
-                <p:dataTable id = "staffAccounts" var="staffAccount" value="#{roleDataTableBean.staffAccounts}"
-                             paginator="true" rows="10" emptyMessage="No role" rowKey="#{staffAccount.staffAccountId}"
-                 selection="#{roleDataTableBean.selectedStaffAccount}" selectionMode="single">
-                    <p:column headerText="Staff Account Name"
-                              sortBy="#{staffAccount.staffAccountName}">
+                
+                <p:dataTable id = "staffAccounts" var="staffAccount" value="#{roleDataTableBean.staffAccounts}" widgetVar="accountTable" filteredValue = "#{roleDataTableBean.filteredStaffAccounts}"
+                             paginator="true" rows="10" emptyMessage="No Staff Accounts Found" rowKey="#{staffAccount.staffAccountId}"
+                 selection="#{roleDataTableBean.selectedStaffAccount}" selectionMode="single" >
+                    
+                    <f:facet name="header">
+                       <p:outputPanel>
+                         <h:outputText value="Search all fields:" />
+                         <p:inputText id="globalFilter" onkeyup="PF('accountTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                       </p:outputPanel>
+                    </f:facet>
+                    
+                    
+                    <p:column filterBy="#{staffAccount.staffAccountName}" filterStyle="display:none"  filterMatchMode="contains" 
+                              headerText="Staff Account Name"
+                              sortBy="#{staffAccount.staffAccountName}" 
+                              >
                         <h:outputText value="#{staffAccount.staffAccountName}" />
                     </p:column>
-                    <p:column headerText="Email"
-                              sortBy="#{staffAccount.email}">
+                    <p:column filterBy="#{staffAccount.email}" filterStyle="display:none"  filterMatchMode="contains" 
+                              headerText="Email"
+                              sortBy="#{staffAccount.email}"
+                              >
                         <h:outputText value="#{staffAccount.email}" />
                     </p:column>
-                    <p:column headerText="Contact Number"
-                              sortBy="#{staffAccount.contactNumber}">
+                    <p:column filterBy="#{staffAccount.contactNumber}" filterStyle="display:none"  filterMatchMode="contains" 
+                              headerText="Contact Number"
+                              >
                         <h:outputText value="#{staffAccount.contactNumber}" />
                     </p:column>
-                    <p:column headerText="Role"
-                              sortBy="#{staffAccount.role.roleName}">
+                    <p:column filterBy="#{staffAccount.role.roleName}" filterStyle="display:none"  filterMatchMode="contains" 
+                              headerText="Role"
+                              sortBy="#{staffAccount.role.roleName}"
+                              >
                         <h:outputText value="#{staffAccount.role.roleName}" />
                     </p:column>
                 </p:dataTable>
             </p:panel>
         </h:form>
     </ui:define>
-<!--Left drop down menu, edit for all .xhtml pages if changed-->
+
+    
+    <!--Left drop down menu, edit for all .xhtml pages if changed-->
     <ui:define name="left">
 <h:form>
     <p:growl autoUpdate="true"/>
             <p:growl id="messages" /> 
             <p:menu style="width:95%" >
-            <p:menuitem value="Home" action="/admin/adminHome" icon="ui-icon-home"/>    
+            <p:menuitem value="Home" outcome="/admin/adminHome" icon="ui-icon-home"/>    
             <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
             </p:menu>
  
@@ -76,25 +104,37 @@
         
         <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
             
-            <p:menuitem value="Edit Account Particulars" action="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
-            <p:menuitem value="Change Password" action="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
+            <p:menuitem value="Edit Account Particulars" outcome="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
+            <p:menuitem value="Change Password" outcome="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
 
         </p:submenu>
         
         <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
             
-            <p:menuitem value="View All Roles" action="/UserAccessControlModule/viewAllRoles" icon="ui-icon-search"/>
-            <p:menuitem value="Add New Role" action="/UserAccessControlModule/addNewRole" icon="ui-icon-plus"/>
-            <p:menuitem value="View All Privileges" action="/UserAccessControlModule/viewAllPrivileges" icon="ui-icon-search"/>
+            <p:menuitem value="View All Roles" outcome="/UserAccessControlModule/viewAllRoles" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Role" outcome="/UserAccessControlModule/addNewRole" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Privileges" outcome="/UserAccessControlModule/viewAllPrivileges" icon="ui-icon-search"/>
         </p:submenu>
         
         <p:submenu label="Account Administration Module" rendered = "#{accessController.accountAdministrationModuleAccess()}">
             
-            <p:menuitem value="View All Staff Accounts" action="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
-            <p:menuitem value="Add New Account" action="/AccountAdministrationModule/addNewStaffAccount" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Staff Accounts" outcome="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Account" outcome="/AccountAdministrationModule/addNewStaffAccount" icon="ui-icon-plus"/>
         </p:submenu>
+        
         <p:submenu label="Purchasing Request Module Dummy" rendered = "#{accessController.purchasingRequestModuleAccess()}" >
             <p:menuitem value="Dummy, do not use" action ="/login.xhtml"  ajax="false" icon="ui-icon-close"/>
+        </p:submenu>
+        
+        <p:submenu label="Item Management Module" rendered = "#{accessController.itemManagementModuleAccess()}">
+            
+            
+            <p:menuitem value="View/Edit Warehouse Inventory" outcome="/ItemManagementModule/viewWarehouseInventory" icon="ui-icon-plus"/>
+            <p:menuitem value="Add Item to Warehouse" outcome="/ItemManagementModule/addWarehouseInventory" icon="ui-icon-plus"/>
+            <p:menuitem value="Redelivery" outcome="/ItemManagementModule/redeliveryDoc" icon="ui-icon-search"/>
+            <p:menuitem value="View Brand" outcome="/ItemManagementModule/viewBrand" icon="ui-icon-search"/>
+            <p:menuitem value="View Items" outcome="/ItemManagementModule/viewItems" icon="ui-icon-search"/>
+            <p:menuitem value="View Item Type" outcome="/ItemManagementModule/viewItemType" icon="ui-icon-search"/>
         </p:submenu>
         <p:separator />
        
@@ -108,3 +148,4 @@
 
 
 </ui:composition>
+
