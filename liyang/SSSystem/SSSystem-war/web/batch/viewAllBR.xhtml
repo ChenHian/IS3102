@@ -11,30 +11,43 @@
             <p:panel header="View All Batch Receipts (BRs)">    
                 <f:facet name="header"> 
                 </f:facet>
+                
+                
 
                 <p:dataTable id="BRtable" var="br" value="#{BRManageBean.allBRs}"  widgetVar="BRtable"  resizableColumns="true" style="margin-bottom:40px"
                              filteredValue="#{BRManageBean.filteredBRs}" paginator="true" rows="20" emptyMessage="No BR" selectionMode="single" selection="#{BRManageBean.selectedBR}" rowKey="#{br.batchReceiptId}">
 
-                    <p:column headerText="BR ID" filterBy="#{br.batchReceiptId}" filterStyle="display:none">
+                    <f:facet name="header">
+                       <p:outputPanel>
+                         <h:outputText value="Search all fields:" />
+                         <p:inputText id="globalFilter" onkeyup="PF('BRtable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                       </p:outputPanel>
+                    </f:facet>
+                    
+                    <p:column headerText="BR ID" filterBy="#{br.batchReceiptId}" filterMatchMode = "contains" filterStyle="display:none"
+                              sortBy= "#{br.batchReceiptId}" >
                         <h:outputText value="#{br.batchReceiptId}" />
                     </p:column>
-                    <p:column headerText="Center Name" filterBy="#{br.centerName}" filterStyle="display:none">
+                    <p:column headerText="Center Name" filterBy="#{br.centerName}" filterMatchMode = "contains" filterStyle="display:none"
+                              sortBy= "#{br.centerName}" >
                         <h:outputText value="#{br.centerName}" />
                     </p:column>
 
-                    <p:column headerText="Item Name" filterBy="#{br.po.item.itemName}" filterStyle="display:none">
+                    <p:column headerText="Item Name" filterBy="#{br.po.item.itemName}" filterMatchMode = "contains" filterStyle="display:none"
+                              sortBy= "#{br.po.item.itemName}" >
                         <h:outputText value="#{br.po.item.itemName}" />
                     </p:column>
 
-                    <p:column headerText="Batch Number" filterBy="#{br.batchNumber}" filterStyle="display:none">
+                    <p:column headerText="Batch Number" filterBy="#{br.batchNumber}"  filterMatchMode = "contains"  filterStyle="display:none"
+                              sortBy= "#{br.batchNumber}" >
                         <h:outputText value="#{br.batchNumber}" />
                     </p:column>
 
-                    <p:column headerText="Quantity In" filterBy="#{br.quantityIn}" filterStyle="display:none">
+                    <p:column headerText="Quantity In" >
                         <h:outputText value="#{br.quantityIn}" />
                     </p:column>
 
-                    <p:column headerText="Available Quantity" filterBy="#{br.availableQuantity}" filterStyle="display:none"> 
+                    <p:column headerText="Available Quantity" > 
                         <h:outputText value="#{br.availableQuantity}" />
                     </p:column>
                 </p:dataTable>
@@ -84,16 +97,70 @@
         </h:form>
     </ui:define>
 
-    <ui:define name="left"> 
-        <h:form>
+    <!--Left drop down menu, edit for all .xhtml pages if changed-->
+    <ui:define name="left">
+<h:form>
+    <p:growl autoUpdate="true"/>
             <p:growl id="messages" /> 
             <p:menu style="width:95%" >
-                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
-                <p:menuitem value="Home" action="/admin/AdminHome" icon="ui-icon-home"/>
-                <p:menuitem value="Add New Role" action="/admin/addNewRole" icon="ui-icon-plus"/>
-                <p:menuitem value="View All Privileges" action="/admin/viewAllPrivileges" icon="ui-icon-search"/>
+            <p:menuitem value="Home" outcome="/admin/adminHome" icon="ui-icon-home"/>    
+            <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
             </p:menu>
-        </h:form>
-    </ui:define>
+ 
+ 
+    
+   
+    <!--Module menu--> 
+    <p:panelMenu style="width:300px">
+        
+        <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
+            
+            <p:menuitem value="Edit Account Particulars" outcome="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
+            <p:menuitem value="Change Password" outcome="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
+
+        </p:submenu>
+        
+        <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
+            
+            <p:menuitem value="View All Roles" outcome="/UserAccessControlModule/viewAllRoles" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Role" outcome="/UserAccessControlModule/addNewRole" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Privileges" outcome="/UserAccessControlModule/viewAllPrivileges" icon="ui-icon-search"/>
+        </p:submenu>
+        
+        <p:submenu label="Account Administration Module" rendered = "#{accessController.accountAdministrationModuleAccess()}">
+            
+            <p:menuitem value="View All Staff Accounts" outcome="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Account" outcome="/AccountAdministrationModule/addNewStaffAccount" icon="ui-icon-plus"/>
+        </p:submenu>
+        
+        <p:submenu label="Purchasing Request Module Dummy" rendered = "#{accessController.purchasingRequestModuleAccess()}" >
+            <p:menuitem value="Dummy, do not use" action ="/login.xhtml"  ajax="false" icon="ui-icon-close"/>
+        </p:submenu>
+        
+        <p:submenu label="Item Management Module" rendered = "#{accessController.itemManagementModuleAccess()}">
+            
+            
+            <p:menuitem value="View/Edit Warehouse Inventory" outcome="/ItemManagementModule/viewWarehouseInventory" icon="ui-icon-plus"/>
+            <p:menuitem value="Add Item to Warehouse" outcome="/ItemManagementModule/addWarehouseInventory" icon="ui-icon-plus"/>
+            <p:menuitem value="Redelivery" outcome="/ItemManagementModule/redeliveryDoc" icon="ui-icon-search"/>
+            <p:menuitem value="View Brand" outcome="/ItemManagementModule/viewBrand" icon="ui-icon-search"/>
+            <p:menuitem value="View Items" outcome="/ItemManagementModule/viewItems" icon="ui-icon-search"/>
+            <p:menuitem value="View Item Type" outcome="/ItemManagementModule/viewItemType" icon="ui-icon-search"/>
+        </p:submenu>
+        
+        
+        <p:submenu label="Purchase Management Module" rendered = "#{accessController.purchaseManagementModuleAccess()}">
+
+            <p:menuitem value="Create Purchase Requisition" outcome="/PurchaseManagementModule/createPR" icon="ui-icon-plus"/>           
+            <p:menuitem value="View Purchase Requisitions" outcome="/PurchaseManagementModule/viewAllPR" icon="ui-icon-search"/>
+            
+        </p:submenu>
+        <p:separator />
+       
+        
+    </p:panelMenu>
+            </h:form>
+      </ui:define>
+    <!--Left drop down menu end-->
 
 </ui:composition>

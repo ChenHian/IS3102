@@ -17,6 +17,7 @@ import session.stateless.BRSessionBean;
 import entity.BatchReceipt;
 import entity.PurchaseOrder;
 import entity.PurchaseRequisition;
+import javax.annotation.PostConstruct;
 
 @Named(value = "BRManageBean")
 @RequestScoped
@@ -55,6 +56,26 @@ public class BRManageBean implements Serializable {
     private BatchReceipt selectedBR;
 
     private List<BatchReceipt> filteredBRs;
+    private List<BatchReceipt> allBRs;
+    
+   
+    
+    @PostConstruct
+    public void init() {
+        allBRs = brSessionBean.getAllBRs();
+    }
+
+    public List<BatchReceipt> getFilteredBRs() {
+        return filteredBRs;
+    }
+
+    public void setFilteredBRs(List<BatchReceipt> filteredBRs) {
+        this.filteredBRs = filteredBRs;
+    }
+
+    public void setAllBRs(List<BatchReceipt> allBRs) {
+        this.allBRs = allBRs;
+    }
     
     
     
@@ -288,7 +309,7 @@ public class BRManageBean implements Serializable {
     }
 
     public List<BatchReceipt> getAllBRs() {
-        return brSessionBean.getAllBRs();
+        return allBRs;
     }
     
     
