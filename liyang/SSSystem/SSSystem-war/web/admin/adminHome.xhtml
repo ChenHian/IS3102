@@ -49,6 +49,14 @@
     <!--Module menu--> 
     <p:panelMenu style="width:300px">
         
+        <p:submenu label="Notification Module" rendered = "#{accessController.notificationModuleAccess()}">
+            
+            <p:menuitem value="View Notifications" outcome="/NotificationModule/viewAllNotifications" icon="ui-icon-search"/>
+            <p:menuitem value="Send Notification" outcome="/NotificationModule/sendNotification" icon="ui-icon-wrench"/>
+
+        </p:submenu>
+        
+        
         <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
             
             <p:menuitem value="Edit Account Particulars" outcome="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
@@ -75,13 +83,16 @@
         
         <p:submenu label="Item Management Module" rendered = "#{accessController.itemManagementModuleAccess()}">
             
-            
+            <p:menuitem value="View All Distribution Centers" outcome="/ItemManagementModule/viewAllDC" icon="ui-icon-search"/>
+            <p:menuitem value="Create Batch Receipt" outcome="/ItemManagementModule/createBatchReceipt" icon="ui-icon-plus"/>
+            <p:menuitem value="View Batch Receipts" outcome="/ItemManagementModule/viewAllBR" icon="ui-icon-search"/>
             <p:menuitem value="View/Edit Warehouse Inventory" outcome="/ItemManagementModule/viewWarehouseInventory" icon="ui-icon-plus"/>
             <p:menuitem value="Add Item to Warehouse" outcome="/ItemManagementModule/addWarehouseInventory" icon="ui-icon-plus"/>
             <p:menuitem value="Redelivery" outcome="/ItemManagementModule/redeliveryDoc" icon="ui-icon-search"/>
             <p:menuitem value="View Brand" outcome="/ItemManagementModule/viewBrand" icon="ui-icon-search"/>
             <p:menuitem value="View Items" outcome="/ItemManagementModule/viewItems" icon="ui-icon-search"/>
             <p:menuitem value="View Item Type" outcome="/ItemManagementModule/viewItemType" icon="ui-icon-search"/>
+            
         </p:submenu>
         
         

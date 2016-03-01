@@ -3,11 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/entity/DeliveryRequestItem.java</file>
-            <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/entity/BatchOut.java</file>
-            <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/entity/PurchaseRequisition.java</file>
-            <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/entity/BatchReceipt.java</file>
+            <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/entity/DeliveryRequest.java</file>
+            <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/entity/Item.java</file>
             <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/entity/DistributionCenter.java</file>
+            <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/session/stateless/NotificationSessionBean.java</file>
+            <file>file:/E:/IS3102/liyang/SSSystem/SSSystem-ejb/src/java/entity/Notification.java</file>
         </group>
     </open-files>
 </project-private>

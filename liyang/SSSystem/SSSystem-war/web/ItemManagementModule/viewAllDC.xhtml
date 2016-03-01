@@ -6,88 +6,60 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+    
+
     <ui:define name="content">
         <h:form id="formMain">
-            <p:panel header="View All Batch Receipts (BRs)">    
+            <p:panel header="View All Distribution Centers (DCs)">    
+
                 <f:facet name="header"> 
                 </f:facet>
-                
-                
 
-                <p:dataTable id="BRtable" var="br" value="#{BRManageBean.allBRs}"  widgetVar="BRtable"  resizableColumns="true" style="margin-bottom:40px"
-                             filteredValue="#{BRManageBean.filteredBRs}" paginator="true" rows="20" emptyMessage="No BR" selectionMode="single" selection="#{BRManageBean.selectedBR}" rowKey="#{br.batchReceiptId}">
+                <p:dataTable id="DCtable" var="dc" value="#{ViewAllDCManageBean.allDistributioncenters}"  widgetVar="DCtable"  resizableColumns="true" style="margin-bottom:40px"
+                             paginator="true" rows="20" emptyMessage="No DC" selectionMode="single" selection="#{ViewAllDCManageBean.selectedDC}" rowKey="#{dc.distributionCenterId}">
 
-                    <f:facet name="header">
-                       <p:outputPanel>
-                         <h:outputText value="Search all fields:" />
-                         <p:inputText id="globalFilter" onkeyup="PF('BRtable').filter()" style="width:150px" placeholder="Enter keyword"/>
-                       </p:outputPanel>
-                    </f:facet>
-                    
-                    <p:column headerText="BR ID" filterBy="#{br.batchReceiptId}" filterMatchMode = "contains" filterStyle="display:none"
-                              sortBy= "#{br.batchReceiptId}" >
-                        <h:outputText value="#{br.batchReceiptId}" />
+                    <p:column headerText="DC ID" filterBy="#{dc.distributionCenterId}" filterStyle="display:none">
+                        <h:outputText value="#{dc.distributionCenterId}" />
                     </p:column>
-                    <p:column headerText="Center Name" filterBy="#{br.centerName}" filterMatchMode = "contains" filterStyle="display:none"
-                              sortBy= "#{br.centerName}" >
-                        <h:outputText value="#{br.centerName}" />
+                    <p:column headerText="DC Name" filterBy="#{dc.name}" filterStyle="display:none">
+                        <h:outputText value="#{dc.name}" />
                     </p:column>
-
-                    <p:column headerText="Item Name" filterBy="#{br.po.item.itemName}" filterMatchMode = "contains" filterStyle="display:none"
-                              sortBy= "#{br.po.item.itemName}" >
-                        <h:outputText value="#{br.po.item.itemName}" />
+                    <p:column headerText="DC Address" filterBy="#{dc.address}" filterStyle="display:none"> 
+                        <h:outputText value="#{dc.address}" />
                     </p:column>
-
-                    <p:column headerText="Batch Number" filterBy="#{br.batchNumber}"  filterMatchMode = "contains"  filterStyle="display:none"
-                              sortBy= "#{br.batchNumber}" >
-                        <h:outputText value="#{br.batchNumber}" />
+                    <p:column headerText="DC Country" filterBy="#{dc.country}" filterStyle="display:none">
+                        <h:outputText value="#{dc.country}" />
                     </p:column>
-
-                    <p:column headerText="Quantity In" >
-                        <h:outputText value="#{br.quantityIn}" />
-                    </p:column>
-
-                    <p:column headerText="Available Quantity" > 
-                        <h:outputText value="#{br.availableQuantity}" />
+                    <p:column headerText="DC Area" filterBy="#{dc.area}" filterStyle="display:none">
+                        <h:outputText value="#{dc.area}" />
                     </p:column>
                 </p:dataTable>
 
-                <p:commandButton  process="BRtable" update=":formMain:brDetail" icon="ui-icon-search" value="View" onclick="PF('brDialog').show()" />
-                <p:dialog header="BR Profile" widgetVar="brDialog" resizable="true">
-                    <p:outputPanel id="brDetail" style="text-align:center;">
-                        <p:panelGrid  columns="2" rendered="#{not empty BRManageBean.selectedBR}" columnClasses="label,value">
+                <p:commandButton  process="DCtable" update=":formMain:dcDetail" icon="ui-icon-search" value="View" onclick="PF('dcDialog').show()" />
+                <p:dialog header="DC Profile" widgetVar="dcDialog" resizable="true">
+                    <p:outputPanel id="dcDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty ViewAllDCManageBean.selectedDC}" columnClasses="label,value">
 
-                            <h:outputText value="BR ID:" />
-                            <h:outputText value="#{BRManageBean.selectedBR.batchReceiptId}" />
+                            <h:outputText value="DC ID:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.distributionCenterId}" />
 
-                            <h:outputText value="PO ID:" />
-                            <h:outputText value="#{BRManageBean.selectedBR.po.purchaseOrderId}" />
+                            <h:outputText value="DC Name:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.name}" />
 
+                            <h:outputText value="DC Address:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.address}" />
 
-                            <h:outputText value="Center Name:" />
-                            <h:outputText value="#{BRManageBean.selectedBR.centerName}" />
+                            <h:outputText value="DC Country:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.country}" />
 
-                            <h:outputText value="Item Name:" />
-                            <h:outputText value="#{BRManageBean.selectedBR.po.item.itemName}" />
+                            <h:outputText value="DC Area:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.area}" />
 
-                            <h:outputText value="Batch Number:" />
-                            <h:outputText value="#{BRManageBean.selectedBR.batchNumber}" />
+                            <h:outputText value="DC Storage Facilities:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.storageFacilities}" />
 
-                            <h:outputText value="Quantity In:" />
-                            <h:outputText value="#{BRManageBean.selectedBR.quantityIn}" />
-
-                            <h:outputText value="Quantity Rejected:" />
-                            <h:outputText value="#{BRManageBean.selectedBR.quantityRejected}" />
-
-                            <h:outputText value="Available Quantity:" />
-                            <h:outputText value="#{BRManageBean.selectedBR.availableQuantity}" />
-
-                            <h:outputText value="Date Received:" />
-                            <h:outputText value="#{BRManageBean.selectedBR.dateReceived}" />
-
-                            <h:outputText value="Expiry Date:" />
-                            <h:outputText value="#{BRManageBean.selectedBR.expiryDate}" />
-
+                            <h:outputText value="DC Number Of Shelves:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.numberOfShelves}" />
                         </p:panelGrid>
 
                         <p:spacer width="0" height="20" />
@@ -96,7 +68,8 @@
             </p:panel>            
         </h:form>
     </ui:define>
-
+    
+        
     <!--Left drop down menu, edit for all .xhtml pages if changed-->
     <ui:define name="left">
 <h:form>
@@ -112,6 +85,14 @@
    
     <!--Module menu--> 
     <p:panelMenu style="width:300px">
+        
+        <p:submenu label="Notification Module" rendered = "#{accessController.notificationModuleAccess()}">
+            
+            <p:menuitem value="View Notifications" outcome="/NotificationModule/viewAllNotifications" icon="ui-icon-search"/>
+            <p:menuitem value="Send Notification" outcome="/NotificationModule/sendNotification" icon="ui-icon-wrench"/>
+
+        </p:submenu>
+        
         
         <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
             
@@ -139,13 +120,16 @@
         
         <p:submenu label="Item Management Module" rendered = "#{accessController.itemManagementModuleAccess()}">
             
-            
+            <p:menuitem value="View All Distribution Centers" outcome="/ItemManagementModule/viewAllDC" icon="ui-icon-search"/>
+            <p:menuitem value="Create Batch Receipt" outcome="/ItemManagementModule/createBatchReceipt" icon="ui-icon-plus"/>
+            <p:menuitem value="View Batch Receipts" outcome="/ItemManagementModule/viewAllBR" icon="ui-icon-search"/>
             <p:menuitem value="View/Edit Warehouse Inventory" outcome="/ItemManagementModule/viewWarehouseInventory" icon="ui-icon-plus"/>
             <p:menuitem value="Add Item to Warehouse" outcome="/ItemManagementModule/addWarehouseInventory" icon="ui-icon-plus"/>
             <p:menuitem value="Redelivery" outcome="/ItemManagementModule/redeliveryDoc" icon="ui-icon-search"/>
             <p:menuitem value="View Brand" outcome="/ItemManagementModule/viewBrand" icon="ui-icon-search"/>
             <p:menuitem value="View Items" outcome="/ItemManagementModule/viewItems" icon="ui-icon-search"/>
             <p:menuitem value="View Item Type" outcome="/ItemManagementModule/viewItemType" icon="ui-icon-search"/>
+            
         </p:submenu>
         
         
@@ -162,5 +146,10 @@
             </h:form>
       </ui:define>
     <!--Left drop down menu end-->
+
+
+    
+    
+
 
 </ui:composition>

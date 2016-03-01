@@ -6,9 +6,30 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content">
-        <h:form id="formMain">
-            <p:panel id="panel" header="Create New Batch Receipt (BR)">
+    <ui:define name="content" >
+        
+        <!--Timeout function, do not move-->    
+        <h:form>
+    <p:growl id="timeout" showDetail="true" sticky="true" />
+ 
+    <p:idleMonitor timeout="900000">
+        <p:ajax event="idle" listener="#{idleMonitorView.onIdle}" update="timeout" />
+        
+    </p:idleMonitor>
+</h:form>
+        
+    <!--Timeout function end-->
+    
+    <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.notificationModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+    
+    
+    <h:form id="formMain" rendered="#{accessController.notificationModuleAccess()}">
+            <p:panel id="panel" header="Send notification">
                 <p:ajaxStatus style="width:16px;height:16px;">
                     <f:facet name="start">
                         <h:graphicImage value="/images/spinner.gif" />
@@ -18,53 +39,51 @@
                     </f:facet>
                 </p:ajaxStatus>
                 <p:messages />
-                <h:panelGrid columns="2" cellpadding="10" style="margin-left: 100px; width: 60%">
-
-                    <p:outputLabel for="poId" style="fontweight:bold" value="PO ID: " />
-                    <p:inputText required="true" label="PO ID" requiredMessage="PO ID is required." id="poId" value="#{BRManageBean.poId}">
-                    </p:inputText>
-
-                    <p:outputLabel for="german" value="Date Received: " />
-                    <p:calendar id="german" value="#{BRManageBean.dateReceived2}" locale="de" navigator="true" pattern="dd/MM/yyyy" />
-
-                    <p:outputLabel for="DCName" value="Select DC: " />
-                    <p:selectOneMenu id="DCName" value="#{BRManageBean.selectedCenterName}" style="width:150px" required ="true">
-                        <f:selectItem itemLabel="Select a DC Name" itemValue="" noSelectionOption="true" />
-                        <f:selectItems value= "#{BRManageBean.allDistributioncenterNames.entrySet()}" var="dc"
-                                       itemValue="#{dc.key}" itemLabel="#{dc.value}" />
+                <p:panelGrid>
+                  
+                    
+                    <p:outputLabel for="role" value="Receiving Role: " />
+                    <p:selectOneMenu id="role" value="#{notificationManagerBean.receivingRole}" required="true">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItems value="#{roleDataTableBean.roleNames}" />
                     </p:selectOneMenu>
+                    
+                    <p:outputLabel for="notificationType" value="Notification Type: " />
+                    <p:selectOneMenu id="notificationType" value="#{notificationManagerBean.notificationType}" required="true">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItems value="#{notificationManagerBean.notificationTypes}" />
+                    </p:selectOneMenu>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="message" style="fontweight:
+                                           bold" value="Input Message: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea required="true" label="message"
+                                         requiredMessage="Message is required." id="message"
+                                         value="#{notificationManagerBean.message}">
+                                <f:validateLength minimum="1" />
+                            </p:inputTextarea>
+                        </p:column>
+                        <p:column>
+                            <p:message for="message" />
+                        </p:column>
+                    </p:row>
 
-                    <p:outputLabel for="batchNumber" style="fontweight:bold" value="Batch Number: " />
-                    <p:inputText required="true" label="Batch Number" requiredMessage="Batch Number is required." id="batchNumber" value="#{BRManageBean.batchNumber}">
-                    </p:inputText>
-
-                    <p:outputLabel for="german2" value="Expiry Date: " />
-                    <p:calendar id="german2" value="#{BRManageBean.expiryDate2}" locale="de" navigator="true" pattern="dd/MM/yyyy" readonlyInput="true" mindate="#{BRManageBean.todayDate}"/>
-
-                    <p:outputLabel for="quantityIn" style="fontweight:bold" value="Quantity In: " />
-                    <p:inputText required="true" label="quantityRequested:" requiredMessage="Quantity In is required." id="quantityIn" value="#{BRManageBean.quantityIn}">
-                    </p:inputText>
-
-                    <p:outputLabel for="quantityRejected" style="fontweight:bold" value="Quantity Rejected: " />
-                    <p:inputText required="true" label="quantityRequested:" requiredMessage="Quantity Rejected is required." id="quantityRejected" value="#{BRManageBean.quantityRejected}">
-                    </p:inputText>
-
-                    <p:outputLabel for="availableQuantity" style="fontweight:bold" value="Quantity Available: " />
-                    <p:inputText required="true" label="availableQuantity:"  id="availableQuantity" value="#{BRManageBean.availableQuantity}">
-                    </p:inputText>
-
-                    <p:spacer/>
-                    <p:spacer/>
-                    <p:spacer/>    
-                    <f:facet name="footer">
-                        <p:commandButton id="btn" update="panel" value ="Save Batch Receipt" action="/warehouse/addFeedbackOnSupplier" actionListener="#{BRManageBean.createBR}" ajax="false">  
-                        </p:commandButton>
-                    </f:facet>
-                </h:panelGrid>        
-            </p:panel> 
+                    
+                </p:panelGrid>
+                <p:commandButton id="btn" value="Send Notification"
+                                 update="panel" actionListener="#{notificationManagerBean.sendNotification()}" ajax="true"
+                                 />
+            </p:panel>
         </h:form>
-    </ui:define> 
 
+
+
+    </ui:define>
+    
+        
     <!--Left drop down menu, edit for all .xhtml pages if changed-->
     <ui:define name="left">
 <h:form>
@@ -80,6 +99,14 @@
    
     <!--Module menu--> 
     <p:panelMenu style="width:300px">
+        
+        <p:submenu label="Notification Module" rendered = "#{accessController.notificationModuleAccess()}">
+            
+            <p:menuitem value="View Notifications" outcome="/NotificationModule/viewAllNotifications" icon="ui-icon-search"/>
+            <p:menuitem value="Send Notification" outcome="/NotificationModule/sendNotification" icon="ui-icon-wrench"/>
+
+        </p:submenu>
+        
         
         <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
             
@@ -107,13 +134,16 @@
         
         <p:submenu label="Item Management Module" rendered = "#{accessController.itemManagementModuleAccess()}">
             
-            
+            <p:menuitem value="View All Distribution Centers" outcome="/ItemManagementModule/viewAllDC" icon="ui-icon-search"/>
+            <p:menuitem value="Create Batch Receipt" outcome="/ItemManagementModule/createBatchReceipt" icon="ui-icon-plus"/>
+            <p:menuitem value="View Batch Receipts" outcome="/ItemManagementModule/viewAllBR" icon="ui-icon-search"/>
             <p:menuitem value="View/Edit Warehouse Inventory" outcome="/ItemManagementModule/viewWarehouseInventory" icon="ui-icon-plus"/>
             <p:menuitem value="Add Item to Warehouse" outcome="/ItemManagementModule/addWarehouseInventory" icon="ui-icon-plus"/>
             <p:menuitem value="Redelivery" outcome="/ItemManagementModule/redeliveryDoc" icon="ui-icon-search"/>
             <p:menuitem value="View Brand" outcome="/ItemManagementModule/viewBrand" icon="ui-icon-search"/>
             <p:menuitem value="View Items" outcome="/ItemManagementModule/viewItems" icon="ui-icon-search"/>
             <p:menuitem value="View Item Type" outcome="/ItemManagementModule/viewItemType" icon="ui-icon-search"/>
+            
         </p:submenu>
         
         
@@ -130,5 +160,9 @@
             </h:form>
       </ui:define>
     <!--Left drop down menu end-->
+
+
+    
+    
 
 </ui:composition>

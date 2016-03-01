@@ -72,6 +72,7 @@
     </ui:define>
     
     
+        
     <!--Left drop down menu, edit for all .xhtml pages if changed-->
     <ui:define name="left">
 <h:form>
@@ -87,6 +88,14 @@
    
     <!--Module menu--> 
     <p:panelMenu style="width:300px">
+        
+        <p:submenu label="Notification Module" rendered = "#{accessController.notificationModuleAccess()}">
+            
+            <p:menuitem value="View Notifications" outcome="/NotificationModule/viewAllNotifications" icon="ui-icon-search"/>
+            <p:menuitem value="Send Notification" outcome="/NotificationModule/sendNotification" icon="ui-icon-wrench"/>
+
+        </p:submenu>
+        
         
         <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
             
@@ -114,13 +123,24 @@
         
         <p:submenu label="Item Management Module" rendered = "#{accessController.itemManagementModuleAccess()}">
             
-            
+            <p:menuitem value="View All Distribution Centers" outcome="/ItemManagementModule/viewAllDC" icon="ui-icon-search"/>
+            <p:menuitem value="Create Batch Receipt" outcome="/ItemManagementModule/createBatchReceipt" icon="ui-icon-plus"/>
+            <p:menuitem value="View Batch Receipts" outcome="/ItemManagementModule/viewAllBR" icon="ui-icon-search"/>
             <p:menuitem value="View/Edit Warehouse Inventory" outcome="/ItemManagementModule/viewWarehouseInventory" icon="ui-icon-plus"/>
             <p:menuitem value="Add Item to Warehouse" outcome="/ItemManagementModule/addWarehouseInventory" icon="ui-icon-plus"/>
             <p:menuitem value="Redelivery" outcome="/ItemManagementModule/redeliveryDoc" icon="ui-icon-search"/>
             <p:menuitem value="View Brand" outcome="/ItemManagementModule/viewBrand" icon="ui-icon-search"/>
             <p:menuitem value="View Items" outcome="/ItemManagementModule/viewItems" icon="ui-icon-search"/>
             <p:menuitem value="View Item Type" outcome="/ItemManagementModule/viewItemType" icon="ui-icon-search"/>
+            
+        </p:submenu>
+        
+        
+        <p:submenu label="Purchase Management Module" rendered = "#{accessController.purchaseManagementModuleAccess()}">
+
+            <p:menuitem value="Create Purchase Requisition" outcome="/PurchaseManagementModule/createPR" icon="ui-icon-plus"/>           
+            <p:menuitem value="View Purchase Requisitions" outcome="/PurchaseManagementModule/viewAllPR" icon="ui-icon-search"/>
+            
         </p:submenu>
         <p:separator />
        
@@ -129,7 +149,10 @@
             </h:form>
       </ui:define>
     <!--Left drop down menu end-->
-  
+
+
+    
+    
 
 
 </ui:composition>

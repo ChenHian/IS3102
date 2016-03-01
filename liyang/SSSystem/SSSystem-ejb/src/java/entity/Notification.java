@@ -7,10 +7,14 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 
 /**
  *
@@ -23,12 +27,15 @@ public class Notification implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long notificationId;
     
-    private String receivingDivision;
-    private String sendingDivision;
+    
+    private String receivingRole;
+    private String sendingRole;
+    
+    
     
     private String notificationType;
     private String notificationMessage;
-    private Date date;
+    private Timestamp timestamp;
 
  /*   @Override
     public int hashCode() {
@@ -72,29 +79,29 @@ public class Notification implements Serializable {
     /**
      * @return the receivingDivision
      */
-    public String getReceivingDivision() {
-        return receivingDivision;
+    public String getReceivingRole() {
+        return receivingRole;
     }
 
     /**
      * @param receivingDivision the receivingDivision to set
      */
-    public void setReceivingDivision(String receivingDivision) {
-        this.receivingDivision = receivingDivision;
+    public void setReceivingRole(String receivingRole) {
+        this.receivingRole = receivingRole;
     }
 
     /**
      * @return the sendingDivision
      */
-    public String getSendingDivision() {
-        return sendingDivision;
+    public String getSendingRole() {
+        return sendingRole;
     }
 
     /**
      * @param sendingDivision the sendingDivision to set
      */
-    public void setSendingDivision(String sendingDivision) {
-        this.sendingDivision = sendingDivision;
+    public void setSendingRole(String sendingRole) {
+        this.sendingRole = sendingRole;
     }
 
     /**
@@ -128,16 +135,18 @@ public class Notification implements Serializable {
     /**
      * @return the date
      */
-    public Date getDate() {
-        return date;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
     /**
      * @param date the date to set
      */
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTimestamp(Timestamp date) {
+        this.timestamp = date;
     }
+    
+    
 
     
 }
