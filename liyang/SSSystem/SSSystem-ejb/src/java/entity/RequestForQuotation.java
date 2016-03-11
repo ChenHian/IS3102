@@ -16,7 +16,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
@@ -32,10 +34,12 @@ public class RequestForQuotation implements Serializable {
     private Date dateRequested;
     private String status;
     private Date deadline;
+    private int quantity;
+    @ManyToOne
+    private Item item = new Item();
     @ManyToMany(cascade={CascadeType.ALL})
+    @JoinTable (name="RequestForQuotation_Supplier")
     private Set<Supplier> suppliers = new HashSet<Supplier>();
-    @OneToMany(cascade={CascadeType.ALL})
-    private Collection<RequestForQuotationItem> requestForQuotationItems = new ArrayList<RequestForQuotationItem>();
     @OneToMany(cascade={CascadeType.ALL})
     private Collection<Quotation> quotations = new ArrayList<Quotation>();
 
@@ -79,6 +83,20 @@ public class RequestForQuotation implements Serializable {
     }
 
     /**
+     * @return the dateRequested
+     */
+    public Date getDateRequested() {
+        return dateRequested;
+    }
+
+    /**
+     * @param dateRequested the dateRequested to set
+     */
+    public void setDateRequested(Date dateRequested) {
+        this.dateRequested = dateRequested;
+    }
+
+    /**
      * @return the status
      */
     public String getStatus() {
@@ -90,6 +108,20 @@ public class RequestForQuotation implements Serializable {
      */
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    /**
+     * @return the deadline
+     */
+    public Date getDeadline() {
+        return deadline;
+    }
+
+    /**
+     * @param deadline the deadline to set
+     */
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
     }
 
     /**
@@ -106,19 +138,6 @@ public class RequestForQuotation implements Serializable {
         this.suppliers = suppliers;
     }
 
-    /**
-     * @return the requestForQuotationItems
-     */
-    public Collection<RequestForQuotationItem> getRequestForQuotationItems() {
-        return requestForQuotationItems;
-    }
-
-    /**
-     * @param requestForQuotationItems the requestForQuotationItems to set
-     */
-    public void setRequestForQuotationItems(Collection<RequestForQuotationItem> requestForQuotationItems) {
-        this.requestForQuotationItems = requestForQuotationItems;
-    }
 
     /**
      * @return the quotations
@@ -135,31 +154,31 @@ public class RequestForQuotation implements Serializable {
     }
 
     /**
-     * @return the dateRequested
+     * @return the quantity
      */
-    public Date getDateRequested() {
-        return dateRequested;
+    public int getQuantity() {
+        return quantity;
     }
 
     /**
-     * @param dateRequested the dateRequested to set
+     * @param quantity the quantity to set
      */
-    public void setDateRequested(Date dateRequested) {
-        this.dateRequested = dateRequested;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     /**
-     * @return the deadline
+     * @return the item
      */
-    public Date getDeadline() {
-        return deadline;
+    public Item getItem() {
+        return item;
     }
 
     /**
-     * @param deadline the deadline to set
+     * @param item the item to set
      */
-    public void setDeadline(Date deadline) {
-        this.deadline = deadline;
+    public void setItem(Item item) {
+        this.item = item;
     }
     
 }

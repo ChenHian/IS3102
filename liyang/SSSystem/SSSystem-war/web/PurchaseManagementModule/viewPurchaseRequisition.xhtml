@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        
+        <h:form id="accessError" rendered="#{!accessController.purchaseManagementModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+        <h:form id="viewPurchaseRequisitionForm" rendered="#{accessController.purchaseManagementModuleAccess()}">
+            <p:panel header="View All Unprocessed Purchase Requisition"> 
+           
+            <p:dataTable id="purchaseRequisitionWDT" var="purchaseRequisitionW" widgetVar="purchaseRequisitionWTable" filteredValue="#{purchaseRequisitionDataTableBean.filteredPurchaseRequisitionW}" value="#{purchaseRequisitionDataTableBean.purchaseRequisitionWith}" resizableColumns="true" style="margin-bottom:40px"
+                         paginator="true" rows="20" emptyMessage="No Purchase Requisition" selectionMode="single" selection="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionW}" rowKey="#{purchaseRequisitionW.purchaseRequisitionId}">
+                <f:facet name="header">
+                    <h:outputText value="With Item Quotation and/or Contract" />
+                </f:facet>
+                <f:facet name="header">
+                        <p:outputPanel>
+                            <p:inputText id="globalFilter" onkeyup="PF('purchaseRequisitionWTable').filter()" style="width:150px" placeholder="Search keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+                <p:column headerText="Centre Requested" filterBy="#{purchaseRequisitionW.centerName}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseRequisitionW.centerName}" />
+                </p:column>
+                <p:column headerText="Date Request" filterBy="#{purchaseRequisitionW.dateRequest}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseRequisitionW.dateRequest}" />
+                </p:column>
+                <p:column headerText="Item Name" filterBy="#{purchaseRequisitionW.item.itemName}" filterStyle="display:none"> 
+                    <h:outputText value="#{purchaseRequisitionW.item.itemName}" />
+                </p:column>
+                <p:column headerText="Quantity Requested" filterBy="#{purchaseRequisitionW.quantityRequested}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseRequisitionW.quantityRequested}" />
+                </p:column>
+                <p:column style="width:32px"> 
+                    <p:commandButton update=":viewPurchaseRequisitionForm:purchaseRequisitionWDetail" icon="fa fa-fw fa-neuter" onclick="PF('purchaseRequisitionWDialog').show() "/>
+                </p:column>
+                <p:column style="width:140px"> 
+                <p:button outcome="/PurchasingModule/createPurchaseOrder" value="Convert to PO">
+                            <f:param name="selectedPurchaseRequisitionId" value="#{purchaseRequisitionW.purchaseRequisitionId}"/>
+                            <f:param name="selectedCenterName" value="#{purchaseRequisitionW.centerName}"/>
+                            <f:param name="selectedItemId" value="#{purchaseRequisitionW.item.itemId}"/>  
+                            <f:param name="selectedItemName" value="#{purchaseRequisitionW.item.itemName}"/> 
+                            <f:param name="selectedQuantityRequested" value="#{purchaseRequisitionW.quantityRequested}"/>
+                            <f:param name="selectedMeasurementUnit" value="#{purchaseRequisitionW.item.itemType.measurementType}"/> 
+                </p:button>
+                    
+                </p:column>
+            </p:dataTable>
+               
+            <p:dialog header="With Item Quotation and/or Contract" widgetVar="purchaseRequisitionWDialog" resizable="true" width="400" height="200">
+                    <p:outputPanel id="purchaseRequisitionWDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty purchaseRequisitionDataTableBean.selectedPurchaseRequisitionW}" columnClasses="label,value">
+
+                            <h:outputText style="font-weight: bold;" value="Purchase Requisition Id:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionW.purchaseRequisitionId}" />
+
+                            <h:outputText style="font-weight: bold;" value="Centre Requested:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionW.centerName}" />
+
+                            <h:outputText style="font-weight: bold;" value="Date Created:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionW.dateCreated}" />
+
+                            <h:outputText style="font-weight: bold;" value="Date Requested to Deliver:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionW.dateRequest}" />
+
+                            <h:outputText style="font-weight: bold;" value="Status:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionW.status}" />
+
+                            <h:outputText style="font-weight: bold;" value="Item Id:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionW.item.itemId}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Item Name:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionW.item.itemName}" />
+                        
+                        </p:panelGrid>
+
+                    </p:outputPanel>
+                </p:dialog>
+                <p:dataTable id="purchaseRequisitionWODT" var="purchaseRequisitionWO" widgetVar="purchaseRequisitionWOTable" filteredValue="#{purchaseRequisitionDataTableBean.filteredPurchaseRequisitionWO}" value="#{purchaseRequisitionDataTableBean.purchaseRequisitionWithout}" resizableColumns="true" style="margin-bottom:40px"
+                         paginator="true" rows="20" emptyMessage="No Purchase Requisition" selectionMode="single" selection="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionWO}" rowKey="#{purchaseRequisitionWO.purchaseRequisitionId}">
+                <f:facet name="header">
+                    <h:outputText value="Without Item Quotation and/or Contract" />
+                </f:facet>
+                <f:facet name="header">
+                        <p:outputPanel>
+                            <p:inputText id="globalFilter" onkeyup="PF('purchaseRequisitionWOTable').filter()" style="width:150px" placeholder="Search keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+                <p:column headerText="Centre Requested" filterBy="#{purchaseRequisitionWO.centerName}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseRequisitionWO.centerName}" />
+                </p:column>
+                <p:column headerText="Date Request" filterBy="#{purchaseRequisitionWO.dateRequest}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseRequisitionWO.dateRequest}" />
+                </p:column>
+                <p:column headerText="Item Name" filterBy="#{purchaseRequisitionWO.item.itemName}" filterStyle="display:none"> 
+                    <h:outputText value="#{purchaseRequisitionWO.item.itemName}" />
+                </p:column>
+                <p:column headerText="Quantity Requested" filterBy="#{purchaseRequisitionWO.quantityRequested}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseRequisitionWO.quantityRequested}" />
+                </p:column>
+                <p:column style="width:32px"> 
+                    <p:commandButton update=":viewPurchaseRequisitionForm:purchaseRequisitionWODetail" icon="fa fa-fw fa-neuter" onclick="PF('purchaseRequisitionWODialog').show() "/>
+                </p:column>
+            </p:dataTable>
+                
+                <p:column style="width:32px"> 
+                    <p:commandButton update=":viewPurchaseRequisitionForm:itemWODetail" value="List of Item without quotation or contract" onclick="PF('viewItemWODialog').show() "/>
+                </p:column>
+                
+                <p:dialog header="Without Item Quotation and Contract" widgetVar="purchaseRequisitionWODialog" resizable="true" width="400" height="200">
+                    <p:outputPanel id="purchaseRequisitionWODetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty purchaseRequisitionDataTableBean.selectedPurchaseRequisitionWO}" columnClasses="label,value">
+
+                            <h:outputText style="font-weight: bold;" value="Purchase Requisition Id:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionWO.purchaseRequisitionId}" />
+
+                            <h:outputText style="font-weight: bold;" value="Centre Requested:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionWO.centerName}" />
+
+                            <h:outputText style="font-weight: bold;" value="Date Created:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionWO.dateCreated}" />
+
+                            <h:outputText style="font-weight: bold;" value="Date Requested to Deliver:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionWO.dateRequest}" />
+
+                            <h:outputText style="font-weight: bold;" value="Status:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionWO.status}" />
+
+                            <h:outputText style="font-weight: bold;" value="Item Id:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionWO.item.itemId}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Item Name:" />
+                            <h:outputText value="#{purchaseRequisitionDataTableBean.selectedPurchaseRequisitionWO.item.itemName}" />
+                        
+                        </p:panelGrid>
+
+                    </p:outputPanel>
+                </p:dialog>
+                
+                <p:dialog header="List of Item Without Quotation and Contract" widgetVar="viewItemWODialog" resizable="true" width="1000" height="500">
+                    <p:outputPanel id="itemWODetail" style="text-align:center;">
+                        <p:dataTable id="itemWOWDT" var="itemWO" value="#{purchaseRequisitionDataTableBean.itemWO}" resizableColumns="true" style="margin-bottom:40px"
+                                        paginator="true" rows="20" emptyMessage="No Item">
+                               
+                               <p:column headerText="Item Name">
+                                   <h:outputText value="#{itemWO.itemName}" />
+                               </p:column>
+                                <p:column headerText="Item Type Description">
+                                    <h:outputText value="#{itemWO.itemType.itemTypeDescription}" />
+                               </p:column>
+                                <p:column headerText="Item Category">
+                                    <h:outputText value="#{itemWO.itemType.itemCategory}" />
+                               </p:column>
+                               <p:column headerText="Item Subcategory">
+                                    <h:outputText value="#{itemWO.itemType.itemSubCategory}" />
+                               </p:column>
+                               <p:column headerText="Item Brand">
+                                   <h:outputText value="#{itemWO.brand.brandName}" />
+                               </p:column>
+                                
+                        </p:dataTable>
+
+                    </p:outputPanel>
+                </p:dialog>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+   
+
+</ui:composition>

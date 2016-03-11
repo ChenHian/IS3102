@@ -10,6 +10,15 @@
         <title>Title</title>
         <h:outputStylesheet library="css" name="default.css"  />
     </h:head>
+    
+    <h:form>
+    <p:growl id="timeout" showDetail="true" sticky="true" />
+ 
+    <p:idleMonitor timeout="900000">
+        <p:ajax event="idle" listener="#{idleMonitorView.onIdle}" update="timeout" />
+        
+    </p:idleMonitor>
+</h:form>
     <h:body>
         <p:layout fullPage="true">
             <p:layoutUnit position="north" size="75" header="S-mart Superb System" resizable="false" closable="false" collapsible="false">
@@ -21,10 +30,133 @@
             </p:layoutUnit> -->
 
             <p:layoutUnit position="west" size="200" header="Menu" resizable="false" closable="false" collapsible="false" >
-                    <ui:insert name="left"></ui:insert>
+                <ui:insert name="left">
+<h:form>
+    <p:growl autoUpdate="true"/>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+            <p:menuitem value="Home" outcome="/admin/adminHome" icon="ui-icon-home"/>    
+            <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
+            </p:menu>
+ 
+ 
+    
+   
+    <!--Module menu--> 
+    <p:panelMenu style="width:300px">
+        
+        <p:submenu label="Notification Module" rendered = "#{accessController.notificationModuleAccess()}">
+            
+            <p:menuitem value="View Notifications" outcome="/NotificationModule/viewAllNotifications" icon="ui-icon-search"/>
+            <p:menuitem value="Send Notification" outcome="/NotificationModule/sendNotification" icon="ui-icon-wrench"/>
+
+        </p:submenu>
+        
+        
+        <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
+            
+            <p:menuitem value="Edit Account Particulars" outcome="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
+            <p:menuitem value="Change Password" outcome="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
+           
+
+        </p:submenu>
+        
+        <p:submenu label="Purchasing Issue Module" rendered = "#{accessController.purchasingIssueModuleAccess()}">
+            
+            <p:menuitem value="View All Item Disposal" outcome="/PurchasingIssueModule/viewAllItemDisposal" icon="ui-icon-search"/>
+            <p:menuitem value="View Late Delivery" outcome="/PurchasingIssueModule/viewLateDelivery" icon="ui-icon-plus"/>
+            <p:menuitem value="View Suppliers Problem" outcome="/PurchasingIssueModule/viewSuppliersProblem" icon="ui-icon-search"/>
+
+        </p:submenu>
+        
+        <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
+            
+            <p:menuitem value="View All Roles" outcome="/UserAccessControlModule/viewAllRoles" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Role" outcome="/UserAccessControlModule/addNewRole" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Privileges" outcome="/UserAccessControlModule/viewAllPrivileges" icon="ui-icon-search"/>
+             <p:menuitem value="Assign New Role to User" outcome="/UserAccessControlModule/assignNewRole" icon="ui-icon-wrench"/>
+        </p:submenu>
+        
+        <p:submenu label="Account Administration Module" rendered = "#{accessController.accountAdministrationModuleAccess()}">
+            
+            <p:menuitem value="View All Staff Accounts" outcome="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
+            <p:menuitem value="Add New Account" outcome="/AccountAdministrationModule/addNewStaffAccount" icon="ui-icon-plus"/>
+        </p:submenu>
+        
+        <p:submenu label="Supplier Management Module " rendered = "#{accessController.supplierManagementModuleAccess()}" >
+            <p:menuitem value="Add Supplier" outcome="/SupplierModule/addSupplier" icon="ui-icon-plus"/>
+            <p:menuitem value="View All Suppliers" outcome="/SupplierModule/viewSuppliers" icon="ui-icon-search"/>
+        </p:submenu>
+        
+        
+        <p:submenu label="Purchasing Contract Module " rendered = "#{accessController.purchasingContractModuleAccess()}" >
+            <p:menuitem value="Add Purchase Contract" outcome="/PurchaseContractModule/addContract" icon="ui-icon-plus"/>
+            <p:menuitem value="View Purchase Contract" outcome="/PurchaseContractModule/viewContract" icon="ui-icon-search"/>
+        </p:submenu>
+        
+        <p:submenu label="Item Management Module" rendered = "#{accessController.itemManagementModuleAccess()}">
+            <p:menuitem value="View All Distribution Centers" outcome="/WarehouseInventoryModule/viewAllDC" icon="ui-icon-search"/>
+            <p:menuitem value="View Brand" outcome="/ItemManagementModule/viewBrand" icon="ui-icon-search"/>
+            <p:menuitem value="View Items" outcome="/ItemManagementModule/viewItems" icon="ui-icon-search"/>
+            <p:menuitem value="View Item Type" outcome="/ItemManagementModule/viewItemType" icon="ui-icon-search"/>
+            
+        </p:submenu>
+        
+        
+        <p:submenu label="Purchase Management Module" rendered = "#{accessController.purchaseManagementModuleAccess()}">
+            <p:menuitem value="View Purchase Requisitions" outcome="/PurchaseManagementModule/viewPurchaseRequisition" icon="ui-icon-search"/>
+            <p:menuitem value="Create Purchase Requisitions" outcome="/PurchaseManagementModule/createPurchaseRequisition" icon="ui-icon-search"/>
+            <p:menuitem value="View All Purchase Requisitions" outcome="/PurchaseManagementModule/viewAllPurchaseRequisition" icon="ui-icon-search"/>
+            
+        </p:submenu>
+        
+        <p:submenu label="Delivery Management Module" rendered = "#{accessController.deliveryManagementModuleAccess()}">
+       
+            <p:menuitem value="View all Batch Out" outcome="/DeliveryManagementModule/viewAllBatchOut" icon="ui-icon-search"/>
+            
+            <p:menuitem value="View All Delivery Arrangements" outcome="/DeliveryManagementModule/viewAllDeliveryArrangements" icon="ui-icon-search"/>
+            <p:menuitem value="View all Delivery Requests" outcome="/DeliveryManagementModule/viewAllDeliveryRequests" icon="ui-icon-search"/>
+          
+            
+        </p:submenu>
+        
+        <p:submenu label="Warehouse Inventory Management Module" rendered = "#{accessController.warehouseInventoryModuleAccess()}">
+           
+            <p:menuitem value="View All Distribution Centers" outcome="/WarehouseInventoryModule/viewAllDistributionCenter" icon="ui-icon-search"/>
+            <p:menuitem value="View Expiry Date" outcome="/WarehouseInventoryModule/viewExpiryDate" icon="ui-icon-search"/>
+            <p:menuitem value="Add Item to Warehouse" outcome="/WarehouseInventoryModule/addWarehouseInventory" icon="ui-icon-plus"/>           
+            <p:menuitem value="View Batch Receipts" outcome="/WarehouseInventoryModule/viewAllBatchReceipt" icon="ui-icon-search"/>
+            
+            <p:menuitem value="Modify Floor Plan " outcome="/WarehouseInventoryModule/floorPlanAdd" icon="ui-icon-wrench"/>
+            <p:menuitem value="View Floor Plan " outcome="/WarehouseInventoryModule/floorPlanView" icon="ui-icon-wrench"/>
+            
+            
+            <p:menuitem value="View/Edit Warehouse Inventory" outcome="/WarehouseInventoryModule/viewWarehouseInventory" icon="ui-icon-plus"/>
+        </p:submenu>
+        
+        <p:submenu label="Purchasing Module" rendered = "#{accessController.purchasingModuleAccess()}">
+            <p:menuitem value="Create Request For Quotation" outcome="/PurchasingModule/createRequestForQuotation" icon="ui-icon-plus"/>
+            <p:menuitem value="View Accepted Quotation" outcome="/PurchasingModule/viewAcceptedQuotation" icon="ui-icon-search"/>          
+            <p:menuitem value="View Pending Quotations" outcome="/PurchasingModule/viewPendingQuotation" icon="ui-icon-search"/>
+            <p:menuitem value="View All Quotations" outcome="/PurchasingModule/viewQuotations" icon="ui-icon-plus"/>
+            <p:menuitem value="View Request for Quotations" outcome="/PurchasingModule/viewRequestForQuotation" icon="ui-icon-plus"/>
+            
+            <p:menuitem value="View All Purchase Order" outcome="/PurchasingModule/viewAllPurchaseOrder" icon="ui-icon-search"/>
+            
+            
+        </p:submenu>
+        
+        
+        <p:separator />
+       
+        
+    </p:panelMenu>
+            </h:form>
+                </ui:insert>
+                    
             </p:layoutUnit>
 
-            <p:layoutUnit position="east" size="200" header="Notification" resizable="true" closable="true" collapsible="true" effect="drop">
+            <p:layoutUnit collapsed="true" position="east" size="200" header="Notification" resizable="true" closable="true" collapsible="true" effect="drop">
                 <h:outputText value="Right unit content." />
             </p:layoutUnit>
 
@@ -32,5 +164,8 @@
                 <ui:insert name="content">Put default content here, if any.</ui:insert>
             </p:layoutUnit>
         </p:layout>
+        
+        
     </h:body>
+    
 </html>

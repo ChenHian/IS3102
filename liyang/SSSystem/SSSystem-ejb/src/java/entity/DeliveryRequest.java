@@ -1,25 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-/**
- *
- * @author WenDi
- */
 @Entity
 public class DeliveryRequest implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,10 +26,15 @@ public class DeliveryRequest implements Serializable {
     private String deliverFrom;
     private String deliverTo;
     
-    @Temporal(TemporalType.DATE)
-    private Date date;
-    private String status;
     
+    
+    private Date requestDate; 
+    private String formattedDate;
+    private String status;
+    private String isArranged;
+    
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "dr")
+    private Collection<BatchOut> batchOuts = new ArrayList<BatchOut>();
 
     public Long getDeliveryRequestId() {
         return deliveryRequestId;
@@ -74,45 +76,79 @@ public class DeliveryRequest implements Serializable {
         this.deliverTo = deliverTo;
     }
     
-    public Date getDate() {
-        return date;
+    public Date getRequestDate() {
+        return requestDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getStatus(String status) {
-        return status;
+    public void setRequestDate(Date requestDate) {
+        this.requestDate = requestDate;
     }
     
+    public String getStatus() {
+        return status;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }
-/*
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+    
+    public String getFormattedDate() {
+        return formattedDate;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Deliveryrequest)) {
-            return false;
-        }
-        Deliveryrequest other = (Deliveryrequest) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    public void setFormattedDate(Date requestDate) {
+        this.formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(requestDate);
+    }
+    
+    public String getIsArranged() {
+        return isArranged;
     }
 
-    @Override
+    public void setIsArranged(String isArranged) {
+        this.isArranged = isArranged;
+    }
+  
+
+    public Collection<BatchOut> getBatchOuts() {
+        return batchOuts;
+    }
+
+    public void setBatchOuts(Collection<BatchOut> batchOuts) {
+        this.batchOuts = batchOuts;
+    }
+    
+     @Override
     public String toString() {
-        return "warehouse_entity.Deliveryrequest[ id=" + id + " ]";
+        return "" + deliveryRequestId + "";
     }
-    */
+
+    /*
+     @Override
+     public int hashCode() {
+     int hash = 0;
+     hash += (id != null ? id.hashCode() : 0);
+     return hash;
+     }
+
+     @Override
+     public boolean equals(Object object) {
+     // TODO: Warning - this method won't work in the case the id fields are not set
+     if (!(object instanceof Deliveryrequest)) {
+     return false;
+     }
+     Deliveryrequest other = (Deliveryrequest) object;
+     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+     return false;
+     }
+     return true;
+     }
+
+     @Override
+     public String toString() {
+     return "warehouse_entity.Deliveryrequest[ id=" + id + " ]";
+     }
+     */
+    /**
+     * @return the status
+     */
 }

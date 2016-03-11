@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        
+        <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.deliveryManagementModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+        <h:form id="formMain" rendered="#{accessController.deliveryManagementModuleAccess()}">
+            <p:panel header="View All Delivery Requests">
+                <p:ajaxStatus style="width:16px;height:16px;">
+                    <f:facet name="start">
+                        <h:graphicImage value="/images/spinner.gif" />
+                    </f:facet>
+                    <f:facet name="complete">
+                        <h:outputText value="" />
+                    </f:facet>
+                </p:ajaxStatus>
+                <p:messages />
+                <p:contextMenu for="deliveryRequests">
+                    <p:menuitem value="Make Arrangement" update="deliveryRequests" actionListener="#{deliveryManagerBean.saveNewDeliveryArrangement}" ajax="true" icon="ui-icon-plus"/>
+                </p:contextMenu>
+                <p:dataTable id = "deliveryRequests" var="deliveryRequest" value="#{deliveryManagerBean.deliveryRequests}"
+                             paginator="true" rows="10" emptyMessage="No Delivery Requests" rowKey="#{deliveryRequest.deliveryRequestId}"
+                             selection="#{deliveryManagerBean.selectedDeliveryRequest}" selectionMode="single" >
+                    <p:column headerText="Delivery Request ID"     
+                              sortBy="#{deliveryRequest.deliveryRequestId}">
+                        <h:outputText value="#{deliveryRequest.deliveryRequestId}" />
+                    </p:column>
+                    <p:column headerText="Request Date"
+                              sortBy="#{deliveryReqeust.formattedDate}">
+                        <h:outputText value="#{deliveryRequest.formattedDate}" />
+                    </p:column>
+                    <p:column headerText="Deliver From"
+                              sortBy="#{deliveryRequest.deliverFrom}">
+                        <h:outputText value="#{deliveryRequest.deliverFrom}" />
+                    </p:column>
+                    <p:column headerText="Deliver To"
+                              sortBy="#{deliveryRequest.deliverTo}">
+                        <h:outputText value="#{deliveryRequest.deliverTo}" />
+                    </p:column>
+                    <p:column headerText="Request Type"
+                              sortBy="#{deliveryRequest.requestType}">
+                        <h:outputText value="#{deliveryRequest.requestType}" />
+                    </p:column>
+                    <p:column headerText="Status"
+                              sortBy="#{deliveryRequest.status}">
+                        <h:outputText value="#{deliveryRequest.status}" />
+                    </p:column>
+                </p:dataTable>
+                
+                    <p:column headerText="Select Delivery Date">
+                        <p:outputLabel for="deliveryDate" value="Delivery Date:" />
+                        <p:calendar id="deliveryDate" value="#{deliveryManagerBean.deliveryDate}" pattern="dd-MM-yyyy" mask="true" mindate="#{deliveryManagerBean.currentDate}"/>
+                    </p:column>          
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+
+</ui:composition>

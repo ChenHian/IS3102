@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+
+    <ui:define name="content">
+          <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.purchasingModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+          <h:form id="viewQuotationForm" rendered="#{accessController.purchasingModuleAccess()}">
+            <p:panel header="View Pending Quotations">
+                <p:dataTable id="quotationDT" var="quotation" value="#{QuotationBean.pendingQuotations}" widgetVar="quotationTable" filteredValue="#{QuotationBean.filteredQuotation}" resizableColumns="true" style="margin-bottom:40px"
+                             paginator="true" rows="20" emptyMessage="No Quotation" selectionMode="single" selection="#{QuotationBean.selectedQuotation}" rowKey="#{quotation.quotationId}">
+                    <p:ajax event="rowSelect" update=":viewQuotationForm:quotationButton,:viewQuotationForm:acceptButton" listener="#{QuotationBean.onRowSelect}" />
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Search all fields:" />
+                            <p:inputText id="globalFilter" onkeyup="PF('quotationTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="ID" filterBy="#{quotation.quotationId}" filterStyle="display:none">
+                        <h:outputText value="#{quotation.quotationId}" />
+                    </p:column>
+                    <p:column headerText="RequestID" filterBy="#{quotation.requestForQuotationId}" filterMatchMode="contains"> 
+                        <h:outputText value="#{quotation.requestForQuotationId}" />
+                    </p:column>
+                    <p:column headerText="Supplier" filterBy="#{quotation.supplier.companyName}" filterMatchMode="exact">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('quotationTable').filter()" >
+                                <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{QuotationBean.filteredSuppliers}" />
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <h:outputText value="#{quotation.supplier.companyName}" />
+                    </p:column>
+                    <p:column headerText="Item" filterBy="#{quotation.item.itemId}" filterMatchMode="contains"> 
+                        <h:outputText value="#{quotation.item.itemName}" />
+                    </p:column>
+                    <p:column headerText="Price" filterBy="#{quotation.price}" filterStyle="display:none">
+                        <h:outputText value="#{quotation.price}" />
+                    </p:column>
+                    <p:column headerText="Date Submitted" filterBy="#{quotation.dateSubmitted}" filterStyle="display:none">
+                        <h:outputText value="#{quotation.dateSubmitted}" />
+                    </p:column>
+                    <p:column headerText="Status" filterBy="#{quotation.status}" filterStyle="display:none">
+                        <h:outputText value="#{quotation.status}" />
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:commandButton  disabled="#{QuotationBean.disabled}" id="quotationButton" process="quotationDT" update=":viewQuotationForm:quotationDetail" icon="ui-icon-search" value="View" onclick="PF('quotationDialog').show()" />
+                <p:commandButton  disabled="#{QuotationBean.disabled}" id="acceptButton" process="quotationDT, @this" icon="ui-icon-check" value="Accept" action ="/PurchasingModule/viewQuotation" ajax="false" actionListener="#{QuotationBean.acceptQuotation}"/> 
+                <p:button outcome="viewAcceptedQuotation" value="View Accepted Quotations" icon="ui-icon-search"></p:button>
+ 
+                
+                <!--<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>-->
+
+                <p:dialog header="Quotation Detail" widgetVar="quotationDialog" resizable="true">
+                    <p:outputPanel id="quotationDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty QuotationBean.selectedQuotation}" columnClasses="label,value">
+
+                            <h:outputText value="Quotation ID:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.quotationId}" />
+
+                            <h:outputText value="Request For Quotation ID:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.requestForQuotationId}" />
+
+                            <h:outputText value="Item:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.item.itemName}" />
+
+                            <h:outputText value="Supplier: " style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.supplier.companyName}" />
+
+                            <h:outputText value="Price:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.price}" />
+
+                            <h:outputText value="Delivery Lead Time:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.deliveryLeadTime}" />
+
+                            <h:outputText value="Valid Start Date:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.validStartDate}" />
+
+                            <h:outputText value="Valid End Date:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.validEndDate}" />
+
+                            <h:outputText value="Status:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.status}" />
+
+                            <h:outputText value="Purchase Terms:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.purchaseTerms}" />
+
+                            <h:outputText value="Payment Terms:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.paymentTerms}" />
+
+                            <h:outputText value="Delivery Terms:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.deliveryTerms}" />
+
+                            <h:outputText value="Return Terms:" style="font-weight:bold"/>
+                            <h:outputText value="#{QuotationBean.selectedQuotation.returnTerms}" />
+
+
+
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

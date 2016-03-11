@@ -8,8 +8,10 @@ package session.stateless;
 
 import entity.Item;
 import entity.Brand;
+import entity.DistributionCenter;
 import entity.DistributionCenterInventory;
 import entity.ItemType;
+import entity.Supplier;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -44,6 +46,33 @@ public class ItemSessionBean implements ItemSessionBeanLocal {
     public List<Item> getItems(){
         Query q = em.createQuery("SELECT i FROM Item i WHERE i.isDelete= false ");
         return q.getResultList();
+    }
+    
+    public List<Item> getItemsByTypeId(Long id){
+        Query q = em.createQuery("SELECT i FROM Item i WHERE i.itemType.itemTypeId ='" + id + "' AND i.isDelete = false" );
+        
+        return q.getResultList();
+    }
+    
+    public Item getItemsById(Long id){
+        Query q = em.createQuery("SELECT i FROM Item i WHERE i.itemId ='" + id + "'");
+        
+        Item item = new Item();
+        
+        if(!q.getResultList().isEmpty()){
+            item = (Item) q.getSingleResult();
+        }
+        
+        return item;
+    }
+    
+    public List<Supplier> getSuppliers(Item it){
+        Query q = em.createQuery("SELECT s FROM Supplier s, SUPPLIER_ITEM si WHERE  ='" + it.getItemId() + "'");
+    
+        Object obj = q.getSingleResult();
+        Item i = (Item) obj;
+        
+        return new ArrayList<Supplier>(i.getSuppliers());
     }
     
     /**
@@ -91,6 +120,7 @@ public class ItemSessionBean implements ItemSessionBeanLocal {
 
     public void addItem(String itemName, String itemDescription,
             boolean itemReturnable,int returnablePeriod, Long brandIdItem, Long itemTypeIdItem) {
+        
             Item i = new Item();
             Query q = em.createQuery("SELECT max(i.itemId) FROM Item i");
             if(!q.getResultList().isEmpty()){
@@ -109,7 +139,7 @@ public class ItemSessionBean implements ItemSessionBeanLocal {
 
             i.setItemName(itemName);
             i.setItemDescription(itemDescription);
-            i.setItemReturnable(false);
+            i.setItemReturnable(itemReturnable);
             i.setReturnablePeriod(returnablePeriod);
             i.setIsDelete(false);
             
@@ -124,9 +154,7 @@ public class ItemSessionBean implements ItemSessionBeanLocal {
             
                 i.setBrand(brand);
                  
-            //em.persist(i);
-             
-                
+            //em.persist(i);   
             }
             
             q = em.createQuery("SELECT i from ItemType i where i.itemTypeId=:itemTypeId");
@@ -145,17 +173,9 @@ public class ItemSessionBean implements ItemSessionBeanLocal {
             
            
             em.persist(i);
-            
-            Query r = em.createQuery("SELECT d.distributionCenterId FROM DistributionCenter d");
-            if(!r.getResultList().isEmpty()) {
-                List<Long> distributionCenterId =  r.getResultList();
-                for(Long id:distributionCenterId) {
-                    this.addDistributionCenterItem(i,id);
-                }
-            }
-            
    
     }
+
 
     public void removeItem(Long itemId){
 
@@ -192,6 +212,26 @@ public class ItemSessionBean implements ItemSessionBeanLocal {
 
         return brandList;
     }
+    
+       public Map<Long, String> getBrandActiveList() {
+        Map<Long, String> brandList = new LinkedHashMap<Long, String>();
+                
+        Query q = em.createQuery("SELECT b FROM Brand b WHERE b.isDelete = false");
+        List<Object> qResultList = q.getResultList();
+        Object obj;
+        
+        for(int j=0; j<qResultList.size(); j++){
+            obj = qResultList.get(j);
+            Brand i = (Brand) obj;
+            
+            brandList.put(i.getBrandId(), i.getBrandName());
+        }
+
+        return brandList;
+    }
+       
+
+   
 
     public Map<Long, String> getItemTypeBasicList() {
         Map<Long, String> ItemTypeList = new LinkedHashMap<Long, String>();
@@ -283,7 +323,7 @@ public class ItemSessionBean implements ItemSessionBeanLocal {
         return q.getResultList();
     }
 
-    public void updateItemType(Long itemTypeId, String itemTypeDescription, String itemCategory, 
+     public void updateItemType(Long itemTypeId, String itemTypeDescription, String itemCategory, 
             String itemSubCategory, String storageType, boolean isPerishable, String measurementType) {
     
           Query q = em.createQuery("SELECT t FROM ItemType t WHERE t.itemTypeId = :itemTypeId");
@@ -362,7 +402,7 @@ public class ItemSessionBean implements ItemSessionBeanLocal {
             b.setItemCategory(itemCategory);
             b.setItemSubCategory(itemSubCategory);
             b.setStorageType(storageType);
-            b.setIsPerishable(false);
+            b.setIsPerishable(isPerishable);
             b.setMeasurementType(measurementType);
            
             
@@ -371,22 +411,22 @@ public class ItemSessionBean implements ItemSessionBeanLocal {
             em.persist(b);
         
     }
+    
 
-
+    //CH code
     public void addDistributionCenterItem(Item i, Long distributionCenterId) {
         DistributionCenterInventory distributionCenterInventory = new DistributionCenterInventory();
-        distributionCenterInventory.setDistributionCenterId(distributionCenterId);
-        distributionCenterInventory.setAvailableQuantity(0);
-        distributionCenterInventory.setBlockedForReturn(0);
-        distributionCenterInventory.setReservedForCustomerOrders(0);
-        distributionCenterInventory.setReservedForTransfer(0);
+        distributionCenterInventory.setDistributionCenter(em.find(DistributionCenter.class, distributionCenterId));
+        distributionCenterInventory.setItemAvailableQuantity(0);
+        //distributionCenterInventory.setBlockedForReturn(0);
+        //distributionCenterInventory.setReservedForCustomerOrders(0);
+        //distributionCenterInventory.setReservedForTransfer(0);
         distributionCenterInventory.setThresholdAlert(100);
         distributionCenterInventory.setItem(i);
         em.persist(distributionCenterInventory);
     }
-       
 
-   
+ 
     
     
     

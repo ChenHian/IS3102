@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="viewSuppliersProblemForm">
+
+            <p:panel header="View All Suppliers Problem">
+                <p:dataTable id="returnSupplierDT" var="returnSupplier" value="#{purchasingIssueDataTableBean.returnSupplier}"  widgetVar="returnSupplierTable" filteredValue="#{purchasingIssueDataTableBean.filteredReturnSupplier}" resizableColumns="false" style="margin-bottom:40px"
+                             paginator="true" rows="20" emptyMessage="No returnSupplier" selectionMode="single" selection="#{purchasingIssueDataTableBean.selectedReturnSupplier}" rowKey="#{returnSupplier.returnSupplierId}">
+
+                    
+                    <f:facet name="header">
+                       <p:outputPanel>
+                         <h:outputText value="Search all fields:" />
+                         <p:inputText id="globalFilter" onkeyup="PF('returnSupplierTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                       </p:outputPanel>
+                    </f:facet>
+                    <p:column headerText="Batch Receipt Id" filterBy="#{returnSupplier.batchReceipt.batchReceiptId}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{returnSupplier.batchReceipt.batchReceiptId}" />
+                     </p:column>
+                    <p:column headerText="Supplier" filterBy="#{returnSupplier.supplier.companyName}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{returnSupplier.supplier.companyName}" />
+                    </p:column>
+                    <p:column headerText="Item Name" filterBy="#{returnSupplier.item.itemName}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{returnSupplier.item.itemName}" />
+                    </p:column>
+                    <p:column headerText="Quantity" filterBy="#{returnSupplier.quantity}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{returnSupplier.quantity}" />
+                    </p:column>
+                    <p:column headerText="Return Date" filterBy="#{returnSupplier.returnDate}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{returnSupplier.returnDate}" />
+                    </p:column>
+                    
+                    
+                    <p:column style="width:32px">
+                        
+                    <p:commandButton  process="returnSupplierDT" update=":viewSuppliersProblemForm:returnSupplierDetail" oncomplete="PF('returnSupplierDialog').show()" icon="fa fa-fw fa-neuter">
+                    <f:setPropertyActionListener value="#{returnSupplier}" target="#{purchasingIssueDataTableBean.selectedReturnSupplier}" />
+                    </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                
+
+                <p:dialog header="Suppliers Problem Profile" widgetVar="returnSupplierDialog" resizable="true" width="380">
+                    <p:outputPanel id="returnSupplierDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty purchasingIssueDataTableBean.selectedReturnSupplier}" columnClasses="label,value">
+
+                        <h:outputText value="Batch Receipt Id:" />
+                        <h:outputText value="#{purchasingIssueDataTableBean.selectedReturnSupplier.batchReceipt.batchReceiptId}" />
+
+                        <h:outputText value="Supplier:" />
+                        <h:outputText value="#{purchasingIssueDataTableBean.selectedReturnSupplier.supplier.companyName}" />
+                        
+                        <h:outputText value="Item Name:" />
+                        <h:outputText value="#{purchasingIssueDataTableBean.selectedReturnSupplier.item.itemName}" />
+                        
+                        <h:outputText value="Return Supplier Id:" />
+                        <h:outputText value="#{purchasingIssueDataTableBean.selectedReturnSupplier.returnSupplierId}" />
+                        
+                        <h:outputText value="Quantity:" />
+                        <h:outputText value="#{purchasingIssueDataTableBean.selectedReturnSupplier.quantity}" />
+                        
+                        <h:outputText value="Return Date:" />
+                        <h:outputText value="#{purchasingIssueDataTableBean.selectedReturnSupplier.returnDate}" />
+                        
+                        <h:outputText value="Return Status:" />
+                        <h:outputText value="#{purchasingIssueDataTableBean.selectedReturnSupplier.returnStatus}" />
+                      
+                    </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+                    
+                    
+                
+            </p:panel>
+        </h:form>
+    </ui:define>
+ 
+
+</ui:composition>
+

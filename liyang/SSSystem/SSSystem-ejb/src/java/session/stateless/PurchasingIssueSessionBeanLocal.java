@@ -9,7 +9,7 @@ import javax.ejb.Local;
 
 /**
  *
- * @author duxianqi
+ * @author Chen Hian
  */
 @Local
 public interface PurchasingIssueSessionBeanLocal {

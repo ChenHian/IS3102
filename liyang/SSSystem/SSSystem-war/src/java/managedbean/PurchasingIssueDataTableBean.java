@@ -3,107 +3,125 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package procurementManagedBean;
+package managedbean;
 
-import entity.PurchaseOrder;
-import entity.Supplier;
+import entity.ReturnSupplier;
+import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import session.stateless.PurchasingIssueSessionBean;
-
+    
 /**
  *
  * @author duxianqi
  */
-@Named(value = "PurchasingIssueDataTableBean")
+@Named(value = "purchasingIssueDataTableBean")
 @RequestScoped
-public class PurchasingIssueDataTableBean {
+public class PurchasingIssueDataTableBean implements Serializable{
+    
     @EJB
     private PurchasingIssueSessionBean purchasingIssueSessionBean;
     
     //for view
-    private Supplier selectedSupplier;
-    private List<Supplier> filteredSupplier;
-    private PurchaseOrder selectedPurchaseOrder;
-    private List<PurchaseOrder> filteredPurchaseOrder;
+    private ReturnSupplier selectedReturnSupplier;
+    private List<ReturnSupplier> filteredReturnSupplier;
+    private Long selectedReturnSupplierId;
+    private int selectedQuantity;
+    private java.util.Date selectedReturnDate;
+    private String selectedReturnStatus;
     
-     public PurchasingIssueDataTableBean() {
+    public PurchasingIssueDataTableBean() {
+    }
+
+    //for view supplier
+    public List<ReturnSupplier> getReturnSupplier(){
+        return purchasingIssueSessionBean.getReturnSupplier();
     }
 
     /**
-     * @return the purchasingIssueSessionBean
+     * @return the selectedReturnSupplier
      */
-    public PurchasingIssueSessionBean getPurchasingIssueSessionBean() {
-        return purchasingIssueSessionBean;
+    public ReturnSupplier getSelectedReturnSupplier() {
+        return selectedReturnSupplier;
     }
 
     /**
-     * @param purchasingIssueSessionBean the purchasingIssueSessionBean to set
+     * @param selectedReturnSupplier the selectedReturnSupplier to set
      */
-    public void setPurchasingIssueSessionBean(PurchasingIssueSessionBean purchasingIssueSessionBean) {
-        this.purchasingIssueSessionBean = purchasingIssueSessionBean;
+    public void setSelectedReturnSupplier(ReturnSupplier selectedReturnSupplier) {
+        this.selectedReturnSupplier = selectedReturnSupplier;
     }
 
     /**
-     * @return the selectedSupplier
+     * @return the filteredReturnSupplier
      */
-    public Supplier getSelectedSupplier() {
-        return selectedSupplier;
+    public List<ReturnSupplier> getFilteredReturnSupplier() {
+        return filteredReturnSupplier;
     }
 
     /**
-     * @param selectedSupplier the selectedSupplier to set
+     * @param filteredReturnSupplier the filteredReturnSupplier to set
      */
-    public void setSelectedSupplier(Supplier selectedSupplier) {
-        this.selectedSupplier = selectedSupplier;
+    public void setFilteredReturnSupplier(List<ReturnSupplier> filteredReturnSupplier) {
+        this.filteredReturnSupplier = filteredReturnSupplier;
     }
 
     /**
-     * @return the filteredSupplier
+     * @return the selectedReturnSupplierId
      */
-    public List<Supplier> getFilteredSupplier() {
-        return filteredSupplier;
+    public Long getSelectedReturnSupplierId() {
+        return selectedReturnSupplierId;
     }
 
     /**
-     * @param filteredSupplier the filteredSupplier to set
+     * @param selectedReturnSupplierId the selectedReturnSupplierId to set
      */
-    public void setFilteredSupplier(List<Supplier> filteredSupplier) {
-        this.filteredSupplier = filteredSupplier;
+    public void setSelectedReturnSupplierId(Long selectedReturnSupplierId) {
+        this.selectedReturnSupplierId = selectedReturnSupplierId;
     }
 
     /**
-     * @return the selectedPurchaseOrder
+     * @return the selectedQuantity
      */
-    public PurchaseOrder getSelectedPurchaseOrder() {
-        return selectedPurchaseOrder;
+    public int getSelectedQuantity() {
+        return selectedQuantity;
     }
 
     /**
-     * @param selectedPurchaseOrder the selectedPurchaseOrder to set
+     * @param selectedQuantity the selectedQuantity to set
      */
-    public void setSelectedPurchaseOrder(PurchaseOrder selectedPurchaseOrder) {
-        this.selectedPurchaseOrder = selectedPurchaseOrder;
+    public void setSelectedQuantity(int selectedQuantity) {
+        this.selectedQuantity = selectedQuantity;
     }
 
     /**
-     * @return the filteredPurchaseOrder
+     * @return the returnDate
      */
-    public List<PurchaseOrder> getFilteredPurchaseOrder() {
-        return filteredPurchaseOrder;
+    public java.util.Date getSelectedReturnDate() {
+        return selectedReturnDate;
     }
 
     /**
-     * @param filteredPurchaseOrder the filteredPurchaseOrder to set
+     * @param returnDate the returnDate to set
      */
-    public void setFilteredPurchaseOrder(List<PurchaseOrder> filteredPurchaseOrder) {
-        this.filteredPurchaseOrder = filteredPurchaseOrder;
+    public void setSelectedReturnDate(java.util.Date returnDate) {
+        this.selectedReturnDate = returnDate;
+    }
+
+    /**
+     * @return the returnStatus
+     */
+    public String getSelectedReturnStatus() {
+        return selectedReturnStatus;
+    }
+
+    /**
+     * @param returnStatus the returnStatus to set
+     */
+    public void setSelectedReturnStatus(String returnStatus) {
+        this.selectedReturnStatus = returnStatus;
     }
     
-    
-    
-    
-    
-    }
+}

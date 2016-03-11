@@ -79,16 +79,16 @@ public class EditViewWarehouseInventory implements Serializable {
         DataTable table = (DataTable) event.getSource();
         
         DistributionCenterInventory distributionCenterInventory  = (DistributionCenterInventory) table.getRowData();
-        Integer oldAvailable= distributionCenterInventory.getAvailableQuantity();
+        Integer oldAvailable= distributionCenterInventory.getItemAvailableQuantity();
         String column = event.getColumn().getHeaderText();
         switch(column) {
             case "Available Quantity" : {
                 
                 System.out.println(oldAvailable);
-                distributionCenterInventory.setAvailableQuantity(n);
+                distributionCenterInventory.setItemAvailableQuantity(n);
                 break;
             }
-            case "Reserved for Customer Orders" : {
+            /*case "Reserved for Customer Orders" : {
                 Integer oldRC = distributionCenterInventory.getReservedForCustomerOrders();
                 System.out.println(oldRC);
                 
@@ -99,14 +99,14 @@ public class EditViewWarehouseInventory implements Serializable {
                 }
                 distributionCenterInventory.setReservedForCustomerOrders(n);
                 //distributionCenterInventory.setAvailableQuantity(oldAvailable-(n-oldRC));
-            }
+            }*/
             case "Alert Threshold" : {
                 Integer oldThreshold = distributionCenterInventory.getThresholdAlert();
                 System.out.println(oldThreshold);
                 distributionCenterInventory.setThresholdAlert(n);
                 break;
             }
-            case "For Return" : {
+            /*case "For Return" : {
                 Integer oldReturn = distributionCenterInventory.getBlockedForReturn();
                 
                 if (oldAvailable-(n-oldReturn)<0) {
@@ -129,7 +129,7 @@ public class EditViewWarehouseInventory implements Serializable {
                 //distributionCenterInventory.setAvailableQuantity(oldAvailable -(n-oldTransfer));
                 distributionCenterInventory.setReservedForTransfer(n);
                 break;
-            }
+            }*/
                 
         }
         

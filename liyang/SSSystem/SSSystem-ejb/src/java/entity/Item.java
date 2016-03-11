@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,8 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 
 /**
  *
@@ -26,8 +25,6 @@ import javax.persistence.Table;
  */
 @Entity
 public class Item implements Serializable {
-    @OneToMany(mappedBy = "item")
-    private List<DistributionCenterInventory> distributionCenterInventorys;
     private static final long serialVersionUID = 1L;
     @Id
     private Long itemId;
@@ -36,66 +33,47 @@ public class Item implements Serializable {
     private boolean approvalStatus;
     private boolean itemReturnable;
     private boolean allowSubscription;
-    private int returnablePeriod;
     private boolean isDelete;
+    private int returnablePeriod;
     @ManyToMany(cascade={CascadeType.ALL}, mappedBy="items")
     private Set<Supplier> suppliers = new HashSet<Supplier>();
-    @OneToMany(cascade={CascadeType.ALL}, mappedBy="item")
-    private Collection<QuotationItem> quotationItems = new ArrayList<QuotationItem>();
     
+    @OneToMany(cascade={CascadeType.ALL}, mappedBy="item")
+    private Collection<PurchaseRequisition> purchaseRequisition = new ArrayList<PurchaseRequisition>();
 
-@ManyToOne
+    @ManyToOne(cascade={CascadeType.ALL})
     private Brand brand = new Brand();
 
-@ManyToOne
+@ManyToOne(cascade={CascadeType.ALL})
     private ItemType itemType = new ItemType();
 
 @OneToMany(cascade = {CascadeType.ALL}, mappedBy="item")
-    private Collection<PurchaseOrderItem> purchaseOrderItems = new ArrayList<PurchaseOrderItem>();
-   
-   
-@OneToMany(cascade = {CascadeType.ALL}, mappedBy="item")
-    private Collection<ContractItem> contractItem = new ArrayList<ContractItem>();
-
+    private Collection<PurchaseOrder> purchaseOrder = new ArrayList<PurchaseOrder>();
 
 @OneToMany(cascade = {CascadeType.ALL}, mappedBy="item")
-    private Collection<PurchaseRequisition> purchaseRequisitionItem = new ArrayList<PurchaseRequisition>();
+    private Collection<Contract> contract = new ArrayList<Contract>();
 
-    public Collection<PurchaseOrderItem> getPurchaseOrderItems(){
-        return purchaseOrderItems;
-    }
+@OneToMany(cascade={CascadeType.ALL}, mappedBy="item")
+    private Collection<RequestForQuotation> requestForQuotations = new ArrayList<RequestForQuotation>();
+
+@OneToMany(mappedBy = "item")
+    private Collection<BatchReceipt> batchReceipts = new ArrayList<BatchReceipt>();
+
+
+
+//add mapping
+    @OneToMany
+    private Collection<DistributionCenterInventory> distributionCenterInventory = new ArrayList<DistributionCenterInventory>();    
     
-    public void setItems(Collection<PurchaseOrderItem> PurchaseOrderItems){
-        this.setPurchaseOrderItems(purchaseOrderItems);
-    }
- /**
-     * @return the contract
-     */
-    public Collection<ContractItem> getContractItem() {
-        return contractItem;
-    }
+    public  Collection<DistributionCenterInventory> getDistributionCenterInventory(){
+        return distributionCenterInventory;
+    }   
+    public void setDistributionCenterInventory(Collection<DistributionCenterInventory> distributionCenterInventory){
+        this.distributionCenterInventory= distributionCenterInventory;
+    }   
+//
 
-    /**
-     * @param contractItem
-     */
-    public void setContractItem(Collection<ContractItem> contractItem) {
-        this.contractItem = contractItem;
-    }
-
-    
-    /**
-     * @return the purchaseRequisitionItem
-     */
-    public Collection<PurchaseRequisition> getPurchaseRequisitionItems() {
-        return purchaseRequisitionItem;
-    }
-
-    /**
-     * @param purchaseRequisitionItem the purchaseRequisitionItem to set
-     */
-    public void setPurchaseRequisitionItems(Collection<PurchaseRequisition> purchaseRequisitionItems) {
-        this.purchaseRequisitionItem = purchaseRequisitionItem;
-    }
+ 
 
     public Long getItemId() {
         return itemId;
@@ -188,18 +166,23 @@ public class Item implements Serializable {
             return false;
         }
         return true;
-    } */
+    }
 
     @Override
     public String toString() {
-        return itemName;
-    }
+        return "entity.Item[ itemId=" + itemId + " ]";
+    }*/
 
     /**
      * @return the suppliers
      */
     public Set<Supplier> getSuppliers() {
         return suppliers;
+    }
+    
+    @Override
+    public String toString() {
+        return itemName;
     }
 
     /**
@@ -209,19 +192,6 @@ public class Item implements Serializable {
         this.suppliers = suppliers;
     }
 
-    /**
-     * @return the quotationItems
-     */
-    public Collection<QuotationItem> getQuotationItems() {
-        return quotationItems;
-    }
-
-    /**
-     * @param quotationItems the quotationItems to set
-     */
-    public void setQuotationItems(Collection<QuotationItem> quotationItems) {
-        this.quotationItems = quotationItems;
-    }
 
     /**
      * @return the approvalStatus
@@ -245,16 +215,9 @@ public class Item implements Serializable {
     }
 
     /**
-     * @param purchaseOrderItems the purchaseOrderItems to set
-     */
-    public void setPurchaseOrderItems(Collection<PurchaseOrderItem> purchaseOrderItems) {
-        this.purchaseOrderItems = purchaseOrderItems;
-    }
-
-    /**
      * @return the isDelete
      */
-    public boolean getIsDelete() {
+    public boolean isIsDelete() {
         return isDelete;
     }
 
@@ -263,6 +226,93 @@ public class Item implements Serializable {
      */
     public void setIsDelete(boolean isDelete) {
         this.isDelete = isDelete;
+    }
+
+    /**
+     * @return the purchaseOrder
+     */
+    public Collection<PurchaseOrder> getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    /**
+     * @param purchaseOrder the purchaseOrder to set
+     */
+    public void setPurchaseOrder(Collection<PurchaseOrder> purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    /**
+     * @return the purchaseRequisition
+     */
+    public Collection<PurchaseRequisition> getPurchaseRequisition() {
+        return purchaseRequisition;
+    }
+
+    /**
+     * @param purchaseRequisition the purchaseRequisition to set
+     */
+    public void setPurchaseRequisition(Collection<PurchaseRequisition> purchaseRequisition) {
+        this.purchaseRequisition = purchaseRequisition;
+    }
+
+    /**
+     * @return the requestForQuotations
+     */
+    public Collection<RequestForQuotation> getRequestForQuotations() {
+        return requestForQuotations;
+    }
+
+    /**
+     * @param requestForQuotations the requestForQuotations to set
+     */
+    public void setRequestForQuotations(Collection<RequestForQuotation> requestForQuotations) {
+        this.requestForQuotations = requestForQuotations;
+    }
+
+    /**
+     * @return the contract
+     */
+    public Collection<Contract> getContract() {
+        return contract;
+    }
+
+    /**
+     * @param contract the contract to set
+     */
+    public void setContract(Collection<Contract> contract) {
+        this.contract = contract;
+    }
+    
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (getItemId() != null ? getItemId().hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Item)) {
+            return false;
+        }
+        Item other = (Item) object;
+        if ((this.getItemId() == null && other.getItemId() != null) || (this.getItemId() != null && !this.itemId.equals(other.itemId))) {
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public Collection<BatchReceipt> getBatchReceipts() {
+        return batchReceipts;
+    }
+
+    public void setBatchReceipts(Collection<BatchReceipt> batchReceipts) {
+        this.batchReceipts = batchReceipts;
     }
 
     

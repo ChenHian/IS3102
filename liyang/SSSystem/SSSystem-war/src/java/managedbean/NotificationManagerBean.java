@@ -15,10 +15,10 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 import javax.servlet.http.HttpSession;
 import loginAuthentication.Database;
+import session.stateless.AccessControlSessionBean;
 import session.stateless.NotificationSessionBean;
 import session.stateless.RoleSessionBean;
 import session.stateless.StaffAccountSessionBean;
@@ -28,15 +28,14 @@ import session.stateless.StaffAccountSessionBean;
 public class NotificationManagerBean {
 
     
-    @PersistenceContext(unitName = "CommonInfrastructure-ejbPU")
-    private EntityManager entityManager;
-    
     @EJB
     private RoleSessionBean roleSessionBean;
     @EJB
     private NotificationSessionBean notificationSessionBean;
     @EJB
     private StaffAccountSessionBean staffAccountSessionBean;
+    @EJB 
+    private AccessControlSessionBean accessControlSessionBean;
     
     private AccessController accessController;
     
@@ -124,6 +123,7 @@ public class NotificationManagerBean {
     public void init() {
         notifications = notificationSessionBean.getAllNotifications();
         availableNotifications = notificationSessionBean.getAvailableNotification(getSessionUserRole());
+        //To be changed
         notificationTypes = Arrays.asList("Low", "Normal", "Critical");
         //roles = roleSessionBean.getAllRoles();
         //filteredStaffAccounts = staffAccounts;
@@ -173,37 +173,7 @@ public class NotificationManagerBean {
         String user = "";
         HttpSession session = Util.getSession();
         user= (String)session.getAttribute("username");
-        //System.out.println("Session user = " + user);
-        Connection con = null;
-        PreparedStatement ps = null;
-        
-        long roleid = 0;
-        try {
-            //System.out.println("Making connection");
-            con = Database.getConnection();
-            //System.out.println("Connection made: "+ con.getCatalog());
-            ps = con.prepareStatement(
-                    "SELECT role_roleid FROM staffaccount WHERE email= ?");
-            ps.setString(1, user);
-            //ps.setString(2, password);
-            ResultSet rs = ps.executeQuery();
-            //System.out.println("After Query");
-            
-            if(rs.next()) {
-                //System.out.println("Result found");
-                //System.out.println("accessController: Roleid getString" + rs.getString("ROLE_ROLEID"));
-                roleid = Long.parseLong(rs.getString("ROLE_ROLEID"));
-                return entityManager.find(Role.class, roleid).getRoleName();
-            }
-            else {
-                System.out.println("No RS result");
-            }
-  
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return "None found";
+        return accessControlSessionBean.getUserRole(user);
     }
  
    

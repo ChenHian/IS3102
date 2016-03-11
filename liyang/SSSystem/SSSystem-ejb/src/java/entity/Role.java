@@ -47,10 +47,21 @@ public class Role implements Serializable {
     private boolean privilege26;
     private boolean privilege27;
     String listOfPrivileges;
+    private String division;
 
     @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private Set<Privilege> privileges = new HashSet<Privilege>();
 
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    
+    
     public Long getRoleId() {
         return roleId;
     }
@@ -72,7 +83,9 @@ public class Role implements Serializable {
     }
 
     public void setPrivilege1(boolean privilege1) {
+        System.out.println("Received 1 : " + privilege1);
         this.privilege1 = privilege1;
+        System.out.println("Set 1: " + this.privilege2);
     }
 
     public boolean isPrivilege2() {
@@ -80,7 +93,10 @@ public class Role implements Serializable {
     }
 
     public void setPrivilege2(boolean privilege2) {
+        System.out.println("Received 2 : " + privilege2);
         this.privilege2 = privilege2;
+        
+        System.out.println("Set 2 : " + this.privilege2);
     }
 
     public boolean isPrivilege3() {

@@ -1,12 +1,19 @@
 package managedbean;
 
+import entity.Role;
+import entity.StaffAccount;
+import java.util.Arrays;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpSession;
 import session.stateless.RoleSessionBean;
+import session.stateless.StaffAccountSessionBean;
 
 @Named(value = "roleManagerBean")
 @RequestScoped
@@ -14,6 +21,10 @@ public class RoleManagerBean {
 
     @EJB
     private RoleSessionBean roleSessionBean;
+    
+    @EJB 
+    private StaffAccountSessionBean staffAccountSessionBean;
+    
     private String roleName;
     private String roleNameLength;
     private String statusMessage;
@@ -45,6 +56,70 @@ public class RoleManagerBean {
     private boolean value25;
     private boolean value26;
     private boolean value27;
+    
+    private String division;
+    private List<String> divisions;
+    
+    private String staffAccount;
+    private List<String> staffAccounts; 
+    
+    private String role;
+    private List<String> roles;
+            
+    
+    @PostConstruct
+    public void init() {
+        divisions = Arrays.asList("PURCHASING DIVISION", "WAREHOUSE DIVISION");
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public List<String> getRoles() {
+        return roleSessionBean.getAllRoleNames();
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    
+    
+    public List<String> getStaffAccounts() {
+        return staffAccountSessionBean.getAllStaffAccountNames();
+    }
+
+    public void setStaffAccounts(List<String> staffAccounts) {
+        this.staffAccounts = staffAccounts;
+    }
+
+    public String getStaffAccount() {
+        return staffAccount;
+    }
+
+    public void setStaffAccount(String staffAccount) {
+        this.staffAccount = staffAccount;
+    }
+    
+    
+    
+    
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+    
+    public List<String> getDivisions() {
+        return divisions;
+    }
 
     public RoleManagerBean() {
         roleNameLength = "Current role name length is less than 4.";
@@ -96,6 +171,7 @@ public class RoleManagerBean {
 
     public void setValue2(boolean value2) {
         this.value2 = value2;
+        System.out.println("value2 " + value2);
     }
 
     public boolean isValue3() {
@@ -303,9 +379,21 @@ public class RoleManagerBean {
     public void saveNewRole(ActionEvent event) {
         newRoleId = roleSessionBean.addNewRole(roleName, value1, value2, value3, value4, value5, value6, value7, value8, 
                 value9, value10, value11, value12, value13, value14, value15, value16, value17, value18, value19, value20,
-                value21, value22, value23, value24, value25, value26, value27);
+                value21, value22, value23, value24, value25, value26, value27, division);
         statusMessage = "New Role Saved Successfully";
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Add New Role Result: "
                 + statusMessage + " (New Role ID is " + newRoleId + ")", ""));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Value 2 Result: "
+                + value2, "" ));
+    }
+    
+    public void assignNewRole(ActionEvent event) {
+        String user = "";
+        HttpSession session = Util.getSession();
+        user= (String)session.getAttribute("username");
+        
+        String statusMessage = roleSessionBean.assignNewRole(user,staffAccount,role);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                statusMessage, ""));
     }
 }

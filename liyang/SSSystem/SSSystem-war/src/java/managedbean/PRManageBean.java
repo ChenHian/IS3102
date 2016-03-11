@@ -14,7 +14,6 @@ import javax.faces.event.ActionEvent;
 import session.stateless.ViewAllDCSessionBean;
 import entity.DistributionCenter;
 import entity.PurchaseRequisition;
-import javax.annotation.PostConstruct;
 import session.stateless.PRSessionBean;
 
 @Named(value = "PRManageBean")
@@ -38,30 +37,18 @@ public class PRManageBean implements Serializable {
     private ViewAllDCSessionBean viewAllDCSessionBean;
     private String selectedCenterName;
     private DistributionCenter selectedDC;
-    
-    private List<PurchaseRequisition> allPRs;
-    private List<PurchaseRequisition> filteredPRs;
-    
-    private Date todayDate= new Date();
-    
-    @PostConstruct
-    public void init() {
-        allPRs = prSessionBean.getAllPRs();
-    }
 
-    public void setAllPRs(List<PurchaseRequisition> allPRs) {
-        this.allPRs = allPRs;
-    }
-    
+    private Date todayDate = new Date();
+
     public PRManageBean() {
     }
 
-    public void setFilteredPRs(List<PurchaseRequisition> filteredPRs) {
-        this.filteredPRs = filteredPRs;
-    }
+    public void createPR(ActionEvent event) {
 
-    public List<PurchaseRequisition> getFilteredPRs() {
-        return filteredPRs;
+        setNewPRId(prSessionBean.createPR(dateCreated2, dateRequest2, getSelectedCenterName(), "Open", quantityRequested, getSelectedItemName()));
+        setStatusMessage("New PR Saved Successfully");
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, " Create New PR Result: "
+                + getStatusMessage() + " (New PR ID is " + getNewPRId() + ")", ""));
     }
 
     public java.util.Date getDateCreated2() {
@@ -144,16 +131,8 @@ public class PRManageBean implements Serializable {
         return prSessionBean.getAllItemName();
     }
 
-    public void createPR(ActionEvent event) {
-
-        setNewPRId(prSessionBean.createPR(dateCreated2, dateRequest2, getSelectedCenterName(), status, quantityRequested, getSelectedItemName()));
-        setStatusMessage("New PR Saved Successfully");
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, " Create New PR Result: "
-                + getStatusMessage() + " (New PR ID is " + getNewPRId() + ")", ""));
-    }
-    
     public List<PurchaseRequisition> getAllPRs() {
-        return allPRs;
+        return prSessionBean.getAllPRs();
     }
 
     public PurchaseRequisition getSelectedPR() {

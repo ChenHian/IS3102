@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -65,7 +67,7 @@ public class RoleSessionBean {
 
     public Long addNewRole(String roleName, boolean value1, boolean value2, boolean value3, boolean value4, boolean value5, boolean value6, boolean value7, boolean value8,
             boolean value9, boolean value10, boolean value11, boolean value12, boolean value13, boolean value14, boolean value15, boolean value16, boolean value17, boolean value18, boolean value19, boolean value20,
-            boolean value21, boolean value22, boolean value23, boolean value24, boolean value25, boolean value26, boolean value27) {
+            boolean value21, boolean value22, boolean value23, boolean value24, boolean value25, boolean value26, boolean value27, String division) {
         Role role = new Role();
         listOfPrivileges = "- ";
         role.setRoleName(roleName);
@@ -90,12 +92,13 @@ public class RoleSessionBean {
         role.setPrivilege19(value19);
         role.setPrivilege20(value20);
         role.setPrivilege21(value21);
-        role.setPrivilege2(value22);
+        role.setPrivilege22(value22);
         role.setPrivilege23(value23);
         role.setPrivilege24(value24);
         role.setPrivilege25(value25);
         role.setPrivilege26(value26);
         role.setPrivilege27(value27);
+        role.setDivision(division);
         if (value1) {
             listOfPrivileges = listOfPrivileges.concat("User Account Management Module. ");
         }
@@ -183,9 +186,44 @@ public class RoleSessionBean {
         return role.getRoleId();
     }
 
-    public void deleteRole(Role seletedRole) {
+    public void deleteRole(Role selectedRole) {
         Role role;
-        role = entityManager.find(Role.class, seletedRole.getRoleId());
-        entityManager.remove(role);
+        role = entityManager.find(Role.class, selectedRole.getRoleId());
+        Query query = entityManager.createQuery("SELECT s FROM StaffAccount s WHERE s.role.roleId = :role").setParameter("role", role.getRoleId());   
+        List<StaffAccount> temp = query.getResultList();
+        if (!temp.isEmpty()) {
+        String statusMessage = "Role is currently assigned to an account, please ensure that all accounts are not assigned to this role before deleting.";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                 statusMessage, ""));
+        
+        }
+        else {
+            entityManager.remove(role);
+        }
+    }
+
+    public List<StaffAccount> getStaffAccounts() {
+        Query query = entityManager.createQuery("SELECT s FROM StaffAccount s");
+        return query.getResultList();
+    }
+
+    public String assignNewRole(String currentUser,String staffAccount, String role) {
+        Query query = entityManager.createQuery("SELECT s FROM StaffAccount s WHERE s.email = :staffUser");
+        query.setParameter("staffUser",staffAccount);
+        if(query.getResultList().isEmpty()) {
+           return "Error Occurred"; 
+        }
+        StaffAccount s = (StaffAccount) query.getSingleResult();
+        if(s.getEmail().equals(currentUser)) {
+            System.out.println(currentUser + " " + s.getEmail());
+            return "You are not allowed to change your own role.";
+        }
+        Query q = entityManager.createQuery("SELECT r FROM Role r WHERE r.roleName = :role");
+        q.setParameter("role", role);
+        s.setRole((Role) q.getSingleResult());
+        entityManager.persist(s);
+        entityManager.flush();
+        return role + " has been assigned to "+ staffAccount + ".";
+        
     }
 }

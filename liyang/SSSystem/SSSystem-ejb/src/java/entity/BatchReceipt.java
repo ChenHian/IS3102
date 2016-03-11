@@ -27,11 +27,17 @@ public class BatchReceipt implements Serializable {
     private Integer quantityRejected;
     private Integer availableQuantity;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     private PurchaseOrder po = new PurchaseOrder();
 
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "br")
     private Collection<BatchOut> batchOuts = new ArrayList<BatchOut>();
+
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "br")
+    private Collection<ItemDisposal> itemDisposals = new ArrayList<ItemDisposal>();
+
+    @ManyToOne(cascade = {CascadeType.PERSIST})
+    private Item item = new Item();
 
     public Long getBatchReceiptId() {
         return batchReceiptId;
@@ -136,5 +142,27 @@ public class BatchReceipt implements Serializable {
 
     public void setBatchOuts(Collection<BatchOut> batchOuts) {
         this.batchOuts = batchOuts;
+    }
+
+    public Collection<ItemDisposal> getItemDisposals() {
+        return itemDisposals;
+    }
+
+    public void setItemDisposals(Collection<ItemDisposal> itemDisposals) {
+        this.itemDisposals = itemDisposals;
+    }
+
+    /**
+     * @return the item
+     */
+    public Item getItem() {
+        return item;
+    }
+
+    /**
+     * @param item the item to set
+     */
+    public void setItem(Item item) {
+        this.item = item;
     }
 }

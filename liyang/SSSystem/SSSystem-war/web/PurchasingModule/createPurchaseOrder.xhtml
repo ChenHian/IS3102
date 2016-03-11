@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        
+        <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.purchasingModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+        <h:form id="createPurchaseOrderForm" rendered="#{accessController.purchasingModuleAccess()}">
+          
+            <f:metadata>
+                <f:viewParam name="selectedPurchaseRequisitionId" value="#{purchaseOrderDataTableBean.selectedPurchaseRequisitionId}" />
+                <f:viewParam name="selectedCenterName" value="#{purchaseOrderDataTableBean.selectedCenterName}"/>
+                <f:viewParam name="selectedItemId" value="#{purchaseOrderDataTableBean.selectedItemId}"/>  
+                <f:viewParam name="selectedItemName" value="#{purchaseOrderDataTableBean.selectedItemName}"/> 
+                <f:viewParam name="selectedQuantityRequested" value="#{purchaseOrderDataTableBean.selectedQuantity}"/> 
+                <f:viewParam name="selectedMeasurementUnit" value="#{purchaseOrderDataTableBean.selectedMeasurementUnit}"/> 
+                <f:viewParam name="selectedItemId" value="#{purchaseOrderDataTableBean.purchaseOrderSessionBean.selectedItemId}"/> 
+            </f:metadata>
+            
+            <h:inputHidden value="#{purchaseOrderDataTableBean.selectedCenterName}"/>
+            <h:inputHidden value="#{purchaseOrderDataTableBean.selectedItemName}"/>
+            <h:inputHidden value="#{purchaseOrderDataTableBean.selectedQuantity}"/>
+            <h:inputHidden value="#{purchaseOrderDataTableBean.selectedMeasurementUnit}"/>
+            <h:inputHidden value="#{purchaseOrderDataTableBean.selectedItemId}"/>
+            
+            
+            <p:panel header="Create New Purchase Order">
+                
+                <h:panelGrid columns="2" style="margin-bottom:40px"> 
+                    <h:outputLabel for="itemId" value="itemId: " style="font-weight:bold" />
+                    <h:outputLabel id="itemId" value="#{purchaseOrderDataTableBean.selectedItemId}"/>
+                    
+                    <h:outputLabel for="centreName" value="Deliver to: " style="font-weight:bold" />
+                    <h:outputLabel id="centreName" value="#{purchaseOrderDataTableBean.selectedCenterName}"/>
+                    
+                    <h:outputLabel for="centreAddress" value="  " style="font-weight:bold" />
+                    <h:outputLabel id="centreAddress" value="#{purchaseOrderDataTableBean.selectedCenterAddress}"/>
+                    
+                    <h:outputLabel for="itemName" value="Item: " style="font-weight:bold" />
+                    <h:outputLabel id="itemName" value="#{purchaseOrderDataTableBean.selectedItemName}"/>
+                    
+                    <h:outputLabel for="quantity" value="Quantity: " style="font-weight:bold" />
+                    <h:outputLabel id="quantity" value="#{purchaseOrderDataTableBean.selectedQuantity}"/>    
+                    
+                    <h:outputLabel for="unit" value="Unit: " style="font-weight:bold" />
+                    <h:outputLabel id="unit" value="#{purchaseOrderDataTableBean.selectedMeasurementUnit}"/>  
+                    
+                    <h:outputLabel for="expectedDeliveryDate" value="Expected Delivery Date: " style="font-weight:bold" />
+                    <p:calendar id="expectedDeliveryDate" value="#{purchaseOrderDataTableBean.expectedDeliveryDate}" required="true" 
+                                requiredMessage="Expected Delivery Date is required" mindate="#{purchaseOrderDataTableBean.todayDate}"
+                                readonlyInput="true" label="ExpectedDeliveryDate" 
+                                navigator="true" pattern="dd/MM/yyyy"/>
+                    <p:spacer height="20"/>
+                    <p:spacer height="20"/>
+                    
+                    <p:outputLabel for="reference" value="Reference: " style="font-weight:bold"/>
+                    <p:selectOneMenu id="reference" value="#{purchaseOrderDataTableBean.referenceType}" style="width:150px"  required="true" requiredMessage="Please choose a reference type">
+                        <f:selectItem itemLabel="Select Type" itemValue="" noSelectionOption="true" />
+                        <f:selectItem itemLabel="Quotation" itemValue="Quotation" />
+                        <f:selectItem itemLabel="Contract" itemValue="Contract" />
+                    </p:selectOneMenu>
+
+                </h:panelGrid>
+            
+                <p:dataTable id="purchaseReferenceDT" var="purchaseReference" widgetVar="purchaseReferenceTable" filteredValue="#{purchaseOrderDataTableBean.filteredPurchaseReference}" value="#{purchaseOrderDataTableBean.purchaseReference}" resizableColumns="true" style="margin-bottom:40px"
+                         paginator="true" rows="20" emptyMessage="No Quotation to Reference" selectionMode="single" selection="#{purchaseOrderDataTableBean.selectedQuotationReference}" rowKey="#{purchaseReference.quotationId}">
+                <f:facet name="header">
+                    <h:outputText value="Approved Quotations" />
+                </f:facet>
+                <f:facet name="header">
+                        <p:outputPanel>
+                            <p:inputText id="globalFilter" onkeyup="PF('purchaseReferenceTable').filter()" style="width:150px" placeholder="Search keyword"/>
+                        </p:outputPanel>
+                </f:facet>
+                <p:column headerText="Quotation Id" filterBy="#{purchaseReference.quotationId}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseReference.quotationId}" />
+                </p:column>
+                <p:column headerText="Price" filterBy="#{purchaseReference.price}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseReference.price}" />
+                </p:column>
+                <p:column headerText="Delivery Lead Time" filterBy="#{purchaseReference.deliveryLeadTime}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseReference.deliveryLeadTime}" />
+                </p:column>
+                <p:column headerText="Status" filterBy="#{purchaseReference.status}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseReference.status}" />
+                </p:column>
+                <p:column style="width:32px"> 
+                    <p:commandButton update=":createPurchaseOrderForm:purchaseReferenceDetail" icon="fa fa-fw fa-neuter" onclick="PF('purchaseReferenceDialog').show() "/>
+                </p:column>
+            </p:dataTable>
+                <p:dialog header="View Quotation Detail" widgetVar="purchaseReferenceDialog" resizable="true" width="400" height="200">
+                    <p:outputPanel id="purchaseReferenceDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty purchaseOrderDataTableBean.selectedQuotationReference}" columnClasses="label,value">
+
+                            <h:outputText value="Quotation ID:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.quotationId}" />
+
+                            <h:outputText value="Request For Quotation ID:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.requestForQuotationId}" />
+                            
+                            <h:outputText value="Supplier: " style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.supplier.companyName}" />
+
+                            <h:outputText value="Item:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.item.itemName}" />
+
+                            <h:outputText value="Price:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.price}" />
+
+                            <h:outputText value="Delivery Lead Time:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.deliveryLeadTime}" />
+
+                            <h:outputText value="Valid Start Date:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.validStartDate}" />
+
+                            <h:outputText value="Valid End Date:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.validEndDate}" />
+
+                            <h:outputText value="Status:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.status}" />
+
+                            <h:outputText value="Purchase Terms:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.purchaseTerms}" />
+
+                            <h:outputText value="Payment Terms:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.paymentTerms}" />
+
+                            <h:outputText value="Delivery Terms:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.deliveryTerms}" />
+
+                            <h:outputText value="Return Terms:" style="font-weight:bold"/>
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedQuotationReference.returnTerms}" />
+                            
+                        </p:panelGrid>
+
+                    </p:outputPanel>
+                </p:dialog> 
+                
+                <p:dataTable id="purchaseReferenceCDT" var="purchaseReferenceC" widgetVar="purchaseReferenceCTable" filteredValue="#{purchaseOrderDataTableBean.filteredPurchaseReferenceC}" value="#{purchaseOrderDataTableBean.purchaseReferenceC}" resizableColumns="true" style="margin-bottom:40px"
+                         paginator="true" rows="20" emptyMessage="No Contract to Reference" selectionMode="single" selection="#{purchaseOrderDataTableBean.selectedContractReference}" rowKey="#{purchaseReferenceC.contractId}">
+                <f:facet name="header">
+                    <h:outputText value="Contracts" />
+                </f:facet>
+                <f:facet name="header">
+                        <p:outputPanel>
+                            <p:inputText id="globalFilter" onkeyup="PF('purchaseReferenceCTable').filter()" style="width:150px" placeholder="Search keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:column headerText="Contract Id" filterBy="#{purchaseReferenceC.contractId}" filterStyle="display:none">
+                        <h:outputText value="#{purchaseReferenceC.contractId}" />
+                </p:column>
+                    <p:column headerText="Price" filterBy="#{purchaseReferenceC.price}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseReferenceC.price}" />
+                </p:column>
+                <p:column headerText="Delivery Lead Time" filterBy="#{purchaseReferenceC.deliveryLeadTime}" filterStyle="display:none">
+                    <h:outputText value="#{purchaseReferenceC.deliveryLeadTime}" />
+                </p:column>
+                <p:column style="width:32px"> 
+                    <p:commandButton update=":createPurchaseOrderForm:purchaseReferenceCDetail" icon="fa fa-fw fa-neuter" onclick="PF('purchaseReferenceCDialog').show() "/>
+                </p:column>
+            </p:dataTable>
+                <p:dialog header="View Contract Detail" widgetVar="purchaseReferenceCDialog" resizable="true" width="400" height="200">
+                    <p:outputPanel id="purchaseReferenceCDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty purchaseOrderDataTableBean.selectedContractReference}" columnClasses="label,value">
+
+                        <h:outputText value="Contract Id:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.contractId}" />
+                        
+                        <h:outputText value="Quotation Id:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.quotation.quotationId}" />
+                        
+                        <h:outputText value="Supplier:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.supplier.companyName}" />
+                        
+                        <h:outputText value="Item:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.item.itemName}" />
+                        
+                        <h:outputText value="Price:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.price}" />
+                        
+                        <h:outputText value="Contract Start Date:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.contractStartDate}" />
+                        
+                        <h:outputText value="Contract End Date:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.contractEndDate}" />
+                                                                        
+                        <h:outputText value="Payment Terms:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.paymentTerms}" />
+                        
+                        <h:outputText value="Delivery Terms:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.deliveryTerms}" />
+                        
+                        <h:outputText value="Purchase Terms:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.paymentTerms}" />
+                        
+                        <h:outputText value="Return Terms:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.returnTerms}" />
+                        
+                        <h:outputText value="Delivery Lead Time:" />
+                        <h:outputText value="#{purchaseOrderDataTableBean.selectedContractReference.deliveryLeadTime}" />
+                        
+                        </p:panelGrid>
+
+                    </p:outputPanel>
+                </p:dialog> 
+                    
+                    
+                
+                
+                <p:commandButton value="Create Purchase Order" id="nonAjax" action ="/PurchasingModule/viewPurchaseOrder" ajax="true" actionListener="#{purchaseOrderDataTableBean.createPurchaseOrderAction}" />
+                <p:spacer width="20" height="20" />
+                <p:button outcome="/PurchaseManagementModule/viewPurchaseRequisition" value="Cancel"></p:button>
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+   
+
+</ui:composition>

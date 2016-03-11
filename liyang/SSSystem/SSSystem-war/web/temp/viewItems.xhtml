@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="viewItemsForm">
+
+            <p:panel header="View All Item">
+                <p:dataTable id="itemDT" var="item" value="#{itemDataTableBean.items}"  widgetVar="itemTable" filteredValue="#{itemDataTableBean.filteredItems}" resizableColumns="false" style="margin-bottom:40px"
+                             paginator="true" rows="20" emptyMessage="No item" selectionMode="single" selection="#{itemDataTableBean.selectedItem}" rowKey="#{item.itemId}">
+
+                    <p:ajax event="rowSelect" update=":viewItemsForm:itemDT"/>
+                    
+                    <f:facet name="header">
+                       <p:outputPanel>
+                         <h:outputText value="Search all fields:" />
+                         <p:inputText id="globalFilter" onkeyup="PF('itemTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                       </p:outputPanel>
+                    </f:facet>
+                    
+                   
+                    <p:column headerText="Item Type" filterBy="#{item.itemType.itemTypeDescription}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{item.itemType.itemTypeDescription}" />
+                    </p:column>
+                    <p:column headerText="Item Name" filterBy="#{item.itemName}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{item.itemName}" />
+                    </p:column>
+                    <p:column headerText="Item Description" filterBy="#{item.itemDescription}" filterStyle="display:none">
+                        <h:outputText value="#{item.itemDescription}" />
+                    </p:column>
+                    <p:column headerText="Brand Name" filterBy="#{item.brand.brandName}" filterStyle="display:none">
+                        <h:outputText value="#{item.brand.brandName}" />
+                    </p:column>
+                    <p:column style="width:32px">
+                        
+                    <p:commandButton disabled="#{itemDataTableBean.disabled}" process="itemDT" update=":viewItemsForm:itemDetail" oncomplete="PF('itemDialog').show()" icon="fa fa-fw fa-neuter">
+                    <f:setPropertyActionListener value="#{item}" target="#{itemDataTableBean.selectedItem}" />
+                    </p:commandButton>
+                    </p:column>
+                    <p:column style="width:32px">
+                        <p:button disabled="#{itemDataTableBean.disabled}" outcome="editItemProfile" icon="fa fa-fw fa-edit">
+                            <f:param name="SelectedItemId" value="#{item.itemId}"/>
+                            <f:param name="SelectedItemName" value="#{item.itemName}"/>
+                            <f:param name="SelectedItemDescription" value="#{item.itemDescription}"/> 
+                            <f:param name="SelectedItemItemReturnable" value="#{item.itemReturnable}"/>
+                            <f:param name="SelectedItemReturnablePeriod" value="#{item.returnablePeriod}"/>  
+                        </p:button>
+                    </p:column>
+
+                    <p:column style="width:32px">
+                    <p:commandButton disabled="#{itemDataTableBean.disabled}" id="nonAjax" ajax="false" icon="fa fa-fw fa-remove" 
+                                     actionListener="#{itemDataTableBean.removeItemAction}"/>  
+                     </p:column>
+                </p:dataTable>
+                
+                     <p:button outcome="addItem" value="New" icon="fa fa-fw fa-plus">
+                     </p:button>
+
+                         
+
+                <p:dialog header="Item Profile" widgetVar="itemDialog" resizable="true" width="300">
+                    <p:outputPanel id="itemDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty itemDataTableBean.selectedItem}" columnClasses="label,value">
+
+                        <h:outputText value="Brand ID:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.brand.brandId}" />
+                        
+                        <h:outputText value="Brand Name:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.brand.brandName}" />
+                        
+                        <h:outputText value="Brand Description:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.brand.brandDescription}" />
+                                                                        
+                        <h:outputText value="Item Type ID:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.itemType.itemTypeId}" />
+                        
+                        <h:outputText value="Item Type:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.itemType.itemTypeDescription}" />
+                        
+                        <h:outputText value="Item ID:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.itemId}" />
+                        
+                        <h:outputText value="Item Name:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.itemName}" />
+                        
+                        <h:outputText value="Item Description:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.itemDescription}" />
+                        
+                        <h:outputText value="Item Category:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.itemType.itemCategory}" />
+                        
+                        <h:outputText value="Item Subcategory:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.itemType.itemSubCategory}" />
+                        
+                        <h:outputText value="Approval Status:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.approvalStatus}" />
+                        
+                        <h:outputText value="Item Returnable:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.itemReturnable}" />
+                        
+                        <h:outputText value="Allow Subscription:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.allowSubscription}" />
+                        
+                        <h:outputText value="Returnable Period:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.returnablePeriod}" />
+                        
+                        <h:outputText value="Storage Type:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.itemType.storageType}" />
+                        
+                        <h:outputText value="Perishable:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.itemType.isPerishable}" />
+                        
+                        <h:outputText value="Measurement Type:" />
+                        <h:outputText value="#{itemDataTableBean.selectedItem.itemType.measurementType}" />
+                    </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+                    
+                    
+                
+            </p:panel>
+        </h:form>
+    </ui:define>
+    <ui:define name ="left">
+        <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="Home" action="/admin/AdminHome" icon="ui-icon-home"/>
+                <p:menuitem value="Manage Item List" action="/procurement/viewItems" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Brand List" action="/procurement/viewBrand" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Item Type List" action="/procurement/viewItemType" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Contract" action="/procurement/viewContract" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Late Delivery" action="/procurement/viewLateDelivery" icon="ui-icon-search"/>
+
+            </p:menu>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

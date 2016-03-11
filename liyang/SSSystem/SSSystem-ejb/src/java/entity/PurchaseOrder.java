@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entity;
 
 import java.io.Serializable;
@@ -13,6 +18,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+/**
+ *
+ * @author duxianqi
+ */
 @Entity
 public class PurchaseOrder implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -23,7 +32,7 @@ public class PurchaseOrder implements Serializable {
     private String status;
     private String documentReferenceType;
     private int documentReferenceNumber;
-    private String expectedDeliveryDate;
+    private Date expectedDeliveryDate;
     private double totalAmount;
     private String deliverToAddress;
     private String deliverToCentreName;
@@ -42,10 +51,16 @@ public class PurchaseOrder implements Serializable {
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "po")
     private Collection<BatchReceipt> batchReceipts = new ArrayList<BatchReceipt>();
     
+     /**
+     * @return the purchaseOrderId
+     */
     public Long getPurchaseOrderId() {
         return purchaseOrderId;
     }
 
+    /**
+     * @param purchaseOrderId the purchaseOrderId to set
+     */
     public void setPurchaseOrderId(Long purchaseOrderId) {
         this.purchaseOrderId = purchaseOrderId;
     }
@@ -70,28 +85,198 @@ public class PurchaseOrder implements Serializable {
         }
         return true;
     }
-
+*/
     @Override
     public String toString() {
-        return "entity.PurchaseOrder[ id=" + id + " ]";
-    }*/
+        return "pid "+purchaseOrderId + "";
+    }
 
-
+    /**
+     * @return the status
+     */
     public String getStatus() {
         return status;
     }
 
+    /**
+     * @param status the status to set
+     */
     public void setStatus(String status) {
         this.status = status;
     }
 
+    /**
+     * @return the documentReferenceType
+     */
     public String getDocumentReferenceType() {
         return documentReferenceType;
     }
 
+    /**
+     * @param documentReferenceType the documentReferenceType to set
+     */
     public void setDocumentReferenceType(String documentReferenceType) {
         this.documentReferenceType = documentReferenceType;
     }
+
+    /**
+     * @return the supplier
+     */
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    /**
+     * @param supplier the supplier to set
+     */
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
+    /**
+     * @return the dateCreated
+     */
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    /**
+     * @param dateCreated the dateCreated to set
+     */
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    /**
+     * @return the totalAmount
+     */
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    /**
+     * @param totalAmount the totalAmount to set
+     */
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    /**
+     * @return the deliverToAddress
+     */
+    public String getDeliverToAddress() {
+        return deliverToAddress;
+    }
+
+    /**
+     * @param deliverToAddress the deliverToAddress to set
+     */
+    public void setDeliverToAddress(String deliverToAddress) {
+        this.deliverToAddress = deliverToAddress;
+    }
+
+    /**
+     * @return the deliverToCentreName
+     */
+    public String getDeliverToCentreName() {
+        return deliverToCentreName;
+    }
+
+    /**
+     * @param deliverToCentreName the deliverToCentreName to set
+     */
+    public void setDeliverToCentreName(String deliverToCentreName) {
+        this.deliverToCentreName = deliverToCentreName;
+    }
+
+    /**
+     * @return the unitPrice
+     */
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    /**
+     * @param unitPrice the unitPrice to set
+     */
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    /**
+     * @return the quantity
+     */
+    public int getQuantity() {
+        return quantity;
+    }
+
+    /**
+     * @param quantity the quantity to set
+     */
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    /**
+     * @return the item
+     */
+    public Item getItem() {
+        return item;
+    }
+
+    /**
+     * @param item the item to set
+     */
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    /**
+     * @return the purchaseRequisition
+     */
+    public PurchaseRequisition getPurchaseRequisition() {
+        return purchaseRequisition;
+    }
+
+    /**
+     * @param purchaseRequisition the purchaseRequisition to set
+     */
+    public void setPurchaseRequisition(PurchaseRequisition purchaseRequisition) {
+        this.purchaseRequisition = purchaseRequisition;
+    }
+
+    /**
+     * @return the expectedDeliveryDate
+     */
+    public Date getExpectedDeliveryDate() {
+        return expectedDeliveryDate;
+    }
+
+    /**
+     * @param expectedDeliveryDate the expectedDeliveryDate to set
+     */
+    public void setExpectedDeliveryDate(Date expectedDeliveryDate) {
+        this.expectedDeliveryDate = expectedDeliveryDate;
+    }
+
+
+
+    /**
+     * @return the batchReceipts
+     */
+    public Collection<BatchReceipt> getBatchReceipts() {
+        return batchReceipts;
+    }
+
+    /**
+     * @param batchReceipts the batchReceipts to set
+     */
+    public void setBatchReceipts(Collection<BatchReceipt> batchReceipts) {
+        this.batchReceipts = batchReceipts;
+    }
+    
+    
+
 
     public int getDocumentReferenceNumber() {
         return documentReferenceNumber;
@@ -101,91 +286,7 @@ public class PurchaseOrder implements Serializable {
         this.documentReferenceNumber = documentReferenceNumber;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
-    }
+  
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
-
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public String getExpectedDeliveryDate() {
-        return expectedDeliveryDate;
-    }
-
-    public void setExpectedDeliveryDate(String expectedDeliveryDate) {
-        this.expectedDeliveryDate = expectedDeliveryDate;
-    }
-
-    public double getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public String getDeliverToAddress() {
-        return deliverToAddress;
-    }
-
-    public void setDeliverToAddress(String deliverToAddress) {
-        this.deliverToAddress = deliverToAddress;
-    }
-
-    public String getDeliverToCentreName() {
-        return deliverToCentreName;
-    }
-
-    public void setDeliverToCentreName(String deliverToCentreName) {
-        this.deliverToCentreName = deliverToCentreName;
-    }
-
-    public double getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
-    public PurchaseRequisition getPurchaseRequisition() {
-        return purchaseRequisition;
-    }
-
-    public void setPurchaseRequisition(PurchaseRequisition purchaseRequisition) {
-        this.purchaseRequisition = purchaseRequisition;
-    }
-
-    public Collection<BatchReceipt> getBatchReceipts() {
-        return batchReceipts;
-    }
-
-    public void setBatchReceipts(Collection<BatchReceipt> batchReceipts) {
-        this.batchReceipts = batchReceipts;
-    }
+   
 }

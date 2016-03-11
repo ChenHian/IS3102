@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="addFeedbackOnSupplierform">
+            <h:inputHidden value ="#{BRManageBean.supplierId}"/>
+            <p:panel header="Add Feedback on Supplier">                
+                <h:panelGrid columns="2" style="margin-bottom:40px"> 
+                    <h:outputLabel for="selectedPurchaseOrderId" value="PO ID: " style="font-weight:bold" />
+                    <h:outputText id ="selectedPurchaseOrderId" value = "#{BRManageBean.selectedPurchaseOrderId}"/>
+
+                    <h:outputLabel for="selectedPurchaseOrderCompanyName" value="Supplier Name: " style="font-weight:bold" />
+                    <h:outputText id ="selectedPurchaseOrderCompanyName" value = "#{BRManageBean.selectedPurchaseOrderCompanyName}"/>
+
+                    <h:outputLabel for="feedbackDeliveryContent" value="Feedback On Delivery: " style="font-weight:bold" />
+                    <p:inputTextarea rows="6" cols="33" id="feedbackDeliveryContent" value="#{BRManageBean.feedbackDeliveryContent}"/>
+
+                    <h:outputLabel for="feedbackDeliveryRating" value="Delivery Rating: " style="font-weight:bold" />
+                    <p:rating id="feedbackDeliveryRating" value="#{BRManageBean.feedbackDeliveryRating}"/>
+
+                    <h:outputLabel for="feedbackStaffContent" value="Feedback On Staff: " style="font-weight:bold" />
+                    <p:inputTextarea rows="6" cols="33" id="feedbackStaffContent" value="#{BRManageBean.feedbackStaffContent}"/>
+
+                    <h:outputLabel for="feedbackStaffRating" value="Staff Rating: " style="font-weight:bold" />
+                    <p:rating id="feedbackStaffRating" value="#{BRManageBean.feedbackStaffRating}"/>
+
+                    <h:outputLabel for="feedbackItemContent" value="Feedback On Item: " style="font-weight:bold" />
+                    <p:inputTextarea rows="6" cols="33" id="feedbackItemContent" value="#{BRManageBean.feedbackItemContent}"/>
+
+                    <h:outputLabel for="feedbackItemRating" value="Item Rating: " style="font-weight:bold" />
+                    <p:rating id="feedbackItemRating" value="#{BRManageBean.feedbackItemRating}"/>
+
+                </h:panelGrid>
+
+                <p:commandButton value="Add" id="nonAjax" ajax="false" action = "/warehouse/viewAllPurchaseOrder" actionListener="#{BRManageBean.addFeedbackOnSupplierAction}" />
+                <p:spacer width="20" height="20" />
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+    <ui:define name ="left">
+        <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="Home" action="/admin/AdminHome" icon="ui-icon-home"/>
+                <p:menuitem value="View Supplier List" action="/procurement/viewSuppliers" icon="ui-icon-search"/>
+                <p:menuitem value="Add Feedback" action="/procurement/addFeedbackOnSupplier" icon="ui-icon-plus"/>
+                <p:menuitem value="Add Supplier" action="/procurement/addSupplier" icon="ui-icon-plus"/>
+                <p:menuitem value="Manage Supplier Item" action="/procurement/manageSupplierItem" icon="ui-icon-clipboard"/>
+            </p:menu>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

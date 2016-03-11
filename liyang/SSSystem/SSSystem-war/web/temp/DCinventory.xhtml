@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="left"> 
+         <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="Home" action="/admin/AdminHome" icon="ui-icon-home"/>
+                <p:menuitem value="Add New Role" action="/admin/addNewRole" icon="ui-icon-plus"/>
+                <p:menuitem value="View All Privileges" action="/admin/viewAllPrivileges" icon="ui-icon-search"/>
+            </p:menu>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="content">
+         <h:form id="formMain">
+            <p:panel header="View Distribution Center Inventory">
+
+          <!--      <p:dataTable var="dci" value="#{DCinventory.DCinventory}"
+                             paginator="true" rows="5" emptyMessage="No DC">
+                    <p:column headerText="DC ID"
+                              sortBy="#{dci.distributionCenterInventoryId}">
+                        <h:outputText value="#{dci.distributionCenterInventoryId}" />
+                    </p:column>
+                    <p:column headerText="DC Name"
+                              sortBy="#{dci.name}">
+                        <h:outputText value="#{dci.name}" />
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+                
+    -->            
+
+             <f:facet name="header"> 
+            </f:facet>
+    
+     <p:dataTable id="DCItable" var="dci" value="#{DCI.DCinventory}"  widgetVar="DCItable" filteredValue="#{DCI.filteredDCs}" resizableColumns="true" style="margin-bottom:40px"
+                             paginator="true" rows="20" emptyMessage="No DC" selectionMode="single" selection="#{DCI.selectedDCinventory}" rowKey="#{dci.distributionCenterInventoryId}">
+             <f:facet name="header">
+            <p:outputPanel>
+                <h:outputText value="Search all fields:" />
+                <p:inputText id="globalFilter" onkeyup="PF('DCITable').filter()" style="width:150px" placeholder="Enter keyword"/>
+            </p:outputPanel>
+        </f:facet>
+                    <p:column headerText="DC Inventory ID" filterBy="#{dci.distributionCenterInventoryId}" filterStyle="display:none">
+                        <h:outputText value="#{dci.distributionCenterInventoryId}" />
+                    </p:column>
+                    <p:column headerText="DC Name" filterBy="#{dci.distributionCenter.name}" filterStyle="display:none">
+                        <h:outputText value="#{dci.distributionCenter.name}" />
+                    </p:column>
+                    <p:column headerText="Item Name" filterBy="#{dci.item.itemName}" filterStyle="display:none"> 
+                        <h:outputText value="#{dci.item.itemName}" />
+                    </p:column>
+                      <p:column headerText="Available Quantity" filterBy="#{dci.availableQuantity}" filterStyle="display:none">
+                        <h:outputText value="#{dci.availableQuantity}" />
+                    </p:column>
+ <!--                   <p:column headerText="Reserve for Cus Orders" filterBy="#{dci.reservedForCustomerOrders}" filterStyle="display:none">
+                        <h:outputText value="#{dci.reservedForCustomerOrders}" />
+                    </p:column>
+                    <p:column headerText="Reserved for Transfer" filterBy="#{dci.reservedForTransfer}" filterStyle="display:none">
+                        <h:outputText value="#{dci.reservedForTransfer}" />
+                    </p:column>
+                      <p:column headerText="Blocked for Return" filterBy="#{dci.blockedForReturn}" filterStyle="display:none">
+                        <h:outputText value="#{dci.blockedForReturn}" />
+                      </p:column>   
+ -->
+                      <p:column headerText="Threshold Alert" filterBy="#{dci.thresholdAlert}" filterStyle="display:none">
+                        <h:outputText value="#{dci.thresholdAlert}" />
+                    </p:column>
+                </p:dataTable>
+                
+                    <p:commandButton  process="DCItable" update=":formMain:dciDetail" icon="ui-icon-search" value="View" onclick="PF('dciDialog').show()" />
+                 
+                
+                <p:dialog header="DC Inventory Profile" widgetVar="dciDialog" resizable="true">
+                    <p:outputPanel id="dciDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty DCinventory.selectedDCinventory}" columnClasses="label,value">
+
+                        <h:outputText value="DC Inventory ID:" />
+                        <h:outputText value="#{DCinventory.selectedDCinventory.distributionCenterInventoryId}" />
+                        
+                        <h:outputText value="DC Name" />
+                        <h:outputText value="#{DCinventory.selectedDCinventory.distributionCenter.name}" />
+                        
+                        <h:outputText value="Item Name" />
+                        <h:outputText value="#{DCinventory.selectedDCinventory.item.itemName}" />
+                        
+                        <h:outputText value="Available Quantity" />
+                        <h:outputText value="#{DCinventory.selectedDCinventory.availableQuantity}" />
+                 
+                <!--
+                        <h:outputText value="Reserve for Cus Orders" />
+                        <h:outputText value="#{DCinventory.selectedDCinventory.reservedForCustomerOrders}" />
+                        
+                        <h:outputText value="Reserved for Transfer" />
+                        <h:outputText value="#{DCinventory.selectedDCinventory.reservedForTransfer}" />
+ 
+                        <h:outputText value="Blocked for Return" />
+                        <h:outputText value="#{DCinventory.selectedDCinventory.blockedForReturn}" />
+                 -->      
+                        <h:outputText value="Threshold Alert" />
+                        <h:outputText value="#{DCinventory.selectedDCinventory.thresholdAlert}" />
+  
+                    </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>  
+           </p:panel>            
+     </h:form>
+ </ui:define>
+
+</ui:composition>

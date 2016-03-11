@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        
+         <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.supplierManagementModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+        
+         <h:form id="viewSuppliersForm" rendered="#{accessController.supplierManagementModuleAccess()}">
+            
+            <p:panel header="View All Suppliers">  
+                <p:dataTable id="supplierDT" var="supplier" value="#{supplierDataTableBean.suppliers}" widgetVar="supplierTable" filteredValue="#{supplierDataTableBean.filteredSuppliers}" resizableColumns="true" style="margin-bottom:40px"
+                             paginator="true" rows="20" emptyMessage="No supplier" selectionMode="single" selection="#{supplierDataTableBean.selectedSupplier}" rowKey="#{supplier.supplierId}">
+                    <p:ajax event="rowSelect" update=":viewSuppliersForm:supplierDT" />
+       
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Search all fields:" />
+                            <p:inputText id="globalFilter" onkeyup="PF('supplierTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+                    
+                    <p:column headerText="Company Name" filterBy="#{supplier.companyName}" filterStyle="display:none">
+                            <h:outputText value="#{supplier.companyName}" />
+                    </p:column>
+                    <p:column headerText="Email" filterBy="#{supplier.email}" filterStyle="display:none"> 
+                        <h:outputText value="#{supplier.email}" />
+                    </p:column>
+                    <p:column headerText="Address" filterBy="#{supplier.address}" filterStyle="display:none">
+                        <h:outputText value="#{supplier.address}" />
+                    </p:column>
+                    <p:column headerText="Contact Person" filterBy="#{supplier.contactPerson}" filterStyle="display:none">
+                        <h:outputText value="#{supplier.contactPerson}" />
+                    </p:column>
+                    <p:column headerText="Contact Number" filterBy="#{supplier.contactNumber}" filterStyle="display:none">
+                        <h:outputText value="#{supplier.contactNumber}" />
+                    </p:column>
+                    
+                    <p:column style="width:32px">
+                        
+                        <p:commandButton process="supplierDT" update=":viewSuppliersForm:supplierDetail" icon="fa fa-fw fa-neuter" onclick="PF('supplierDialog').show() "/>
+                    </p:column>
+                    <p:column style="width:32px">
+                       
+                        <p:button outcome="editSupplierProfile" icon="fa fa-fw fa-edit" >
+                            <f:param name="selectedSupplierId" value="#{supplier.supplierId}"/>
+                            <f:param name="selectedSupplierCompanyName" value="#{supplier.companyName}"/>
+                            <f:param name="selectedSupplierEmail" value="#{supplier.email}"/>
+                            <f:param name="selectedSupplierAddress" value="#{supplier.address}"/>
+                            <f:param name="selectedSupplierContactPerson" value="#{supplier.contactPerson}"/>
+                            <f:param name="selectedSupplierContactNumber" value="#{supplier.contactNumber}"/>            
+                        </p:button>
+                    </p:column>
+                    <p:column style="width:32px;text-align: center">
+                        <p:commandButton id="nonAjax" ajax="false" icon="fa fa-fw fa-remove" actionListener="#{supplierDataTableBean.removeSupplierAction}"/> 
+                    </p:column> 
+                 
+                </p:dataTable>
+         
+                <p:button icon= "fa fa-fw fa-plus" value="New Supplier" outcome = "addSupplier"/>
+
+                
+                <p:dialog header="Supplier Profile" widgetVar="supplierDialog" resizable="true" width="1000" height="700" style = "font-size:200%">
+                    <p:outputPanel id="supplierDetail" style="text-align:center; font-size:200%;" >
+                        <p:panelGrid  columns="2" rendered="#{not empty supplierDataTableBean.selectedSupplier}" columnClasses="label,value">
+
+                            <h:outputText style="font-weight: bold; font-size:200%;" value="Supplier Id:"/>
+                            <h:outputText value="#{supplierDataTableBean.selectedSupplier.supplierId}" style = "font-size:200%"/>
+
+                            <h:outputText style="font-weight: bold; font-size:200%;" value="Company Name:" />
+                            <h:outputText value="#{supplierDataTableBean.selectedSupplier.companyName}" style = "font-size:200%"/>
+
+                            <h:outputText style="font-weight: bold; font-size:200%;" value="Email:" />
+                            <h:outputText value="#{supplierDataTableBean.selectedSupplier.email}" style = "font-size:200%"/>
+
+                            <h:outputText style="font-weight: bold; font-size:200%;" value="Address:" />
+                            <h:outputText value="#{supplierDataTableBean.selectedSupplier.address}" style = "font-size:200%"/>
+
+                            <h:outputText style="font-weight: bold; font-size:200%;" value="Contact Person:" />
+                            <h:outputText value="#{supplierDataTableBean.selectedSupplier.contactPerson}" style = "font-size:200%"/>
+
+                            <h:outputText style="font-weight: bold; font-size:200%;" value="Contact Number:" />
+                            <h:outputText value="#{supplierDataTableBean.selectedSupplier.contactNumber}" style = "font-size:200%"/>
+                        
+                        </p:panelGrid>
+                        
+                        <p:spacer width="0" height="20" />
+                        <p:panelGrid  columns="2" columnClasses="label,value">
+                            <f:facet name="header" >
+                                <h:outputText value="Supplier's Rating" style = "font-size:200%"/>
+                            </f:facet>
+                            
+                            <h:outputText style="font-weight: bold; font-size:200%;" value="Weighted Rating:" />
+                            <h:outputText value="#{supplierDataTableBean.supplierWeightedRating}" style = "font-size:200%"/>
+
+                            <h:outputText style="font-weight: bold; font-size:200%;" value="Delivery:" />
+                            <h:outputText value="#{supplierDataTableBean.supplierAverageDeliveryRating}" style = "font-size:200%"/>
+                            
+                            <h:outputText style="font-weight: bold; font-size:200%;" value="Staff:" />
+                            <h:outputText value="#{supplierDataTableBean.supplierAverageStaffRating}" style = "font-size:200%"/>
+                            
+                            <h:outputText style="font-weight: bold; font-size:200%;" value="Item:" />
+                            <h:outputText value="#{supplierDataTableBean.supplierAverageItemRating}" style = "font-size:200%"/>
+                        
+                        </p:panelGrid>
+                        
+                        <p:spacer width="0" height="20" />
+                        
+                        <p:tabView style = "font-size:200%">
+                            <p:tab title="Delivery">
+                                    <p:dataTable var="supplierDeliveryFeedback" value="#{supplierDataTableBean.selectedSupplier.feedbackOnSupplier}" resizableColumns="true"
+                                                paginator="true" rows="10" emptyMessage="No Feedback" rowKey="#{supplierDeliveryFeedback.feedbackOnSupplierId}">
+                                       <p:column headerText="Date" width="100">
+                                           <h:outputText value="#{supplierDeliveryFeedback.date}" />
+                                       </p:column>
+                                       <p:column headerText="Feedback">
+                                           <h:outputText value="#{supplierDeliveryFeedback.feedbackDeliveryContent}" />
+                                       </p:column>
+                                       <p:column headerText="Rating">
+                                           <p:rating value="#{supplierDeliveryFeedback.feedbackDeliveryRating}" readonly="true" />
+                                       </p:column>
+
+                                   </p:dataTable>
+                            </p:tab>
+                            <p:tab title="Staff">
+                                    <p:dataTable var="supplierStaffFeedback" value="#{supplierDataTableBean.selectedSupplier.feedbackOnSupplier}" resizableColumns="true"
+                                                paginator="true" rows="10" emptyMessage="No Feedback" rowKey="#{supplierStaffFeedback.feedbackOnSupplierId}">
+                                       <p:column headerText="Date" width="100">
+                                           <h:outputText value="#{supplierStaffFeedback.date}" />
+                                       </p:column>
+                                       <p:column headerText="Feedback">
+                                           <h:outputText value="#{supplierStaffFeedback.feedbackStaffContent}" />
+                                       </p:column>
+                                       <p:column headerText="Rating">
+                                           <p:rating value="#{supplierStaffFeedback.feedbackStaffRating}" readonly="true" />
+                                       </p:column>
+
+                                   </p:dataTable>
+                            </p:tab>
+                            <p:tab title="Item">
+                                    <p:dataTable var="supplierItemFeedback" value="#{supplierDataTableBean.selectedSupplier.feedbackOnSupplier}" resizableColumns="true"
+                                                paginator="true" rows="10" emptyMessage="No Feedback" rowKey="#{supplierItemFeedback.feedbackOnSupplierId}">
+                                       <p:column headerText="Date" width="100">
+                                           <h:outputText value="#{supplierItemFeedback.date}" />
+                                       </p:column>
+                                       <p:column headerText="Feedback">
+                                           <h:outputText value="#{supplierItemFeedback.feedbackItemContent}" />
+                                       </p:column>
+                                       <p:column headerText="Rating">
+                                           <p:rating value="#{supplierItemFeedback.feedbackItemRating}" readonly="true" />
+                                       </p:column>
+
+                                   </p:dataTable>
+                            </p:tab>
+                        </p:tabView>
+                        
+                         <p:spacer width="0" height="20" />
+                        <p:tabView>
+                            <p:tab title="Supplier Item">
+                                <p:dataTable var="supplierItem" value="#{supplierDataTableBean.selectedSupplier.items}" resizableColumns="true" style="margin-bottom:40px"
+                                             paginator="true" rows="10" emptyMessage="No item recorded found" rowKey="#{supplierItem.itemId}">
+                                    <p:column headerText="Id" width="100">
+                                        <h:outputText value="#{supplierItem.itemId}" />
+                                    </p:column>
+                                    <p:column headerText="Item" width="100">
+                                        <h:outputText value="#{supplierItem.itemName}" />
+                                    </p:column>
+                                    <p:column headerText="Description" width="100">
+                                        <h:outputText value="#{supplierItem.itemDescription}" />
+                                    </p:column>
+                                    <p:column headerText="Item Type" width="100">
+                                        <h:outputText value="#{supplierItem.itemType.itemTypeDescription}" />
+                                    </p:column>
+                                    <p:column headerText="Brand" width="100">
+                                        <h:outputText value="#{supplierItem.brand.brandName}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="Purchase">
+                                <p:dataTable var="supplierPurchase" value="#{supplierDataTableBean.supplierPurchase}" resizableColumns="true" style="margin-bottom:40px"
+                                             paginator="true" rows="10" emptyMessage="No purchase made with this supplier yet" rowKey="#{supplierPurchase.purchaseOrderId}">
+                                    <p:column headerText="Id" width="100">
+                                        <h:outputText value="#{supplierPurchase.purchaseOrderId}" />
+                                    </p:column>
+                                    <p:column headerText="Date Created" width="100">
+                                        <h:outputText value="#{supplierPurchase.dateCreated}" />
+                                    </p:column>
+                                    <p:column headerText="Item" width="100">
+                                        <h:outputText value="#{supplierPurchase.item.itemName}" />
+                                    </p:column>
+                                    <p:column headerText="Quantity" width="100">
+                                        <h:outputText value="#{supplierPurchase.quantity}" />
+                                    </p:column>
+                                    <p:column headerText="Unit Price ($)" width="100">
+                                        <h:outputText value="#{supplierPurchase.unitPrice}" />
+                                    </p:column>
+                                    <p:column headerText="Total ($)" width="100">
+                                        <h:outputText value="#{supplierPurchase.totalAmount}" />
+                                    </p:column>
+                                    <p:column headerText="Center" width="100">
+                                        <h:outputText value="#{supplierPurchase.deliverToCentreName}" />
+                                    </p:column>
+                                    <p:column headerText="Expected Delivery Date" width="100">
+                                        <h:outputText value="#{supplierPurchase.expectedDeliveryDate}" />
+                                    </p:column>
+                                    <p:column headerText="Status" width="100">
+                                        <h:outputText value="#{supplierPurchase.status}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="Quotation">
+                                <p:dataTable var="supplierQuotation" value="#{supplierDataTableBean.supplierQuotation}" resizableColumns="true" style="margin-bottom:40px"
+                                             paginator="true" rows="10" emptyMessage="No approved quotation from this supplier yet" rowKey="#{supplierQuotation.quotationId}">
+                                    <p:column headerText="Id" width="100">
+                                        <h:outputText value="#{supplierQuotation.quotationId}" />
+                                    </p:column>
+                                    <p:column headerText="Item" width="100">
+                                        <h:outputText value="#{supplierQuotation.item.itemName}" />
+                                    </p:column>
+                                    <p:column headerText="Unit Price ($)" width="100">
+                                        <h:outputText value="#{supplierQuotation.price}" />
+                                    </p:column>
+                                    <p:column headerText="Lead Time (Days)" width="100">
+                                        <h:outputText value="#{supplierQuotation.deliveryLeadTime}" />
+                                    </p:column>
+                                    <p:column headerText="Valid From" width="100">
+                                        <h:outputText value="#{supplierQuotation.validStartDate}" />
+                                    </p:column>
+                                    <p:column headerText="Valid To" width="100">
+                                        <h:outputText value="#{supplierQuotation.validEndDate}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="Contract">
+                                <p:dataTable var="supplierContract" value="#{supplierDataTableBean.supplierContract}" resizableColumns="true" style="margin-bottom:40px"
+                                             paginator="true" rows="10" emptyMessage="No contract agreement made with this supplier yet" rowKey="#{supplierContract.contractId}">
+                                    <p:column headerText="Id" width="100">
+                                        <h:outputText value="#{supplierContract.contractId}" />
+                                    </p:column>
+                                    <p:column headerText="Item" width="100">
+                                        <h:outputText value="#{supplierContract.item.itemName}" />
+                                    </p:column>
+                                    <p:column headerText="Unit Price ($)" width="100">
+                                        <h:outputText value="#{supplierContract.price}" />
+                                    </p:column>
+                                    <p:column headerText="Lead Time (Days)" width="100">
+                                        <h:outputText value="#{supplierContract.deliveryLeadTime}" />
+                                    </p:column>
+                                    <p:column headerText="Valid From" width="100">
+                                        <h:outputText value="#{supplierContract.contractStartDate}" />
+                                    </p:column>
+                                    <p:column headerText="Valid To" width="100">
+                                        <h:outputText value="#{supplierContract.contractEndDate}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:tab>
+                        </p:tabView>
+                                     
+                    </p:outputPanel>
+                </p:dialog>
+                 
+            </p:panel>
+        </h:form>
+    </ui:define>
+ 
+    
+</ui:composition>

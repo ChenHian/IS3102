@@ -7,15 +7,15 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -35,38 +35,19 @@ public class Contract implements Serializable {
     private String returnTerms;
     private int deliveryLeadTime;
     private boolean automaticPurchase;
-    private int quotationIdReference;
+    private double price;
     
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy="contract")
-    private Collection<ContractItem> contractItem = new ArrayList<ContractItem>();
+    private boolean isDelete;
+    
     @ManyToOne
     private Supplier supplier = new Supplier();
+    @ManyToOne(cascade={CascadeType.ALL})
+    private Item item = new Item();
+    //private Set<Item> items = new HashSet<Item>();
+    @OneToOne(mappedBy="contract")
+    private Quotation quotation;
             
-    /*@Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContractItem)) {
-            return false;
-        }
-        ContractItem other = (ContractItem) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.ContractItem[ id=" + id + " ]";
-    }*/
-
+   
     /**
      * @return the contractItemId
      */
@@ -140,7 +121,7 @@ public class Contract implements Serializable {
     /**
      * @return the automaticPurchase
      */
-    public boolean isAutomaticPurchase() {
+    public boolean getAutomaticPurchase() {
         return automaticPurchase;
     }
 
@@ -149,34 +130,6 @@ public class Contract implements Serializable {
      */
     public void setAutomaticPurchase(boolean automaticPurchase) {
         this.automaticPurchase = automaticPurchase;
-    }
-
-    /**
-     * @return the quotationIdReference
-     */
-    public int getQuotationIdReference() {
-        return quotationIdReference;
-    }
-
-    /**
-     * @param quotationIdReference the quotationIdReference to set
-     */
-    public void setQuotationIdReference(int quotationIdReference) {
-        this.quotationIdReference = quotationIdReference;
-    }
-
-    /**
-     * @return the contractItem
-     */
-    public Collection<ContractItem> getContractItem() {
-        return contractItem;
-    }
-
-    /**
-     * @param contractItem the contractItem to set
-     */
-    public void setContractItem(Collection<ContractItem> contractItem) {
-        this.contractItem = contractItem;
     }
 
     /**
@@ -233,6 +186,62 @@ public class Contract implements Serializable {
      */
     public void setDeliveryLeadTime(int deliveryLeadTime) {
         this.deliveryLeadTime = deliveryLeadTime;
+    }
+
+    /**
+     * @return the price
+     */
+    public double getPrice() {
+        return price;
+    }
+
+    /**
+     * @param price the price to set
+     */
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    /**
+     * @return the item
+     */
+    public Item getItem() {
+        return item;
+    }
+
+    /**
+     * @param item the item to set
+     */
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    /**
+     * @return the quotation
+     */
+    public Quotation getQuotation() {
+        return quotation;
+    }
+
+    /**
+     * @param quotation the quotation to set
+     */
+    public void setQuotation(Quotation quotation) {
+        this.quotation = quotation;
+    }
+
+    /**
+     * @return the isDelete
+     */
+    public boolean isIsDelete() {
+        return isDelete;
+    }
+
+    /**
+     * @param isDelete the isDelete to set
+     */
+    public void setIsDelete(boolean isDelete) {
+        this.isDelete = isDelete;
     }
 
 }

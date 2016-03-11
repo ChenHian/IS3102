@@ -1,0 +1,272 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+          <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.purchasingModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+          <h:form id="viewPurchaseOrderForm" rendered="#{accessController.purchasingModuleAccess()}">
+
+            <p:tabView>
+                <p:tab title="Purchase Order with Open Status">
+                    <p:dataTable id="purchaseOrderDT" var="purchaseOrder" widgetVar="purchaseOrderTable" filteredValue="#{purchaseOrderDataTableBean.filteredPurchaseOrder}" value="#{purchaseOrderDataTableBean.purchaseOrder}" resizableColumns="true" style="margin-bottom:40px"
+                                 paginator="true" rows="20" emptyMessage="No Purchase Order" selectionMode="single" selection="#{purchaseOrderDataTableBean.selectedPurchaseOrder}" rowKey="#{purchaseOrder.purchaseOrderId}">
+
+                        <f:facet name="header">
+                                <p:outputPanel>
+                                    <p:inputText id="globalFilter" onkeyup="PF('purchaseOrderTable').filter()" style="width:150px" placeholder="Search keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+                        <p:column headerText="Id" filterBy="#{purchaseOrder.purchaseOrderId}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrder.purchaseOrderId}" />
+                        </p:column>
+                        <p:column headerText="Date Created" filterBy="#{purchaseOrder.dateCreated}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrder.dateCreated}" />
+                        </p:column>
+                        <p:column headerText="Centre" filterBy="#{purchaseOrder.deliverToCentreName}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrder.deliverToCentreName}" />
+                        </p:column>
+                        <p:column headerText="Item" filterBy="#{purchaseOrder.item.itemName}" filterStyle="display:none"> 
+                            <h:outputText value="#{purchaseOrder.item.itemName}" />
+                        </p:column>
+                        <p:column headerText="Quantity" filterBy="#{purchaseOrder.quantity}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrder.quantity}" />
+                        </p:column>
+                        <p:column headerText="Amount" filterBy="#{purchaseOrder.totalAmount}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrder.totalAmount}" />
+                        </p:column>
+                        <p:column headerText="Supplier" filterBy="#{purchaseOrder.supplier.companyName}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrder.supplier.companyName}" />
+                        </p:column>
+                        <p:column style="width:32px"> 
+                            <p:commandButton update=":viewPurchaseOrderForm:purchaseOrderDetail" icon="fa fa-fw fa-neuter" onclick="PF('purchaseOrderDialog').show() "/>
+                        </p:column>
+                        <p:column style="width:70px;text-align: center">
+                            <p:commandButton id="nonAjax" ajax="false" value="Void" actionListener="#{purchaseOrderDataTableBean.voidPurchaseOrderAction}"/> 
+                        </p:column> 
+
+                    </p:dataTable>
+                </p:tab>
+                <p:tab title="Purchase History">
+                    <p:dataTable id="purchaseOrderHDT" var="purchaseOrderH" widgetVar="purchaseOrderHTable" filteredValue="#{purchaseOrderDataTableBean.filteredPurchaseOrderH}" value="#{purchaseOrderDataTableBean.purchaseOrderH}" resizableColumns="true" style="margin-bottom:40px"
+                                 paginator="true" rows="20" emptyMessage="No Purchase Order" selectionMode="single" selection="#{purchaseOrderDataTableBean.selectedPurchaseOrderH}" rowKey="#{purchaseOrderH.purchaseOrderId}">
+
+                        <f:facet name="header">
+                                <p:outputPanel>
+                                    <p:inputText id="globalFilter" onkeyup="PF('purchaseOrderHTable').filter()" style="width:150px" placeholder="Search keyword"/>
+                                </p:outputPanel>
+                            </f:facet>
+                        <p:column headerText="Id" filterBy="#{purchaseOrderH.purchaseOrderId}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrderH.purchaseOrderId}" />
+                        </p:column>
+                        <p:column headerText="Date Created" filterBy="#{purchaseOrderH.dateCreated}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrderH.dateCreated}" />
+                        </p:column>
+                        <p:column headerText="Centre" filterBy="#{purchaseOrderH.deliverToCentreName}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrderH.deliverToCentreName}" />
+                        </p:column>
+                        <p:column headerText="Item" filterBy="#{purchaseOrderH.item.itemName}" filterStyle="display:none"> 
+                            <h:outputText value="#{purchaseOrderH.item.itemName}" />
+                        </p:column>
+                        <p:column headerText="Quantity" filterBy="#{purchaseOrderH.quantity}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrderH.quantity}" />
+                        </p:column>
+                        <p:column headerText="Amount" filterBy="#{purchaseOrderH.totalAmount}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrderH.totalAmount}" />
+                        </p:column>
+                        <p:column headerText="Supplier" filterBy="#{purchaseOrderH.supplier.companyName}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrderH.supplier.companyName}" />
+                        </p:column>
+                        <p:column headerText="Status" filterBy="#{purchaseOrderH.status}" filterStyle="display:none">
+                            <h:outputText value="#{purchaseOrderH.status}" />
+                        </p:column>
+                        <p:column style="width:32px"> 
+                            <p:commandButton update=":viewPurchaseOrderForm:purchaseOrderHDetail" icon="fa fa-fw fa-neuter" onclick="PF('purchaseOrderHDialog').show() "/>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:tab>
+            </p:tabView>    
+               
+            <p:dialog header="Purchase Order" widgetVar="purchaseOrderDialog" resizable="true" width="1000" height="600">
+                    <p:outputPanel id="purchaseOrderDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty purchaseOrderDataTableBean.selectedPurchaseOrder}" columnClasses="label,value">
+
+                            <h:outputText style="font-weight: bold;" value="Purchase Order Id:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.purchaseOrderId}" />
+
+                            <h:outputText style="font-weight: bold;" value="Date Created:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.dateCreated}" />
+
+                            <h:outputText style="font-weight: bold;" value="Center:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.deliverToCentreName}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Address:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.deliverToAddress}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Expected Delivery Date:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.expectedDeliveryDate}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Item:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.item.itemName}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Quantity:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.quantity}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Unit:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.item.itemType.measurementType}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Unit Price:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.unitPrice}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Total Amount:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.totalAmount}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Reference Type:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.documentReferenceType}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Reference Document Id:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.documentReferenceNumber}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Supplier:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.supplier.companyName}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Status:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.status}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Purchase Requisition Id:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.purchaseRequisition.purchaseRequisitionId}" />
+                        </p:panelGrid>
+                        
+                        <p:spacer width="0" height="20" />
+                            <p:dataTable id="BatchReceiptDT" var="batchReceipt" widgetVar="batchReceiptTable" value="#{purchaseOrderDataTableBean.selectedPurchaseOrder.batchReceipts}" resizableColumns="true" style="margin-bottom:40px"
+                                         paginator="true" rows="5" emptyMessage="No Batch Receipt" rowKey="#{batchReceipt.batchReceiptId}">
+                                <f:facet name="header">
+                                    <h:outputText value="Batch Receipt" />
+                                </f:facet>
+                                <p:column headerText="Id">
+                                    <h:outputText value="#{batchReceipt.batchReceiptId}" />
+                                </p:column>
+                                <p:column headerText="Batch no">
+                                    <h:outputText value="#{batchReceipt.batchNumber}" />
+                                </p:column>
+                                <p:column headerText="Date Received">
+                                    <h:outputText value="#{batchReceipt.dateReceived}" />
+                                </p:column>
+                                <p:column headerText="Center"> 
+                                    <h:outputText value="#{batchReceipt.centerName}" />
+                                </p:column>
+                                <p:column headerText="Quantity In">
+                                    <h:outputText value="#{batchReceipt.quantityIn}" />
+                                </p:column>
+                                <p:column headerText="Rejected">
+                                    <h:outputText value="#{batchReceipt.quantityRejected}" />
+                                </p:column>
+                                <p:column headerText="Expiry Date">
+                                    <h:outputText value="#{batchReceipt.expiryDate}" />
+                                </p:column>
+
+                            </p:dataTable>  
+
+                    </p:outputPanel>
+                </p:dialog>
+                <p:dialog header="Purchase Order" widgetVar="purchaseOrderHDialog" resizable="true" width="1000" height="600">
+                    <p:outputPanel id="purchaseOrderHDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty purchaseOrderDataTableBean.selectedPurchaseOrderH}" columnClasses="label,value">
+
+                            <h:outputText style="font-weight: bold;" value="Purchase Order Id:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.purchaseOrderId}" />
+
+                            <h:outputText style="font-weight: bold;" value="Date Created:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.dateCreated}" />
+
+                            <h:outputText style="font-weight: bold;" value="Center:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.deliverToCentreName}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Address:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.deliverToAddress}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Expected Delivery Date:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.expectedDeliveryDate}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Item:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.item.itemName}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Quantity:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.quantity}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Unit:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.item.itemType.measurementType}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Unit Price:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.unitPrice}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Total Amount:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.totalAmount}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Reference Type:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.documentReferenceType}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Reference Document Id:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.documentReferenceNumber}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Supplier:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.supplier.companyName}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Status:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.status}" />
+                            
+                            <h:outputText style="font-weight: bold;" value="Purchase Requisition Id:" />
+                            <h:outputText value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.purchaseRequisition.purchaseRequisitionId}" />
+                            
+                        </p:panelGrid>
+                        
+                            <p:spacer width="0" height="20" />
+                            <p:dataTable id="BatchReceiptHDT" var="batchReceiptH" widgetVar="batchReceiptHTable" value="#{purchaseOrderDataTableBean.selectedPurchaseOrderH.batchReceipts}" resizableColumns="true" style="margin-bottom:40px"
+                                         paginator="true" rows="5" emptyMessage="No Batch Receipt" rowKey="#{batchReceiptH.batchReceiptId}">
+                                <f:facet name="header">
+                                    <h:outputText value="Batch Receipt" />
+                                </f:facet>
+                                <p:column headerText="Id">
+                                    <h:outputText value="#{batchReceiptH.batchReceiptId}" />
+                                </p:column>
+                                <p:column headerText="Batch no">
+                                    <h:outputText value="#{batchReceiptH.batchNumber}" />
+                                </p:column>
+                                <p:column headerText="Date Received">
+                                    <h:outputText value="#{batchReceiptH.dateReceived}" />
+                                </p:column>
+                                <p:column headerText="Center"> 
+                                    <h:outputText value="#{batchReceiptH.centerName}" />
+                                </p:column>
+                                <p:column headerText="Quantity In">
+                                    <h:outputText value="#{batchReceiptH.quantityIn}" />
+                                </p:column>
+                                <p:column headerText="Rejected">
+                                    <h:outputText value="#{batchReceiptH.quantityRejected}" />
+                                </p:column>
+                                <p:column headerText="Expiry Date">
+                                    <h:outputText value="#{batchReceiptH.expiryDate}" />
+                                </p:column>
+
+                            </p:dataTable>     
+
+                    </p:outputPanel>
+                </p:dialog>
+
+
+
+        </h:form>
+    </ui:define>
+   
+
+</ui:composition>

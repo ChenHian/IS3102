@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="formMain">
+            <p:panel id="panel" header="Create New Purchase Requisition (PR)">
+                <h:panelGrid columns="2" cellpadding="10" style="margin-left: 100px; width: 60%">
+
+                    <p:outputLabel for="german" value="Date Created: " />
+                    <p:calendar id="german" value="#{PRManageBean.dateCreated2}" locale="de" navigator="true" pattern="dd/MM/yyyy" />
+
+                    <p:outputLabel for="german2" value="Date Request: " />
+                    <p:calendar id="german2" value="#{PRManageBean.dateRequest2}" locale="de" navigator="true" pattern="dd/MM/yyyy" readonlyInput="true" mindate="#{PRManageBean.todayDate}"/>
+
+                    <p:outputLabel for="DCName" value="Select DC: " />
+                    <p:selectOneMenu id="DCName" value="#{PRManageBean.selectedCenterName}" style="width:150px" required ="true">
+                        <f:selectItem itemLabel="Select a DC Name" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value= "#{PRManageBean.allDistributioncenterNames.entrySet()}" var="dc"
+                                       itemValue="#{dc.key}" itemLabel="#{dc.value}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="ItemName" value="Select Item Name: " />
+                    <p:selectOneMenu id="ItemName" value="#{PRManageBean.selectedItemName}" style="width:150px" required ="true">
+                        <f:selectItem itemLabel="Select a Item Name" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value= "#{PRManageBean.allItemName.entrySet()}" var="item"
+                                       itemValue="#{item.key}" itemLabel="#{item.value}" />
+                    </p:selectOneMenu>
+                    <p:outputLabel for="quantityRequested" style="fontweight:bold" value="Quantity Requested: " />
+                    <p:inputText required="true" label="quantityRequested:" requiredMessage="Quantity Requested is required." id="quantityRequested" value="#{PRManageBean.quantityRequested}">
+                    </p:inputText>
+                    <p:outputLabel for="status" style="fontweight:bold" value="Status: " />
+                    <p:inputText required="true" label="Status" requiredMessage="Status is required." id="status" value="#{PRManageBean.status}">
+                    </p:inputText>
+                    <p:spacer/>
+                    <p:spacer/>
+                    <p:spacer/>    
+                    <f:facet name="footer">
+                        <p:commandButton id="btn" value="Save Purchase Requisition" action = "/warehouse/viewAllPurchaseRequisition" update="panel" actionListener="#{PRManageBean.createPR}" ajax="false"/>
+                    </f:facet>
+                </h:panelGrid>        
+            </p:panel> 
+        </h:form>
+    </ui:define> 
+
+    <ui:define name ="left">
+        <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                <p:menuitem value="Logout" action="/Login.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="View All Staff Accounts" action="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
+            </p:menu>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

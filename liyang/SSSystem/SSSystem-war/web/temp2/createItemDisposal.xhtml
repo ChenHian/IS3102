@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="createBatchOutform">
+            <h:inputHidden value ="#{BRManageBean.selectedBRId}"/>
+            <f:metadata>
+                <f:viewParam name="SelectedBRId" value = "#{BRManageBean.selectedBRId}"/>
+                <f:viewParam name="SelectedBRitemName" value="#{BRManageBean.selectedBRitemName}"/>
+                <f:viewParam name="SelectedBatchNumber" value="#{BRManageBean.selectedBatchNumber}"/>
+                <f:viewParam name="SelectedAvailableQuantity" value="#{BRManageBean.selectedAvailableQuantity}"/>  
+            </f:metadata>
+            <p:panel id="panel" header="Create New Batch Out (BO)"> 
+                <h:panelGrid columns="2" cellpadding="10" style="margin-left: 100px; width: 60%">               
+                    <h:outputLabel for="selectedItemName" value="Item Name: " style="font-weight:bold" />
+                    <h:outputText id ="selectedItemName" value = "#{BRManageBean.selectedBRitemName}"/>
+
+                    <h:outputLabel for="selectedBatchNumber" value="Batch Number: " style="font-weight:bold" />
+                    <h:outputText id ="selectedBatchNumber" value = "#{BRManageBean.selectedBatchNumber}"/>
+
+                    <h:outputLabel for="selectedBRavailableQuantity" value="Available Quantity: " style="font-weight:bold" />
+                    <h:outputText id ="selectedBRavailableQuantity" value = "#{BRManageBean.selectedAvailableQuantity}"/>
+
+                    <p:outputLabel for="german" value="Disposal Date: " />
+                    <p:calendar id="german" value="#{BRManageBean.disposalDate2}" locale="de" navigator="true" pattern="dd/MM/yyyy" />
+
+                    <p:outputLabel for="disposedQuantity" style="fontweight:bold" value="Disposal Quantity: " />
+                    <p:inputText required="true" label="disposedQuantity:" requiredMessage="Disposed Quantity is required." id="disposedQuantity" value="#{BRManageBean.disposedQuantity}"/>
+
+                    <p:outputLabel for="reasonForDisposal" style="fontweight:bold" value="Reason For Disposal: " />
+                    <p:inputTextarea rows="6" cols="33" label="reasonForDisposal:" requiredMessage="Reason For Disposal is required." id="reasonForDisposal" value="#{BRManageBean.reasonForDisposal}"/>                            
+                    <p:spacer/>
+                    <p:spacer/>
+                    <p:spacer/>    
+                    <f:facet name="footer">
+                        <p:commandButton id="btn" update="panel" value ="Save Batch Out Record"  action = "/warehouse/viewAllItemDisposal" actionListener="#{BRManageBean.createItemDisposal}" ajax="false">  
+                        </p:commandButton>
+                    </f:facet>
+                </h:panelGrid>        
+            </p:panel> 
+        </h:form>
+    </ui:define> 
+
+    <ui:define name ="left">
+        <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                <p:menuitem value="Logout" action="/Login.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="View All Staff Accounts" action="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
+            </p:menu>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

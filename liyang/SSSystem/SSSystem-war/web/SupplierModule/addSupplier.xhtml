@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        
+        
+         <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.supplierManagementModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+        
+         <h:form id="addSupplierForm" rendered="#{accessController.supplierManagementModuleAccess()}">
+            
+
+            <p:panel header="Add Supplier">
+                
+                <h:panelGrid columns="2" style="margin-bottom:40px"> 
+                    <h:outputLabel for="companyName" value="Company Name: " style="font-weight:bold" />
+                    <p:inputText id="companyName" value="#{supplierDataTableBean.newCompanyName}" required="true"/>
+
+                    <h:outputLabel for="email" value="Email: " style="font-weight:bold" />
+                    <p:inputText id="email" value="#{supplierDataTableBean.newEmail}" required="true" validator="#{supplierDataTableBean.isEmailValid}"/>
+
+                    <h:outputLabel for="address" value="Address: " style="font-weight:bold" />
+                    <p:inputText id="address" value="#{supplierDataTableBean.newAddress}" required="true"/>
+                    
+                    <h:outputLabel for="contactPerson" value="Contact Person: " style="font-weight:bold" />
+                    <p:inputText id="contactPerson" value="#{supplierDataTableBean.newContactPerson}" required="true"  />
+                    
+                    <h:outputLabel for="contactNumber" value="Contact Number: " style="font-weight:bold" />
+                    <p:inputText id="contactNumber" value="#{supplierDataTableBean.newContactNumber}" required="true">
+                                 <f:validateLength minimum="8" maximum="8"/> 
+                    </p:inputText>
+                </h:panelGrid>
+                
+                <p:commandButton value="Add" id="nonAjax" action ="/SupplierModule/viewSuppliers" ajax="false" actionListener="#{supplierDataTableBean.addSupplierAction}" />
+                <p:spacer width="20" height="20" />
+                <p:button outcome="viewSuppliers" value="View Supplier List" icon="ui-icon-search"></p:button>
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+    
+    
+
+</ui:composition>

@@ -40,7 +40,7 @@ public class IdleMonitorView {
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             request.getSession().invalidate();
             try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("timeout.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/SSSystem-war/timeout.xhtml");
             }
             catch(Exception ex) {
                 ex.printStackTrace();

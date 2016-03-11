@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="viewLateDeliveryForm">
+
+            <p:panel header="View All Late Delivery">
+                <p:dataTable id="purchaseOrderDT" var="purchaseOrder" value="#{purchasingDataTableBean.purchaseOrder}"  widgetVar="purchaseOrderTable" filteredValue="#{purchasingDataTableBean.filteredPurchaseOrder}" resizableColumns="false" style="margin-bottom:40px"
+                             paginator="true" rows="20" emptyMessage="No purchaseOrder" selectionMode="single" selection="#{purchasingDataTableBean.selectedPurchaseOrder}" rowKey="#{purchaseOrder.purchaseOrderId}">
+
+                    <p:ajax event="rowSelect" update=":viewLateDeliveryForm:purchaseOrderDT"/>
+                    
+                    <f:facet name="header">
+                       <p:outputPanel>
+                         <h:outputText value="Search all fields:" />
+                         <p:inputText id="globalFilter" onkeyup="PF('purchaseOrderTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                       </p:outputPanel>
+                    </f:facet>
+                    <p:column headerText="Purchase Order Number" filterBy="#{purchaseOrder.purchaseOrderId}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{purchaseOrder.purchaseOrderId}" />
+                     </p:column>
+                    <p:column headerText="Supplier" filterBy="#{purchaseOrder.supplier.companyName}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{purchaseOrder.supplier.companyName}" />
+                    </p:column>
+                    <p:column headerText="Contact Person" filterBy="#{purchaseOrder.supplier.contactPerson}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{purchaseOrder.supplier.contactPerson}" />
+                    </p:column>
+                    <p:column headerText="Contact Number" filterBy="#{purchaseOrder.supplier.contactNumber}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{purchaseOrder.supplier.contactNumber}" />
+                    </p:column>
+                    <p:column headerText="Expected Delivery Date" filterBy="#{purchaseOrder.expectedDeliveryDate}" filterStyle="display:none"  filterMatchMode="contains"> 
+                        <h:outputText value="#{purchaseOrder.expectedDeliveryDate}" />
+                    </p:column>
+                    
+                    
+                    <p:column style="width:32px">
+                        
+                    <p:commandButton  process="purchaseOrderDT" update=":viewLateDeliveryForm:purchaseOrderDetail" oncomplete="PF('purchaseOrderDialog').show()" icon="fa fa-fw fa-neuter">
+                    <f:setPropertyActionListener value="#{purchaseOrder}" target="#{purchasingDataTableBean.selectedPurchaseOrder}" />
+                    </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                
+
+                <p:dialog header="Late Delivery Profile" widgetVar="purchaseOrderDialog" resizable="true" width="380" style="font-size: 200%">
+                    <p:outputPanel id="purchaseOrderDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty purchasingDataTableBean.selectedPurchaseOrder}" columnClasses="label,value">
+
+                        <h:outputText value="Purchase Order Number:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.purchaseOrderId}" style="font-size: 200%"/>
+
+                        <h:outputText value="Supplier:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.supplier.companyName}" style="font-size: 200%"/>
+                        
+                        <h:outputText value="Contact Person:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.supplier.contactPerson}" style="font-size: 200%"/>
+                        
+                        <h:outputText value="Contact Number:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.supplier.contactNumber}" style="font-size: 200%"/>
+                        
+                        <h:outputText value="Expected Delivery Date:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.expectedDeliveryDate}" style="font-size: 200%"/>
+                        
+                        <h:outputText value="Date Created:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.dateCreated}" style="font-size: 200%"/>
+                        
+                        <h:outputText value="Document Reference Type:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.documentReferenceType}" style="font-size: 200%"/>
+                        
+                        <h:outputText value="Document Reference Number:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.documentReferenceNumber}" style="font-size: 200%"/>
+                        
+                        <h:outputText value="Total Amount:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.totalAmount}" style="font-size: 200%"/>
+                        
+                        <h:outputText value="Deliver To Address:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.deliverToAddress}" style="font-size: 200%"/>
+                        
+                        <h:outputText value="Deliver To Centre Name:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.deliverToCentreName}" style="font-size: 200%"/>
+                        
+                        <h:outputText value="Unit Price:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.unitPrice}" style="font-size: 200%"/>
+                        
+                        <h:outputText value="Quantity:" style="font-size: 200%"/>
+                        <h:outputText value="#{purchasingDataTableBean.selectedPurchaseOrder.quantity}" style="font-size: 200%"/>
+                    </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+                    
+                    
+                
+            </p:panel>
+        </h:form>
+    </ui:define>
+  
+    
+    
+
+</ui:composition>
+

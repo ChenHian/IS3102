@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        
+        <h:form id="accessError" rendered="#{!accessController.purchasingContractModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        <h:form id="addContractForm" rendered="#{accessController.purchasingContractModuleAccess()}">
+            <p:panel header="Add Contract">
+                <h:panelGrid columns="2" style="margin-bottom:40px"> 
+                    <h:outputLabel for="contractStartDate" value="Contract Start Date: " style="font-weight:bold" />
+                    <p:calendar id="contractStartDate" value="#{contractDataTableBean.newContractStartDate}" required="true"
+                                requiredMessage="Start date is required" mindate="#{contractDataTableBean.todayDate}"
+                                readonlyInput="true" label="Start Date"
+                                navigator="true" pattern="dd/MM/yyyy">
+                    <p:ajax event="dateSelect" update="contractEndDate" global="false"/>
+                    <p:ajax event="change" update="contractEndDate" global="false"/>
+                    </p:calendar>
+                    
+                    <h:outputLabel for="contractEndDate" value="Contract End Date: " style="font-weight:bold" />
+                    <p:calendar id="contractEndDate" value="#{contractDataTableBean.newContractEndDate}" required="true"
+                                requiredMessage="End date is required" mindate="#{contractDataTableBean.newContractStartDate}"
+                                readonlyInput="true" label="End Date"
+                                navigator="true" pattern="dd/MM/yyyy"/>
+                    
+                    <h:outputLabel for="paymentTerms" value="Payment Terms: " style="font-weight:bold" />
+                    <p:inputTextarea rows="6" cols="33" id="paymentTerms" value="#{contractDataTableBean.newPaymentTerms}" required="true"/>
+                    
+                    <h:outputLabel for="deliveryTerms" value="Delivery Terms: " style="font-weight:bold" />
+                    <p:inputTextarea rows="6" cols="33" id="deliveryTerms" value="#{contractDataTableBean.newDeliveryTerms}" required="true" />
+                    
+                    <h:outputLabel for="purchaseTerms" value="Purchase Terms: " style="font-weight:bold" />
+                    <p:inputTextarea rows="6" cols="33" id="purchaseTerms" value="#{contractDataTableBean.newPurchaseTerms}" required="true"/>
+                    
+                    <h:outputLabel for="returnTerms" value="Return Terms: " style="font-weight:bold" />
+                    <p:inputTextarea rows="6" cols="33" id="returnTerms" value="#{contractDataTableBean.newReturnTerms}" required="true"/>
+                    
+                    <h:outputLabel for="deliveryLeadTime" value="Delivery Lead Time (Days): " style="font-weight:bold" />
+                    <p:inputText id="deliveryLeadTime" value="#{contractDataTableBean.newDeliveryLeadTime}" required="true"/>
+                    
+                    <h:outputLabel for="automaticPurchase" value="Automatic Purchase: " style="font-weight:bold" />
+                    <p:inputSwitch id="automaticPurchase" value="#{contractDataTableBean.newAutomaticPurchase}" required="true"/>
+                    
+                    <h:outputLabel for="price" value="Price ($): " style="font-weight:bold" />
+                    <p:inputText id="price" value="#{contractDataTableBean.newPrice}" required="true"/>
+                    
+                    <h:outputLabel for="itemType" value="Item Type: " style="font-weight:bold" />
+                    <p:selectOneMenu id="itemType" required="true" requiredMessage="Item type is required" 
+                                     value="#{contractDataTableBean.itemTypeId}" style="width:150px">
+                        <p:ajax event="change" update="item" listener="#{contractDataTableBean.handleItemTypeChange}" />
+                        <f:selectItem itemLabel="Select Item Type" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{contractDataTableBean.itemTypes.entrySet()}" var="type"
+                                       itemLabel="#{type.value}" itemValue="#{type.key}" />
+                    </p:selectOneMenu>
+                    
+                    <h:outputLabel for="item" value="Item Name: " style="font-weight:bold" />
+                    <p:selectOneMenu id="item" required="true"  requiredMessage="Supplier is required"  
+                                      value="#{contractDataTableBean.itemm}" style="width:150px">
+                            <f:selectItem itemLabel="Select Item Name" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{contractDataTableBean.items.entrySet()}" var="itemm" itemLabel="#{itemm.value}" itemValue="#{itemm.key}" />
+                    </p:selectOneMenu>
+                    
+                    <h:outputLabel for="supplierIdContract" value="Company Name:" style="font-weight:bold" />
+                    <p:selectOneMenu id="supplierIdContract" value="#{contractDataTableBean.supplierIdContract}" style="width:150px">
+                        <f:selectItem itemLabel="Select Company Name" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value= "#{contractDataTableBean.supplierBasicList.entrySet()}" var="sup"
+                                    itemValue="#{sup.key}" itemLabel="#{sup.value}" />
+                    </p:selectOneMenu>
+             
+                </h:panelGrid>
+                
+                <p:commandButton value="Add" icon="fa fa-plus" id="nonAjax" action ="/PurchaseContractModule/viewContract" ajax="false" actionListener="#{contractDataTableBean.addContractAction}" />
+                <p:spacer width="20" height="20" />
+                <p:button outcome="viewContract" value="View Contract List" icon="fa fa-fw fa-neuter"></p:button>
+
+            </p:panel>
+
+
+            
+                    
+
+        </h:form>
+    </ui:define>
+    
+
+</ui:composition>
+

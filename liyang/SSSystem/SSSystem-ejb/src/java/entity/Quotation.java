@@ -7,15 +7,13 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -29,7 +27,7 @@ public class Quotation implements Serializable {
     private Long quotationId;
     private Long requestForQuotationId;
     private String status;
-    private String approvedBy;
+    private Long approvedBy;
     private int deliveryLeadTime;
     private Date validStartDate;
     private Date validEndDate;
@@ -38,11 +36,14 @@ public class Quotation implements Serializable {
     private String deliveryTerms;
     private String returnTerms;
     private Date dateSubmitted;
-    private String acceptedBy;
+    private Long acceptedBy;
+    private double price;
     @ManyToOne
     private Supplier supplier = new Supplier();
-    @OneToMany(cascade={CascadeType.ALL}, mappedBy="quotation")
-    private Collection<QuotationItem> quotationItems = new ArrayList<QuotationItem>();
+    @ManyToOne
+    private Item item = new Item();
+    @OneToOne(cascade={CascadeType.ALL})
+    private Contract contract;
 
     /*@Override
     public int hashCode() {
@@ -114,14 +115,14 @@ public class Quotation implements Serializable {
     /**
      * @return the approvedBy
      */
-    public String getApprovedBy() {
+    public Long getApprovedBy() {
         return approvedBy;
     }
 
     /**
      * @param approvedBy the approvedBy to set
      */
-    public void setApprovedBy(String approvedBy) {
+    public void setApprovedBy(Long approvedBy) {
         this.approvedBy = approvedBy;
     }
 
@@ -184,14 +185,14 @@ public class Quotation implements Serializable {
     /**
      * @return the acceptedBy
      */
-    public String getAcceptedBy() {
+    public Long getAcceptedBy() {
         return acceptedBy;
     }
 
     /**
      * @param acceptedBy the acceptedBy to set
      */
-    public void setAcceptedBy(String acceptedBy) {
+    public void setAcceptedBy(Long acceptedBy) {
         this.acceptedBy = acceptedBy;
     }
 
@@ -207,20 +208,6 @@ public class Quotation implements Serializable {
      */
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
-    }
-
-    /**
-     * @return the quotationItems
-     */
-    public Collection<QuotationItem> getQuotationItems() {
-        return quotationItems;
-    }
-
-    /**
-     * @param quotationItems the quotationItems to set
-     */
-    public void setQuotationItems(Collection<QuotationItem> quotationItems) {
-        this.quotationItems = quotationItems;
     }
 
     /**
@@ -277,6 +264,48 @@ public class Quotation implements Serializable {
      */
     public void setDeliveryLeadTime(int deliveryLeadTime) {
         this.deliveryLeadTime = deliveryLeadTime;
+    }
+
+    /**
+     * @return the price
+     */
+    public double getPrice() {
+        return price;
+    }
+
+    /**
+     * @param price the price to set
+     */
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    /**
+     * @return the item
+     */
+    public Item getItem() {
+        return item;
+    }
+
+    /**
+     * @param item the item to set
+     */
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    /**
+     * @return the contract
+     */
+    public Contract getContract() {
+        return contract;
+    }
+
+    /**
+     * @param contract the contract to set
+     */
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
     
 }

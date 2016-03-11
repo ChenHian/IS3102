@@ -7,7 +7,15 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h:form id="viewBrandForm">
+        
+        <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.itemManagementModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+        <h:form id="viewBrandForm" rendered="#{accessController.itemManagementModuleAccess()}">
 
             <p:panel header="View All Brand">
                 <p:dataTable id="brandDT" var="brand" value="#{itemDataTableBean.brand}"  widgetVar="brandTable" filteredValue="#{itemDataTableBean.filteredBrand}" resizableColumns="true" style="margin-bottom:40px"
@@ -55,18 +63,18 @@
                      </p:button>
 
 
-                    <p:dialog header="Brand Profile" widgetVar="brandDialog" resizable="true">
+                    <p:dialog header="Brand Profile" widgetVar="brandDialog" resizable="true" style = "font-size:200%">
                     <p:outputPanel id="brandDetail" style="text-align:center;">
                         <p:panelGrid  columns="2" rendered="#{not empty itemDataTableBean.selectedBrand}" columnClasses="label,value">
 
-                        <h:outputText value="Brand ID:" />
-                        <h:outputText value="#{itemDataTableBean.selectedBrand.brandId}" />
+                        <h:outputText value="Brand ID:" style="font-size: 200%"/>
+                        <h:outputText value="#{itemDataTableBean.selectedBrand.brandId}" style="font-size: 200%"/>
                         
-                        <h:outputText value="Brand Name:" />
-                        <h:outputText value="#{itemDataTableBean.selectedBrand.brandName}" />
+                        <h:outputText value="Brand Name:" style="font-size: 200%"/>
+                        <h:outputText value="#{itemDataTableBean.selectedBrand.brandName}" style="font-size: 200%"/>
                         
-                        <h:outputText value="Brand Description:" />
-                        <h:outputText value="#{itemDataTableBean.selectedBrand.brandDescription}" />
+                        <h:outputText value="Brand Description:" style="font-size: 200%"/>
+                        <h:outputText value="#{itemDataTableBean.selectedBrand.brandDescription}" style="font-size: 200%"/>
                     </p:panelGrid>
                     </p:outputPanel>
                 </p:dialog>
@@ -78,87 +86,7 @@
     </ui:define>
     
     
-        
-    <!--Left drop down menu, edit for all .xhtml pages if changed-->
-    <ui:define name="left">
-<h:form>
-    <p:growl autoUpdate="true"/>
-            <p:growl id="messages" /> 
-            <p:menu style="width:95%" >
-            <p:menuitem value="Home" outcome="/admin/adminHome" icon="ui-icon-home"/>    
-            <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
-            </p:menu>
- 
- 
-    
-   
-    <!--Module menu--> 
-    <p:panelMenu style="width:300px">
-        
-        <p:submenu label="Notification Module" rendered = "#{accessController.notificationModuleAccess()}">
-            
-            <p:menuitem value="View Notifications" outcome="/NotificationModule/viewAllNotifications" icon="ui-icon-search"/>
-            <p:menuitem value="Send Notification" outcome="/NotificationModule/sendNotification" icon="ui-icon-wrench"/>
 
-        </p:submenu>
-        
-        
-        <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
-            
-            <p:menuitem value="Edit Account Particulars" outcome="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
-            <p:menuitem value="Change Password" outcome="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
-
-        </p:submenu>
-        
-        <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
-            
-            <p:menuitem value="View All Roles" outcome="/UserAccessControlModule/viewAllRoles" icon="ui-icon-search"/>
-            <p:menuitem value="Add New Role" outcome="/UserAccessControlModule/addNewRole" icon="ui-icon-plus"/>
-            <p:menuitem value="View All Privileges" outcome="/UserAccessControlModule/viewAllPrivileges" icon="ui-icon-search"/>
-        </p:submenu>
-        
-        <p:submenu label="Account Administration Module" rendered = "#{accessController.accountAdministrationModuleAccess()}">
-            
-            <p:menuitem value="View All Staff Accounts" outcome="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
-            <p:menuitem value="Add New Account" outcome="/AccountAdministrationModule/addNewStaffAccount" icon="ui-icon-plus"/>
-        </p:submenu>
-        
-        <p:submenu label="Purchasing Request Module Dummy" rendered = "#{accessController.purchasingRequestModuleAccess()}" >
-            <p:menuitem value="Dummy, do not use" action ="/login.xhtml"  ajax="false" icon="ui-icon-close"/>
-        </p:submenu>
-        
-        <p:submenu label="Item Management Module" rendered = "#{accessController.itemManagementModuleAccess()}">
-            
-            <p:menuitem value="View All Distribution Centers" outcome="/ItemManagementModule/viewAllDC" icon="ui-icon-search"/>
-            <p:menuitem value="Create Batch Receipt" outcome="/ItemManagementModule/createBatchReceipt" icon="ui-icon-plus"/>
-            <p:menuitem value="View Batch Receipts" outcome="/ItemManagementModule/viewAllBR" icon="ui-icon-search"/>
-            <p:menuitem value="View/Edit Warehouse Inventory" outcome="/ItemManagementModule/viewWarehouseInventory" icon="ui-icon-plus"/>
-            <p:menuitem value="Add Item to Warehouse" outcome="/ItemManagementModule/addWarehouseInventory" icon="ui-icon-plus"/>
-            <p:menuitem value="Redelivery" outcome="/ItemManagementModule/redeliveryDoc" icon="ui-icon-search"/>
-            <p:menuitem value="View Brand" outcome="/ItemManagementModule/viewBrand" icon="ui-icon-search"/>
-            <p:menuitem value="View Items" outcome="/ItemManagementModule/viewItems" icon="ui-icon-search"/>
-            <p:menuitem value="View Item Type" outcome="/ItemManagementModule/viewItemType" icon="ui-icon-search"/>
-            
-        </p:submenu>
-        
-        
-        <p:submenu label="Purchase Management Module" rendered = "#{accessController.purchaseManagementModuleAccess()}">
-
-            <p:menuitem value="Create Purchase Requisition" outcome="/PurchaseManagementModule/createPR" icon="ui-icon-plus"/>           
-            <p:menuitem value="View Purchase Requisitions" outcome="/PurchaseManagementModule/viewAllPR" icon="ui-icon-search"/>
-            
-        </p:submenu>
-        <p:separator />
-       
-        
-    </p:panelMenu>
-            </h:form>
-      </ui:define>
-    <!--Left drop down menu end-->
-
-
-    
-    
 
 </ui:composition>
 

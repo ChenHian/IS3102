@@ -26,7 +26,12 @@
         
         <navigation-case>
             <from-outcome>failure</from-outcome>
-            <to-view-id>resetPassword.xhtml</to-view-id>
+            <to-view-id>resetPasswordFailure.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>sendFailure</from-outcome>
+            <to-view-id>resetPasswordFailure.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     

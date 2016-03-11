@@ -7,32 +7,39 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h:form id="addItemForm">
+        
+        <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.itemManagementModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+        <h:form id="addItemForm" rendered="#{accessController.itemManagementModuleAccess()}">
             <p:panel header="Add Item">
                 
                 <h:panelGrid columns="2" style="margin-bottom:40px"> 
                     <h:outputLabel for="itemName" value="Item Name: " style="font-weight:bold" />
-                    <p:inputText id="itemName" value="#{itemDataTableBean.newItemName}" />
+                    <p:inputText id="itemName" value="#{itemDataTableBean.newItemName}" required="true" />
                     
                     <h:outputLabel for="itemDescription" value="Item Description: " style="font-weight:bold" />
-                    <p:inputText id="itemDescription" value="#{itemDataTableBean.newItemDescription}" />
-                  
+                    <p:inputTextarea rows="6" cols="33" id="itemDescription" value="#{itemDataTableBean.newItemDescription}" required="true"/>
+                   
                     <h:outputLabel for="itemReturnable" value="Item Returnable: " style="font-weight:bold" />
-                    
-                    <p:selectBooleanCheckbox value="#{itemDataTableBean.newItemReturnable}" />
+                    <p:inputSwitch id="itemReturnable" value="#{itemDataTableBean.newItemReturnable}" required="true"/>
                     
                     <h:outputLabel for="returnablePeriod" value="Returnable Period: " style="font-weight:bold" />
-                    <p:inputText id="returnablePeriod" value="#{itemDataTableBean.newReturnablePeriod}" />
+                    <p:inputText id="returnablePeriod" value="#{itemDataTableBean.newReturnablePeriod}" required="true"/>
                     
                     <h:outputLabel for="brandIdItem" value="Brand Name: " style="font-weight:bold" />
-                    <p:selectOneMenu id="brandIdItem" value="#{itemDataTableBean.brandIdItem}" style="width:150px">
+                    <p:selectOneMenu id="brandIdItem" value="#{itemDataTableBean.brandIdItem}" style="width:150px" required="true">
                         <f:selectItem itemLabel="Select Brand Name" itemValue="" noSelectionOption="true" />
-                        <f:selectItems value= "#{itemDataTableBean.brandBasicList.entrySet()}" var="itemm"
+                        <f:selectItems value= "#{itemDataTableBean.brandActiveList.entrySet()}" var="itemm"
                                     itemValue="#{itemm.key}" itemLabel="#{itemm.value}" />
                     </p:selectOneMenu>
                     
                     <h:outputLabel for="itemTypeIdItem" value="Item Type: " style="font-weight:bold" />
-                    <p:selectOneMenu id="itemTypeIdItem" value="#{itemDataTableBean.itemTypeIdItem}" style="width:150px">
+                    <p:selectOneMenu id="itemTypeIdItem" value="#{itemDataTableBean.itemTypeIdItem}" style="width:150px" required="true">
                         <f:selectItem itemLabel="Select Item Type" itemValue="" noSelectionOption="true" />
                         <f:selectItems value= "#{itemDataTableBean.itemTypeBasicList.entrySet()}" var="itemmm"
                                     itemValue="#{itemmm.key}" itemLabel="#{itemmm.value}" />
@@ -53,86 +60,8 @@
         </h:form>
     </ui:define>
     
-        
-    <!--Left drop down menu, edit for all .xhtml pages if changed-->
-    <ui:define name="left">
-<h:form>
-    <p:growl autoUpdate="true"/>
-            <p:growl id="messages" /> 
-            <p:menu style="width:95%" >
-            <p:menuitem value="Home" outcome="/admin/adminHome" icon="ui-icon-home"/>    
-            <p:menuitem value="Logout" action="#{loginController.logout}" icon="ui-icon-power"/>
-            </p:menu>
- 
- 
     
-   
-    <!--Module menu--> 
-    <p:panelMenu style="width:300px">
-        
-        <p:submenu label="Notification Module" rendered = "#{accessController.notificationModuleAccess()}">
-            
-            <p:menuitem value="View Notifications" outcome="/NotificationModule/viewAllNotifications" icon="ui-icon-search"/>
-            <p:menuitem value="Send Notification" outcome="/NotificationModule/sendNotification" icon="ui-icon-wrench"/>
 
-        </p:submenu>
-        
-        
-        <p:submenu label="User Account Management Module" rendered = "#{accessController.userAccountManagementModuleAccess()}">
-            
-            <p:menuitem value="Edit Account Particulars" outcome="/UserAccountManagementModule/editAccountParticulars" icon="ui-icon-wrench"/>
-            <p:menuitem value="Change Password" outcome="/UserAccountManagementModule/changePassword" icon="ui-icon-wrench"/>
-
-        </p:submenu>
-        
-        <p:submenu label="User Access Control Module" rendered = "#{accessController.userAccessControlModuleAccess()}">
-            
-            <p:menuitem value="View All Roles" outcome="/UserAccessControlModule/viewAllRoles" icon="ui-icon-search"/>
-            <p:menuitem value="Add New Role" outcome="/UserAccessControlModule/addNewRole" icon="ui-icon-plus"/>
-            <p:menuitem value="View All Privileges" outcome="/UserAccessControlModule/viewAllPrivileges" icon="ui-icon-search"/>
-        </p:submenu>
-        
-        <p:submenu label="Account Administration Module" rendered = "#{accessController.accountAdministrationModuleAccess()}">
-            
-            <p:menuitem value="View All Staff Accounts" outcome="/AccountAdministrationModule/viewAllStaffAccounts" icon="ui-icon-search"/>
-            <p:menuitem value="Add New Account" outcome="/AccountAdministrationModule/addNewStaffAccount" icon="ui-icon-plus"/>
-        </p:submenu>
-        
-        <p:submenu label="Purchasing Request Module Dummy" rendered = "#{accessController.purchasingRequestModuleAccess()}" >
-            <p:menuitem value="Dummy, do not use" action ="/login.xhtml"  ajax="false" icon="ui-icon-close"/>
-        </p:submenu>
-        
-        <p:submenu label="Item Management Module" rendered = "#{accessController.itemManagementModuleAccess()}">
-            
-            <p:menuitem value="View All Distribution Centers" outcome="/ItemManagementModule/viewAllDC" icon="ui-icon-search"/>
-            <p:menuitem value="Create Batch Receipt" outcome="/ItemManagementModule/createBatchReceipt" icon="ui-icon-plus"/>
-            <p:menuitem value="View Batch Receipts" outcome="/ItemManagementModule/viewAllBR" icon="ui-icon-search"/>
-            <p:menuitem value="View/Edit Warehouse Inventory" outcome="/ItemManagementModule/viewWarehouseInventory" icon="ui-icon-plus"/>
-            <p:menuitem value="Add Item to Warehouse" outcome="/ItemManagementModule/addWarehouseInventory" icon="ui-icon-plus"/>
-            <p:menuitem value="Redelivery" outcome="/ItemManagementModule/redeliveryDoc" icon="ui-icon-search"/>
-            <p:menuitem value="View Brand" outcome="/ItemManagementModule/viewBrand" icon="ui-icon-search"/>
-            <p:menuitem value="View Items" outcome="/ItemManagementModule/viewItems" icon="ui-icon-search"/>
-            <p:menuitem value="View Item Type" outcome="/ItemManagementModule/viewItemType" icon="ui-icon-search"/>
-            
-        </p:submenu>
-        
-        
-        <p:submenu label="Purchase Management Module" rendered = "#{accessController.purchaseManagementModuleAccess()}">
-
-            <p:menuitem value="Create Purchase Requisition" outcome="/PurchaseManagementModule/createPR" icon="ui-icon-plus"/>           
-            <p:menuitem value="View Purchase Requisitions" outcome="/PurchaseManagementModule/viewAllPR" icon="ui-icon-search"/>
-            
-        </p:submenu>
-        <p:separator />
-       
-        
-    </p:panelMenu>
-            </h:form>
-      </ui:define>
-    <!--Left drop down menu end-->
-
-
-    
     
 
 

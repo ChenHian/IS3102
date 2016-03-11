@@ -79,8 +79,12 @@ public class NotificationSessionBean implements NotificationSessionBeanLocal {
         return q.getResultList();    
         }
         else {
-            Query q = entityManager.createQuery("SELECT n FROM Notification n WHERE n.receivingRole LIKE :sessionUserRole OR n.sendingRole LIKE :sessionUserRole");
+            
+            //Refine query
+            Query q = entityManager.createQuery("SELECT DISTINCT n FROM Notification n, Role r WHERE (n.receivingRole LIKE :sessionUserRole) OR (n.sendingRole LIKE :sessionUserRole)"
+                    + " OR (n.sendingRole LIKE r.division AND r.roleName LIKE :sessionUserRole) OR (n.receivingRole LIKE r.division AND r.roleName like :sessionUserRole)");
             q.setParameter("sessionUserRole", sessionUserRole);
+            
             return q.getResultList();
         }
     }

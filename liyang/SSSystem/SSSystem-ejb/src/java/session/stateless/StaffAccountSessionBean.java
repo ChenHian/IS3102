@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -94,6 +96,18 @@ public class StaffAccountSessionBean {
     public Long addNewStaffAccount(String email, String staffAccountName, int contactNumber, String name) {
         StaffAccount staffAccount = new StaffAccount();
         
+        
+        
+        Query query = entityManager.createQuery("SELECT s FROM StaffAccount s WHERE s.email = :email").setParameter("email", email);
+        List<StaffAccount> temp = query.getResultList();
+        if (!temp.isEmpty()) {
+        String statusMessage = "User email is taken, please enter a different email.";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                 statusMessage, ""));
+        return null;
+        }
+        else {
+        
         String password = "password";
         String passwordMD5 = "";
                 try { 
@@ -113,6 +127,7 @@ public class StaffAccountSessionBean {
         entityManager.persist(staffAccount);
         entityManager.flush();
         return staffAccount.getStaffAccountId();
+        }
     }
         public void deleteStaffAccount(StaffAccount selectedStaffAccount) {
         StaffAccount staffAccount;
@@ -179,6 +194,11 @@ public class StaffAccountSessionBean {
             staffAccount.setPassword(passwordMD5);
             entityManager.persist(staffAccount);
             entityManager.flush();
+    }
+
+    public List<String> getAllStaffAccountNames() {
+       Query query = entityManager.createQuery("SELECT s.email FROM StaffAccount s");
+        return query.getResultList();
     }
     
         

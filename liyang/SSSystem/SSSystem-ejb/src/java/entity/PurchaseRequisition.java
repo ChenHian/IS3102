@@ -23,11 +23,11 @@ public class PurchaseRequisition implements Serializable {
     private String status;
     private Integer quantityRequested;
 
-    @OneToOne (cascade = {CascadeType.ALL})
+    @OneToOne(cascade = {CascadeType.ALL})
     private PurchaseOrder purchaseOrder;
 
     @ManyToOne
-    private Item item;
+    private Item item = new Item();
 
     public Long getPurchaseRequisitionId() {
         return purchaseRequisitionId;

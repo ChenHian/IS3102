@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -78,10 +80,10 @@ public class WarehouseSessionBean implements WarehouseSessionBeanLocal {
         Long id = updated.getDistributionCenterInventoryId();
         DistributionCenterInventory old = entityManager.find(DistributionCenterInventory.class, id);
         
-        old.setAvailableQuantity(updated.getAvailableQuantity());
-        old.setBlockedForReturn(updated.getBlockedForReturn());
-        old.setReservedForCustomerOrders(updated.getReservedForCustomerOrders());
-        old.setReservedForTransfer(updated.getReservedForTransfer());
+        old.setItemAvailableQuantity(updated.getItemAvailableQuantity());
+        //old.setBlockedForReturn(updated.getBlockedForReturn());
+        //old.setReservedForCustomerOrders(updated.getReservedForCustomerOrders());
+        //old.setReservedForTransfer(updated.getReservedForTransfer());
         old.setThresholdAlert(updated.getThresholdAlert());
         
         entityManager.persist(old);
@@ -93,7 +95,7 @@ public class WarehouseSessionBean implements WarehouseSessionBeanLocal {
         Item item = getItem(itemName).get(0);
                 
         
-        Query q = entityManager.createQuery("SELECT d FROM DistributionCenterInventory d WHERE d.distributionCenterId = :dcId AND d.item.itemId = :itemId ");
+        Query q = entityManager.createQuery("SELECT d FROM DistributionCenterInventory d WHERE d.distributionCenter.distributionCenterId = :dcId AND d.item.itemId = :itemId ");
         q.setParameter("itemId", item.getItemId());
         q.setParameter("dcId", distributionCenter.getDistributionCenterId()); 
         
@@ -103,14 +105,23 @@ public class WarehouseSessionBean implements WarehouseSessionBeanLocal {
         
         DistributionCenterInventory dc = new DistributionCenterInventory();
         dc.setItem(item);
-        dc.setDistributionCenterId(distributionCenter.getDistributionCenterId());
-        dc.setAvailableQuantity(0);
-        dc.setBlockedForReturn(0);
-        dc.setReservedForCustomerOrders(0);
-        dc.setReservedForTransfer(0);
+        dc.setDistributionCenter(distributionCenter);
+        dc.setItemAvailableQuantity(0);
+        //dc.setBlockedForReturn(0);
+        //dc.setReservedForCustomerOrders(0);
+        //dc.setReservedForTransfer(0);
         dc.setThresholdAlert(1000);
         entityManager.persist(dc);
         entityManager.flush();
+        String statusMessage = "Item has been added to warehouse.";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                 statusMessage, ""));
+        }
+        
+        else {
+            String statusMessage = "Item already exists in warehouse.";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                 statusMessage, ""));
         }
     }
     public List<DistributionCenter> getDistributionCenter(String name){

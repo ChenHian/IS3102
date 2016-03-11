@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <ui:define name="content" >
+    
+    <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.warehouseInventoryModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+    
+
+        <h:form id="viewBRForm" rendered="#{accessController.warehouseInventoryModuleAccess()}">
+            <p:panel header="View Batch Expiry Date">    
+                <p:dataTable id="BRtable" var="br" value="#{BRManageBean.allBRs}"  widgetVar="BRtable"  resizableColumns="true" tableStyle="width:auto" style="margin-bottom:40px;width:100%"
+                             paginator="true" rows="20" emptyMessage="No BR" selectionMode="single" selection="#{BRManageBean.selectedBR}" rowKey="#{br.batchReceiptId}">
+                    <p:ajax event="rowSelect" update=":viewBRForm:BRtable"/>
+                    <p:column headerText="Center Name" filterBy="#{br.centerName}" filterStyle="display:none">
+                        <h:outputText value="#{br.centerName}" />
+                    </p:column>
+                    <p:column headerText="Item Name" filterBy="#{br.po.item.itemName}" filterStyle="display:none">
+                        <h:outputText value="#{br.po.item.itemName}" />
+                    </p:column>
+                    <p:column headerText="Batch No." filterBy="#{br.batchNumber}" filterStyle="display:none">
+                        <h:outputText value="#{br.batchNumber}" />
+                    </p:column>
+                    <p:column headerText="Availability" filterBy="#{br.availableQuantity}" filterStyle="display:none"> 
+                        <h:outputText value="#{br.availableQuantity}" />
+                    </p:column>
+                    <p:column headerText="Expiry Date" filterBy="#{br.expiryDate}" filterStyle="display:none"> 
+                        <h:outputText value="#{br.expiryDate}" />
+                    </p:column>               
+                    <p:column style="width:25px">
+                        <p:commandButton  process="BRtable" update=":viewBRForm:brDetail" icon="ui-icon-search" oncomplete="PF('brDialog').show()">
+                            <f:setPropertyActionListener value="#{br}" target="#{BRManageBean.selectedBR}" />
+                        </p:commandButton>
+                    </p:column>
+
+                    <p:column style="width:32px">
+                        <p:button outcome="createItemDisposal" value="Create Item Disposal">
+                            <f:param name="SelectedBRId" value="#{br.batchReceiptId}"/>
+                            <f:param name="SelectedBRitemName" value="#{br.po.item.itemName}"/>
+                            <f:param name="SelectedBatchNumber" value="#{br.batchNumber}"/>
+                            <f:param name="SelectedAvailableQuantity" value="#{br.availableQuantity}"/>
+                            <f:param name="SelectedDateReceived2" value="#{br.dateReceived}"/>
+                            <f:param name="SelectedDateExpiry2" value="#{br.expiryDate}"/>
+                        </p:button>
+                    </p:column>                  
+                </p:dataTable>
+                <p:dialog header="BR Profile" widgetVar="brDialog" resizable="true">
+                    <p:outputPanel id="brDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty BRManageBean.selectedBR}" columnClasses="label,value">
+
+                            <h:outputText value="BR ID:" />
+                            <h:outputText value="#{BRManageBean.selectedBR.batchReceiptId}" />
+
+                            <h:outputText value="PO ID:" />
+                            <h:outputText value="#{BRManageBean.selectedBR.po.purchaseOrderId}" />
+
+                            <h:outputText value="Center Name:" />
+                            <h:outputText value="#{BRManageBean.selectedBR.centerName}" />
+
+                            <h:outputText value="Item Name:" />
+                            <h:outputText value="#{BRManageBean.selectedBR.po.item.itemName}" />
+
+                            <h:outputText value="Batch Number:" />
+                            <h:outputText value="#{BRManageBean.selectedBR.batchNumber}" />
+
+                            <h:outputText value="Quantity In:" />
+                            <h:outputText value="#{BRManageBean.selectedBR.quantityIn}" />
+
+                            <h:outputText value="Quantity Rejected:" />
+                            <h:outputText value="#{BRManageBean.selectedBR.quantityRejected}" />
+
+                            <h:outputText value="Available Quantity:" />
+                            <h:outputText value="#{BRManageBean.selectedBR.availableQuantity}" />
+
+                            <h:outputText value="Date Received:" />
+                            <h:outputText value="#{BRManageBean.selectedBR.dateReceived}" />
+
+                            <h:outputText value="Expiry Date:" />
+                            <h:outputText value="#{BRManageBean.selectedBR.expiryDate}" />
+
+                            <h:outputText value="Days to Expiry:" />
+                            <h:outputText value="#{BRManageBean.daysToExpiryInfo}" />
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>  
+            </p:panel>            
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -11,6 +11,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpSession;
 import session.stateless.StaffAccountSessionBean;
 
@@ -149,10 +151,26 @@ public class StaffAccountManagerBean {
  
     
     public void saveNewStaffAccount(ActionEvent event) {
-        newStaffAccountId = staffAccountSessionBean.addNewStaffAccount(email, staffAccountName, contactNumber, role);
+        if(contactNumber>=60000000 &&contactNumber<70000000 || contactNumber>=80000000) {
+            if(isValidEmailAddress(email)) {
+                newStaffAccountId = staffAccountSessionBean.addNewStaffAccount(email, staffAccountName, contactNumber, role);
+            }
+            else {
+                statusMessage = "Please enter a valid email address.";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, statusMessage, ""));
+            }
+        }
+        else {
+        statusMessage = "Please enter a valid Singapore contact number.";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, statusMessage, ""));
+        }
+        if (newStaffAccountId == null) {
+        }
+        else {
         statusMessage = "New Staff Account Saved Successfully";
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Add New Staff Account Result: "
                 + statusMessage + " (New Staff Account ID is " + newStaffAccountId + ")", ""));
+        }
 
 
     }   
@@ -172,5 +190,16 @@ public class StaffAccountManagerBean {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, statusMessage, ""));
         }
         
+    }
+
+    private boolean isValidEmailAddress(String email) {
+        boolean result = true;
+   try {
+      InternetAddress emailAddr = new InternetAddress(email);
+      emailAddr.validate();
+   } catch (AddressException ex) {
+      result = false;
+   }
+   return result;
     }
 }

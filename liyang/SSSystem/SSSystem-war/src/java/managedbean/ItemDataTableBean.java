@@ -1,8 +1,14 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package managedbean;
 
 import entity.Brand;
 import entity.Item;
 import entity.ItemType;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
@@ -12,12 +18,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import session.stateless.ItemSessionBean;
+import session.stateless.NotificationSessionBean;
 
 /**
  *
  * @author QianJun
  */
-
 @Named(value = "itemDataTableBean")
 @RequestScoped
 public class ItemDataTableBean {
@@ -25,6 +31,9 @@ public class ItemDataTableBean {
     @EJB
     private ItemSessionBean itemSessionBean;
 
+    @EJB 
+    private NotificationSessionBean notificationSessionBean;
+    
     //for edit and view supplier
     private Item selectedItem;
     private Brand selectedBrand;
@@ -49,7 +58,7 @@ public class ItemDataTableBean {
     private String selectedMeasurementType;
     private String selectedItemCategory;
     private String selectedItemSubCategory;
-
+    private boolean disabled=true;
     //for add Item
     private Long newItemId;
     private String newItemName;
@@ -81,6 +90,14 @@ public class ItemDataTableBean {
         return itemSessionBean.getItems();
     }
     
+    public List<String> getStorageTypes() {
+        return Arrays.asList("Normal", "Refrigerated");
+    }
+    
+    public List<String> getMeasurementTypes() {
+        return Arrays.asList("g", "pc");
+    }
+    
     public List<Brand> getBrand(){
         return itemSessionBean.getBrand();
     }
@@ -93,12 +110,15 @@ public class ItemDataTableBean {
      * @return the selectedItem
      */
     public Item getSelectedItem() {
+        if(selectedItem!=null)
+            disabled=false;
         return selectedItem;
     }
 
     /**
      * @param selectedItem the selectedItem to set
      */
+    
     public void setSelectedItem(Item selectedItem) {
         this.selectedItem = selectedItem;
     }
@@ -219,6 +239,7 @@ public class ItemDataTableBean {
      * @return the selectedBrandId
      */
     public Long getSelectedBrandId() {
+        
         return selectedBrandId;
     }
 
@@ -379,7 +400,7 @@ public class ItemDataTableBean {
         itemSessionBean.updateItemType(
                 selectedItemTypeId, selectedItemTypeDescription, selectedItemCategory, selectedItemSubCategory,
                 selectedStorageType, selectedIsPerishable,selectedMeasurementType);
-        addMessage("Brand record has been updated successfully!");
+        addMessage("Item type record has been updated successfully!");
     }
     
     
@@ -393,30 +414,31 @@ public class ItemDataTableBean {
         //System.out.println("addItemAction: " + newItemReturnable);
         itemSessionBean.addItem(newItemName,newItemDescription,
                 newItemReturnable,newReturnablePeriod, brandIdItem,itemTypeIdItem);
-        addMessage("A new supplier record has been added successfully!");
+        addMessage("A new item record has been added successfully!");
+        notificationSessionBean.createNotification("WAREHOUSE MANAGER","PURCHASING DIVISION" ,"New Item", newItemName + " has been added to SMART catalogue");
     }
 
      public void addBrandAction(ActionEvent actionEvent) {
         //System.out.println("addItemAction: " + newItemReturnable);
         itemSessionBean.addBrand(newBrandName,newBrandDescription);
-        addMessage("A new supplier record has been added successfully!");
+        addMessage("A new brand record has been added successfully!");
     }
      
      public void addItemTypeAction(ActionEvent actionEvent) {
         //System.out.println("addItemAction: " + newItemReturnable);
         itemSessionBean.addItemType(newItemTypeDescription, newItemCategory, newItemSubCategory,
                                     newStorageType, newIsPerishable,newMeasurementType);
-        addMessage("A new supplier record has been added successfully!");
+        addMessage("A new item type record has been added successfully!");
     }
      
     public void removeItemAction(ActionEvent actionEvent) {
         
         if(selectedItem!=null){
             itemSessionBean.removeItem(selectedItem.getItemId());
-            addMessage("The selected supplier record has been removed from the list successfully!");
+            addMessage("The selected item record has been removed from the list successfully!");
         }
         else{
-            errorMessage("Please select a supplier to remove from the list!");
+            errorMessage("Please select a item to remove from the list!");
         }
     }
     
@@ -424,10 +446,10 @@ public class ItemDataTableBean {
         
         if(selectedBrand!=null){
             itemSessionBean.removeBrand(selectedBrand.getBrandId());
-            addMessage("The selected supplier record has been removed from the list successfully!");
+            addMessage("The selected brand record has been removed from the list successfully!");
         }
         else{
-            errorMessage("Please select a supplier to remove from the list!");
+            errorMessage("Please select a brand to remove from the list!");
         }
     }
      
@@ -435,10 +457,10 @@ public class ItemDataTableBean {
         
         if(selectedItemType!=null){
             itemSessionBean.removeItemType(selectedItemType.getItemTypeId());
-            addMessage("The selected supplier record has been removed from the list successfully!");
+            addMessage("The selected item type record has been removed from the list successfully!");
         }
         else{
-            errorMessage("Please select a supplier to remove from the list!");
+            errorMessage("Please select a item type to remove from the list!");
         }
     }
      
@@ -451,6 +473,10 @@ public class ItemDataTableBean {
    
     public Map<Long,String> getBrandBasicList(){
             return itemSessionBean.getBrandBasicList();
+    }
+    
+    public Map<Long,String> getBrandActiveList(){
+            return itemSessionBean.getBrandActiveList();
     }
     
     
@@ -508,7 +534,7 @@ public class ItemDataTableBean {
     /**
      * @return the newApprovalStatus
      */
-    public boolean isNewApprovalStatus() {
+    public boolean getNewApprovalStatus() {
         return newApprovalStatus;
     }
 
@@ -522,7 +548,7 @@ public class ItemDataTableBean {
     /**
      * @return the newItemReturnable
      */
-    public boolean isNewItemReturnable() {
+    public boolean getNewItemReturnable() {
         return newItemReturnable;
     }
 
@@ -536,7 +562,7 @@ public class ItemDataTableBean {
     /**
      * @return the newAllowSubscription
      */
-    public boolean isNewAllowSubscription() {
+    public boolean getNewAllowSubscription() {
         return newAllowSubscription;
     }
 
@@ -719,6 +745,8 @@ public class ItemDataTableBean {
      * @return the selectedBrand
      */
     public Brand getSelectedBrand() {
+        if(selectedBrand!=null)
+            disabled=false;
         return selectedBrand;
     }
 
@@ -761,6 +789,8 @@ public class ItemDataTableBean {
      * @return the selectedItemType
      */
     public ItemType getSelectedItemType() {
+        if(selectedItemType!=null)
+            disabled=false;
         return selectedItemType;
     }
 
@@ -785,4 +815,19 @@ public class ItemDataTableBean {
         this.filteredItemType = filteredItemType;
     }
 
+    /**
+     * @return the disabled
+     */
+    public boolean getDisabled() {
+        return disabled;
+    }
+
+    /**
+     * @param disabled the disabled to set
+     */
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
 }
+

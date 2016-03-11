@@ -1,5 +1,4 @@
 package managedbean;
-
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;

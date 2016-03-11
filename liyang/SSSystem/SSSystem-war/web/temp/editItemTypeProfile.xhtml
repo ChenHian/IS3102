@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="editItemTypeProfileForm">
+            
+            <f:metadata>
+                <f:viewParam name="SelectedItemTypeId" value="#{itemDataTableBean.selectedItemTypeId}"/>
+                <f:viewParam name="SelectedItemTypeDescription" value="#{itemDataTableBean.selectedItemTypeDescription}"/>
+                <f:viewParam name="SelectedItemCategory" value="#{itemDataTableBean.selectedItemCategory}"/>
+                <f:viewParam name="SelectedItemSubCategory" value="#{itemDataTableBean.selectedItemSubCategory}"/>
+                <f:viewParam name="SelectedStorageType" value="#{itemDataTableBean.selectedStorageType}"/>
+                <f:viewParam name="SelectedIsPerishable" value="#{itemDataTableBean.selectedIsPerishable}"/>
+                <f:viewParam name="SelectedMeasurementType" value="#{itemDataTableBean.selectedMeasurementType}"/>   
+            </f:metadata>
+            
+            <p:panel header="Edit Item Type">
+                
+                <h:panelGrid columns="2" style="margin-bottom:40px"> 
+                   
+                    <h:outputLabel for="Item Type Description" value="Item Type Description: " style="font-weight:bold" />
+                    <p:inputText id="itemTypeDescription" value="#{itemDataTableBean.selectedItemTypeDescription}" />
+                    
+                    <h:outputLabel for="itemCategory" value="Item Category: " style="font-weight:bold" />
+                    <p:inputText id="itemCategory" value="#{itemDataTableBean.selectedItemCategory}" />
+                    
+                    <h:outputLabel for="itemSubcategory" value="Item Subcategory: " style="font-weight:bold" />
+                    <p:inputText id="itemSubcategory" value="#{itemDataTableBean.selectedItemSubCategory}" />
+                    
+                    <h:outputLabel for="storageType" value="Storage Type: " style="font-weight:bold" />
+                    <p:inputText id="storageType" value="#{itemDataTableBean.selectedStorageType}" />
+                    
+                    <h:outputLabel for="perishable" value="Perishable: " style="font-weight:bold" />
+                    <p:inputText id="perishable" value="#{itemDataTableBean.selectedIsPerishable}" />
+                    
+                    <h:outputLabel for="measurementType" value="Measurement Type: " style="font-weight:bold" />
+                    <p:inputText id="measurementType" value="#{itemDataTableBean.selectedMeasurementType}" />
+
+                </h:panelGrid>
+                
+                <p:commandButton value="Update" icon="fa fa-refresh" id="nonAjax" action ="/procurement/viewItemType" ajax="false" actionListener="#{itemDataTableBean.editItemTypeProfileAction}" />
+                <p:spacer width="20" height="20" />
+                <p:button outcome="viewItemType" value="View Item Type List" icon="fa fa-fw fa-neuter"></p:button>
+
+            </p:panel>
+
+
+            
+                    
+
+        </h:form>
+    </ui:define>
+    
+    <ui:define name ="left">
+        <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="Home" action="/admin/AdminHome" icon="ui-icon-home"/>
+                <p:menuitem value="Manage Item List" action="/procurement/viewItems" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Brand List" action="/procurement/viewBrand" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Item Type List" action="/procurement/viewItemType" icon="ui-icon-search"/>
+                <p:menuitem value="Manage Contract" action="/procurement/viewContract" icon="ui-icon-search"/>
+
+            </p:menu>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

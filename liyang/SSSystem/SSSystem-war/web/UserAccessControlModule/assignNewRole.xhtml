@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml" >
+
+    <ui:define name="content">
+        
+
+       
+        
+        <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.userAccessControlModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+        <!-- Rendered -->
+        <h:form id="formMain" rendered="#{accessController.userAccessControlModuleAccess()}">
+            <p:panel id="panel" header="Assign New Role">
+                <p:ajaxStatus style="width:16px;height:16px;">
+                    <f:facet name="start">
+                        <h:graphicImage value="/images/spinner.gif" />
+                    </f:facet>
+                    <f:facet name="complete">
+                        <h:outputText value="" />
+                    </f:facet>
+                </p:ajaxStatus>
+                <p:messages />
+                <p:panelGrid>
+                    
+                    <p:outputLabel for="account" value="Account Name: " />
+                    <p:selectOneMenu id="account" value="#{roleManagerBean.staffAccount}" required="true">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItems value="#{roleManagerBean.staffAccounts}" />
+                    </p:selectOneMenu>
+   
+                        
+                            <p:outputLabel for="role" style="fontweight:
+                                           bold" value="New Role: " />
+                        
+                        <p:selectOneMenu id="role" value="#{roleManagerBean.role}" required="true">
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItems value="#{roleManagerBean.roles}" />
+                    </p:selectOneMenu>
+         
+                    
+                    
+                </p:panelGrid>
+                <p:commandButton id="btn" value="Assign New Role"
+                                 update="panel" actionListener="#{roleManagerBean.assignNewRole}" ajax="true"
+                                 />
+            </p:panel>
+        </h:form>
+        </ui:define>
+
+
+
+ 
+    
+ 
+
+
+    
+</ui:composition>

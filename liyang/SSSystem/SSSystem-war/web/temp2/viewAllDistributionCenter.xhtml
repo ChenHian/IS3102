@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="left"> 
+        <h:form>
+            <p:growl id="messages" /> 
+            <p:menu style="width:95%" >
+                <p:menuitem value="Logout" action="/index.xhtml" icon="ui-icon-power"/>
+                <p:menuitem value="Home" action="/admin/AdminHome" icon="ui-icon-home"/>
+                <p:menuitem value="Add New Role" action="/admin/addNewRole" icon="ui-icon-plus"/>
+                <p:menuitem value="View All Privileges" action="/admin/viewAllPrivileges" icon="ui-icon-search"/>
+            </p:menu>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formMain">
+            <p:panel header="View All Distribution Centers (DCs)">    
+                <f:facet name="header"> 
+                </f:facet>
+                <p:dataTable id="DCtable" var="dc" value="#{ViewAllDCManageBean.allDistributioncenters}"  widgetVar="DCtable"  resizableColumns="true" style="margin-bottom:40px"
+                             paginator="true" rows="20" emptyMessage="No DC" selectionMode="single" selection="#{ViewAllDCManageBean.selectedDC}" rowKey="#{dc.distributionCenterId}">
+                    <p:column headerText="DC ID" filterBy="#{dc.distributionCenterId}" filterStyle="display:none">
+                        <h:outputText value="#{dc.distributionCenterId}" />
+                    </p:column>
+                    <p:column headerText="DC Name" filterBy="#{dc.name}" filterStyle="display:none">
+                        <h:outputText value="#{dc.name}" />
+                    </p:column>
+                    <p:column headerText="DC Address" filterBy="#{dc.address}" filterStyle="display:none"> 
+                        <h:outputText value="#{dc.address}" />
+                    </p:column>
+                    <p:column headerText="DC Country" filterBy="#{dc.country}" filterStyle="display:none">
+                        <h:outputText value="#{dc.country}" />
+                    </p:column>
+                    <p:column headerText="DC Area" filterBy="#{dc.area}" filterStyle="display:none">
+                        <h:outputText value="#{dc.area}" />
+                    </p:column>
+                </p:dataTable>
+
+                <p:commandButton  process="DCtable" update=":formMain:dcDetail" icon="ui-icon-search" value="View" onclick="PF('dcDialog').show()" />
+                <p:dialog header="DC Profile" widgetVar="dcDialog" resizable="true">
+                    <p:outputPanel id="dcDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty ViewAllDCManageBean.selectedDC}" columnClasses="label,value">
+
+                            <h:outputText value="DC ID:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.distributionCenterId}" />
+
+                            <h:outputText value="DC Name:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.name}" />
+
+                            <h:outputText value="DC Address:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.address}" />
+
+                            <h:outputText value="DC Country:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.country}" />
+
+                            <h:outputText value="DC Area:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.area}" />
+
+                            <h:outputText value="DC Storage Facilities:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.storageFacilities}" />
+
+                            <h:outputText value="DC Number Of Shelves:" />
+                            <h:outputText value="#{ViewAllDCManageBean.selectedDC.numberOfShelves}" />
+                        </p:panelGrid>
+
+                        <p:spacer width="0" height="20" />
+                    </p:outputPanel>
+                </p:dialog>  
+            </p:panel>            
+        </h:form>
+    </ui:define>
+
+</ui:composition>

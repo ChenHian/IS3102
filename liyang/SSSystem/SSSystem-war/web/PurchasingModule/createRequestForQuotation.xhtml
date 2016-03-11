@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+    
+
+    <ui:define name="content">
+        
+          <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.purchasingModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+          <h:form id="addRFQ" rendered="#{accessController.purchasingModuleAccess()}">
+
+            <p:panel header="Create Request for Quotation">
+
+                <h:panelGrid columns="2" style="margin-bottom:40px"> 
+                    <h:outputLabel for="itemType" value="Item Type: " style="font-weight:bold" />
+                    <p:selectOneMenu id="itemType" required="true" requiredMessage="Item type is required" 
+                                     value="#{RequestForQuotationBean.itemTypeId}" style="width:150px">
+                        <p:ajax event="change" update="item, suppliers" listener="#{RequestForQuotationBean.handleItemTypeChange}" />
+                        <f:selectItem itemLabel="Select Item Type" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{RequestForQuotationBean.itemTypes.entrySet()}" var="type"
+                                       itemLabel="#{type.value}" itemValue="#{type.key}" />
+                    </p:selectOneMenu>
+
+                    <h:outputLabel for="item" value="Item for Quotation: " style="font-weight:bold" />
+                    <p:selectOneMenu id="item" required="true" requiredMessage="Item for quotation is required" 
+                                     value="#{RequestForQuotationBean.itemId}" style="width:150px">
+                        <p:ajax event="change" update="suppliers" listener="#{RequestForQuotationBean.handleItemChange}" />
+                        <f:selectItem itemLabel="Select Item" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{RequestForQuotationBean.items.entrySet()}" var="i"
+                                       itemLabel="#{i.value}" itemValue="#{i.key}" />
+                    </p:selectOneMenu>
+                    <p:spacer height="40"/>
+
+                    <div id="display">
+                        <h:outputLabel for="suppliers" value="List of Suppliers: " style="font-weight:bold" />
+                        <p:selectManyCheckbox id="suppliers" value="#{RequestForQuotationBean.selectedSuppliers}" 
+                                              requiredMessage="Supplier is required"  required="true" layout="grid" columns="5">
+                            <f:selectItems value="#{RequestForQuotationBean.suppliers.entrySet()}" var="supp" itemLabel="#{supp.value}" itemValue="#{supp.key}" />
+                        </p:selectManyCheckbox>
+                    </div>
+                    <p:spacer height="40"/>
+
+                    <p:outputLabel for="deadline" value="Deadline:  " style="font-weight:bold"/>
+                    <p:calendar id="deadline" value="#{RequestForQuotationBean.deadline}" required="true" 
+                                requiredMessage="Deadline is required" mindate="#{RequestForQuotationBean.todayDate}"
+                                readonlyInput="true" label="Deadline" 
+                                navigator="true" pattern="dd/MM/yyyy"/>
+                    <p:spacer height="20"/>
+                    <p:spacer height="20"/>
+                    
+                    <h:outputLabel for="quantity" value="Quantity: " style="font-weight:bold"/>                    
+                    <p:inputText id="quantity" value="#{RequestForQuotationBean.quantity}" label="Quantity">
+                        <f:validateDoubleRange minimum="1" maximum="9999" />
+                    </p:inputText>
+                    <p:spacer height="20"/>
+
+                </h:panelGrid>
+
+                <p:commandButton value="Create" id="nonAjax" action ="/PurchasingModule/viewRequestForQuotation" ajax="false" actionListener="#{RequestForQuotationBean.addRequestForQuotation}" />
+                <p:spacer width="20" height="20" />
+                <p:button outcome="viewRequestForQuotation" value="View Request For Quotation list" icon="ui-icon-search"></p:button>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

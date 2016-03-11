@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+    <ui:define name="content">
+          <!-- URL Access control, change rendered to module -->
+        <h:form id="accessError" rendered="#{!accessController.purchasingModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+          <h:form id="viewRequestForm" rendered="#{accessController.purchasingModuleAccess()}">
+            <p:panel header="View Request For Quotation">
+                <p:dataTable id="rfqDT" var="rfq" value="#{RequestForQuotationBean.requestForQuotations}" widgetVar="rfqTable" filteredValue="#{RequestForQuotationBean.filteredRfq}" resizableColumns="true" style="margin-bottom:40px"
+                             paginator="true" rows="20" emptyMessage="No Request For Quotation" selectionMode="single" selection="#{RequestForQuotationBean.selectedRfq}" rowKey="#{rfq.requestForQuotationId}">
+                    <p:ajax event="rowSelect" update=":viewRequestForm:rfqButton" listener="#{RequestForQuotationBean.onRowSelect}" />
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Search all fields:" />
+                            <p:inputText id="globalFilter" onkeyup="PF('rfqTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="ID" filterBy="#{rfq.requestForQuotationId}" filterStyle="display:none">
+                        <h:outputText value="#{rfq.requestForQuotationId}" />
+                    </p:column>
+                    <p:column headerText="Item" filterBy="#{rfq.item.itemId}" filterMatchMode="contains"> 
+                        <h:outputText value="#{rfq.item.itemName}" />
+                    </p:column>
+                    <p:column headerText="Quantity" filterBy="#{rfq.quantity}" filterStyle="display:none">
+                        <h:outputText value="#{rfq.quantity}" />
+                    </p:column>
+                    <p:column headerText="Date Requested" filterBy="#{rfq.dateRequested}" filterStyle="display:none">
+                        <h:outputText value="#{rfq.dateRequested}" />
+                    </p:column>
+                    <p:column headerText="Deadline" filterBy="#{rfq.deadline}" filterStyle="display:none">
+                        <h:outputText value="#{rfq.deadline}" />
+                    </p:column>
+                    <p:column headerText="Status" filterBy="#{rfq.status}" filterStyle="display:none">
+                        <h:outputText value="#{rfq.status}" />
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:commandButton  disabled="#{RequestForQuotationBean.disabled}" id="rfqButton" process="rfqDT" update=":viewRequestForm:rfqDetail" icon="ui-icon-search" value="View" onclick="PF('rfqDialog').show()" />
+
+                <p:dialog header="Request For Quotation Detail" widgetVar="rfqDialog" resizable="true">
+                    <p:outputPanel id="rfqDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty RequestForQuotationBean.selectedRfq}" columnClasses="label,value">
+
+                            <h:outputText value="Request For Quotation ID:" />
+                            <h:outputText value="#{RequestForQuotationBean.selectedRfq.requestForQuotationId}" />
+
+                            <h:outputText value="Item:" />
+                            <h:outputText value="#{RequestForQuotationBean.selectedRfq.item.itemName}" />
+
+                            <h:outputText value="Quantity:" />
+                            <h:outputText value="#{RequestForQuotationBean.selectedRfq.quantity}" />
+                            
+                            <h:outputText value="Suppliers:" />
+                            <p:dataList value="#{RequestForQuotationBean.selectedRfq.suppliers}" var="supp" type="ordered">
+                                <f:facet name="header">
+                                    Suppliers
+                                </f:facet>
+                                ID: #{supp.supplierId}
+                                <p:spacer height="20"/>
+                                Company: #{supp.companyName}
+                                <p:spacer height="20"/>
+                                Email: #{supp.email}
+                            </p:dataList>
+
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+            </p:panel>  
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

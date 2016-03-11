@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        
+        <h:form id="accessError" rendered="#{!accessController.purchasingContractModuleAccess()}">
+            <p:panel header="Error Accessing Page">
+                You do not have the access required to view this page, please contact your system administrator.
+            </p:panel>
+        </h:form>
+        
+        <h:form id="editContractProfileForm" rendered="#{accessController.purchasingContractModuleAccess()}">
+            <h:inputHidden value="#{contractDataTableBean.selectedContractId}"/>
+            <h:inputHidden value="#{contractDataTableBean.selectedAutomaticPurchase}"/>
+            
+            <p:panel header="Edit Contract">
+                
+                  <h:panelGrid columns="2" style="margin-bottom:40px"> 
+                    
+                    <h:outputLabel for="contractStartDate" value="Contract Start Date: " style="font-weight:bold" />
+                    <h:outputText id="contractStartDate" value="#{contractDataTableBean.selectedContractStartDate}"/> 
+                               
+                    <h:outputLabel for="contractEndDate" value="Contract End Date: " style="font-weight:bold" />
+                    <h:outputText id="contractEndDate" value="#{contractDataTableBean.selectedContractEndDate}"/>
+
+                    <h:outputLabel for="paymentTerms" value="Payment Terms: " style="font-weight:bold" />
+                    <h:outputText id="paymentTerms" value="#{contractDataTableBean.selectedPaymentTerms}" />
+                    
+                    <h:outputLabel for="deliveryTerms" value="Delivery Terms: " style="font-weight:bold" />
+                    <h:outputText id="deliveryTerms" value="#{contractDataTableBean.selectedDeliveryTerms}" />
+                    
+                    <h:outputLabel for="purchaseTerms" value="Purchase Terms: " style="font-weight:bold" />
+                    <h:outputText id="purchaseTerms" value="#{contractDataTableBean.selectedPurchaseTerms}" />
+                    
+                    <h:outputLabel for="returnTerms" value="Return Terms: " style="font-weight:bold" />
+                    <h:outputText id="returnTerms" value="#{contractDataTableBean.selectedReturnTerms}" />
+                    
+                    <h:outputLabel for="deliveryLeadTime" value="Delivery Lead Time(Days): " style="font-weight:bold" />
+                    <h:outputText id="deliveryLeadTime" value="#{contractDataTableBean.selectedDeliveryLeadTime}" />
+                    
+                    <h:outputLabel for="price" value="Price ($): " style="font-weight:bold" />
+                    <h:outputText id="price" value="#{contractDataTableBean.selectedPrice}" />
+                    
+                    <h:outputLabel for="item" value="Item: " style="font-weight:bold" />
+                    <h:outputText id="item" value="#{contractDataTableBean.selectedContract.item.itemName}" />
+                    
+                    <h:outputLabel for="automaticPurchase" value="Automatic Purchase: " style="font-weight:bold" />
+                    <p:inputSwitch id="automaticPurchase" value="#{contractDataTableBean.selectedAutomaticPurchase}" required="true"/>
+                    
+                  
+                </h:panelGrid>
+                
+                <p:commandButton value="Update" icon="fa fa-refresh" id="nonAjax" action ="/PurchaseContractModule/viewContract" ajax="false" actionListener="#{contractDataTableBean.editContractProfileAction}" />
+                <p:spacer width="20" height="20" />
+                <p:button outcome="viewContract" value="View Contract List" icon="fa fa-fw fa-neuter"></p:button>
+
+            </p:panel>
+
+
+            
+                    
+
+        </h:form>
+    </ui:define>
+    
+
+</ui:composition>
+
